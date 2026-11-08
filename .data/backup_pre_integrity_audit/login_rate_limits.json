@@ -1,0 +1,58 @@
+{
+  "login:192.168.1.64:concurrent-test-1794056665011@orbinova.com": {
+    "key": "login:192.168.1.64:concurrent-test-1794056665011@orbinova.com",
+    "count": 5,
+    "windowStart": 1794056666150,
+    "cooldownUntil": 1794056966219,
+    "lastAttemptAt": "2026-11-07T13:04:26.238Z"
+  },
+  "login:10.0.0.1:worker-test-1794056665011@orbinova.com": {
+    "key": "login:10.0.0.1:worker-test-1794056665011@orbinova.com",
+    "count": 5,
+    "windowStart": 1794056666268,
+    "cooldownUntil": 1794056966346,
+    "lastAttemptAt": "2026-11-07T13:04:26.362Z"
+  },
+  "login:192.168.1.80:concurrent-test-1794056719022@orbinova.com": {
+    "key": "login:192.168.1.80:concurrent-test-1794056719022@orbinova.com",
+    "count": 5,
+    "windowStart": 1794056719616,
+    "cooldownUntil": 1794057019707,
+    "lastAttemptAt": "2026-11-07T13:05:19.728Z"
+  },
+  "login:10.0.0.1:worker-test-1794056719022@orbinova.com": {
+    "key": "login:10.0.0.1:worker-test-1794056719022@orbinova.com",
+    "count": 5,
+    "windowStart": 1794056719760,
+    "cooldownUntil": 1794057019842,
+    "lastAttemptAt": "2026-11-07T13:05:19.915Z"
+  },
+  "login:192.168.1.131:concurrent-test-1794056915734@orbinova.com": {
+    "key": "login:192.168.1.131:concurrent-test-1794056915734@orbinova.com",
+    "count": 5,
+    "windowStart": 1794056917689,
+    "cooldownUntil": 1794057217832,
+    "lastAttemptAt": "2026-11-07T13:08:37.852Z"
+  },
+  "login:10.0.0.1:worker-test-1794056915734@orbinova.com": {
+    "key": "login:10.0.0.1:worker-test-1794056915734@orbinova.com",
+    "count": 5,
+    "windowStart": 1794056917878,
+    "cooldownUntil": 1794057217954,
+    "lastAttemptAt": "2026-11-07T13:08:37.971Z"
+  },
+  "login:::1:hospital@orbinova": {
+    "key": "login:::1:hospital@orbinova",
+    "count": 6,
+    "windowStart": 1794058377218,
+    "cooldownUntil": 1794058686501,
+    "lastAttemptAt": "2026-11-07T13:33:06.502Z"
+  },
+  "login:127.0.0.1:doctor@orbinova.com": {
+    "key": "login:127.0.0.1:doctor@orbinova.com",
+    "count": 1,
+    "windowStart": 1794059768080,
+    "cooldownUntil": null,
+    "lastAttemptAt": "2026-11-07T13:56:08.081Z"
+  }
+}

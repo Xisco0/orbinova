@@ -1,0 +1,142 @@
+[
+  {
+    "id": "audit-1794075359144-313rs",
+    "transaction_id": "tx-1794075359144-mqn6",
+    "actor_id": "user-audit-tester",
+    "organization_id": "org-luth",
+    "action": "blood_stock_allocated",
+    "entity_type": "blood_unit",
+    "entity_id": "unit-sample-test",
+    "previous_state": {
+      "status": "available",
+      "password": "[REDACTED]"
+    },
+    "new_state": {
+      "status": "reserved"
+    },
+    "reason": "Automated fulfillment allocation",
+    "ip_address": null,
+    "created_at": "2026-11-07T18:15:59.144Z",
+    "checksum": "576af40ff650e0f91d64ec95e9d159739b06b9572599c82d786adc96fca0ef3d"
+  },
+  {
+    "id": "audit-1794074357593-zlnaw",
+    "transaction_id": "tx-1794074357593-c7kd",
+    "actor_id": "user-audit-tester",
+    "organization_id": "org-luth",
+    "action": "blood_stock_allocated",
+    "entity_type": "blood_unit",
+    "entity_id": "unit-sample-test",
+    "previous_state": {
+      "status": "available",
+      "password": "[REDACTED]"
+    },
+    "new_state": {
+      "status": "reserved"
+    },
+    "reason": "Automated fulfillment allocation",
+    "ip_address": null,
+    "created_at": "2026-11-07T17:59:17.593Z",
+    "checksum": "47fab9590d7bfdf08121c51faada09addb795e2fef91be63d03f5d178bcfa4df"
+  },
+  {
+    "id": "audit-1794063833169-eqrm4",
+    "transaction_id": "tx-1794063833169-1s88",
+    "actor_id": "user-audit-tester",
+    "organization_id": "org-luth",
+    "action": "blood_stock_allocated",
+    "entity_type": "blood_unit",
+    "entity_id": "unit-sample-test",
+    "previous_state": {
+      "status": "available",
+      "password": "[REDACTED]"
+    },
+    "new_state": {
+      "status": "reserved"
+    },
+    "reason": "Automated fulfillment allocation",
+    "ip_address": null,
+    "created_at": "2026-11-07T15:03:53.169Z",
+    "checksum": "b4c9d9761ea97d44c3e1a5796a596bc28eb4ac9903f25a9c43f2059abd12acaa"
+  },
+  {
+    "id": "audit-1794063668317-a2c0u",
+    "transaction_id": "tx-1794063668317-hjcv",
+    "actor_id": "user-audit-tester",
+    "organization_id": "org-luth",
+    "action": "blood_stock_allocated",
+    "entity_type": "blood_unit",
+    "entity_id": "unit-sample-test",
+    "previous_state": {
+      "status": "available",
+      "password": "[REDACTED]"
+    },
+    "new_state": {
+      "status": "reserved"
+    },
+    "reason": "Automated fulfillment allocation",
+    "ip_address": null,
+    "created_at": "2026-11-07T15:01:08.317Z",
+    "checksum": "c8fee25f64a038b08a4dc4da9e6b98c7bf6af8899cfdfbf0e6d0d8b867c6e537"
+  },
+  {
+    "id": "audit-1794063495880-z1xod",
+    "transaction_id": "tx-1794063495880-a3kd",
+    "actor_id": "user-audit-tester",
+    "organization_id": "org-luth",
+    "action": "blood_stock_allocated",
+    "entity_type": "blood_unit",
+    "entity_id": "unit-sample-test",
+    "previous_state": {
+      "status": "available",
+      "password": "[REDACTED]"
+    },
+    "new_state": {
+      "status": "reserved"
+    },
+    "reason": "Automated fulfillment allocation",
+    "ip_address": null,
+    "created_at": "2026-11-07T14:58:15.880Z",
+    "checksum": "216abec1c5a34e0cf15bae68d4abb2004da54f1e34b3a79ebf61abb7d0c802c2"
+  },
+  {
+    "id": "audit-1794063423304-ib9iv",
+    "transaction_id": "tx-1794063423304-jqyy",
+    "actor_id": "user-audit-tester",
+    "organization_id": "org-luth",
+    "action": "blood_stock_allocated",
+    "entity_type": "blood_unit",
+    "entity_id": "unit-sample-test",
+    "previous_state": {
+      "status": "available",
+      "password": "[REDACTED]"
+    },
+    "new_state": {
+      "status": "reserved"
+    },
+    "reason": "Automated fulfillment allocation",
+    "ip_address": null,
+    "created_at": "2026-11-07T14:57:03.304Z",
+    "checksum": "4027e4e6aadff2fb6af49c4335a90d0cc72af9b086547ffb7093a5ae30dc4299"
+  },
+  {
+    "id": "audit-1794063365318-njlv7",
+    "transaction_id": "tx-1794063365318-xv2a",
+    "actor_id": "user-audit-tester",
+    "organization_id": "org-luth",
+    "action": "blood_stock_allocated",
+    "entity_type": "blood_unit",
+    "entity_id": "unit-sample-test",
+    "previous_state": {
+      "status": "available",
+      "password": "[REDACTED]"
+    },
+    "new_state": {
+      "status": "reserved"
+    },
+    "reason": "Automated fulfillment allocation",
+    "ip_address": null,
+    "created_at": "2026-11-07T14:56:05.318Z",
+    "checksum": "a63bb8328dcf3e0b95f0e370ae58f36328ff129f8bfef389959c25772fabb791"
+  }
+]

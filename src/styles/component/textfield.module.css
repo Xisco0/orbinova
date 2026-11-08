@@ -1,0 +1,86 @@
+.formGroup {
+  position: relative;
+  width: 100%;
+}
+
+.floatingInput {
+  width: 100%;
+  padding: 15px 20px;
+  height: 54px;
+  font-size: 15px;
+  color: #0f172a;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  outline: none;
+  background-color: #ffffff;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.floatingInput:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+}
+
+.floatingTextArea {
+  width: 100%;
+  padding: 16px 20px;
+  min-height: 120px;
+  font-size: 15px;
+  color: #0f172a;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  outline: none;
+  background-color: #ffffff;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  resize: vertical;
+  font-family: inherit;
+}
+
+.floatingTextArea:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+}
+
+.formGroup .floatingLabel {
+  position: absolute;
+  left: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  padding: 0 6px;
+  font-size: 13px;
+  color: #64748b;
+  pointer-events: none;
+  transition: 0.2s ease all;
+  background-color: white;
+}
+
+.formGroup .floatingTextArea ~ .floatingLabel {
+  top: 24px;
+  transform: none;
+}
+
+.floatingInput:focus ~ .floatingLabel,
+.floatingInput:not(:placeholder-shown) ~ .floatingLabel,
+.floatingTextArea:focus ~ .floatingLabel,
+.floatingTextArea:not(:placeholder-shown) ~ .floatingLabel {
+  top: -9px;
+  transform: none;
+  font-size: 11px;
+  font-weight: 600;
+  color: #ffffff;
+  background-color: #2563eb;
+  border-radius: 4px;
+  padding: 2px 6px;
+}
+
+.issueText {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #dc2626;
+  margin-top: 0.25rem;
+  padding-left: 0.25rem;
+}
+
+.inputError {
+  border-color: #ef4444 !important;
+}

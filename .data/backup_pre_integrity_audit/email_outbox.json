@@ -1,0 +1,401 @@
+{
+  "outbox-1793984028721-l9fvk": {
+    "id": "outbox-1793984028721-l9fvk",
+    "eventType": "TEST_TRANSACTION_COMMITTED",
+    "payload": {
+      "to": "audit@hospital.com",
+      "subject": "Outbox Guaranteed Message",
+      "html": "<p>Outbox body</p>",
+      "category": "institution"
+    },
+    "status": "published",
+    "createdAt": "2026-11-06T16:53:48.721Z",
+    "attempts": 1,
+    "publishedAt": "2026-11-06T16:53:48.799Z"
+  },
+  "outbox-1793984112355-c07nt": {
+    "id": "outbox-1793984112355-c07nt",
+    "eventType": "TEST_TRANSACTION_COMMITTED",
+    "payload": {
+      "to": "audit@hospital.com",
+      "subject": "Outbox Guaranteed Message",
+      "html": "<p>Outbox body</p>",
+      "category": "institution"
+    },
+    "status": "published",
+    "createdAt": "2026-11-06T16:55:12.355Z",
+    "attempts": 1,
+    "publishedAt": "2026-11-06T16:55:12.390Z"
+  },
+  "outbox-1793984136892-j27nw": {
+    "id": "outbox-1793984136892-j27nw",
+    "eventType": "TEST_TRANSACTION_COMMITTED",
+    "payload": {
+      "to": "audit@hospital.com",
+      "subject": "Outbox Guaranteed Message",
+      "html": "<p>Outbox body</p>",
+      "category": "institution"
+    },
+    "status": "published",
+    "createdAt": "2026-11-06T16:55:36.892Z",
+    "attempts": 1,
+    "publishedAt": "2026-11-06T16:55:36.948Z"
+  },
+  "outbox-1794040410772-sqfaf": {
+    "id": "outbox-1794040410772-sqfaf",
+    "eventType": "TEST_TRANSACTION_COMMITTED",
+    "payload": {
+      "to": "audit@hospital.com",
+      "subject": "Outbox Guaranteed Message",
+      "html": "<p>Outbox body</p>",
+      "category": "institution"
+    },
+    "status": "published",
+    "createdAt": "2026-11-07T08:33:30.772Z",
+    "attempts": 1,
+    "publishedAt": "2026-11-07T08:33:30.790Z"
+  },
+  "outbox-1794042471254-es608": {
+    "id": "outbox-1794042471254-es608",
+    "eventType": "TEST_EMAIL_EVENT",
+    "payload": {
+      "to": "quality-assurance@orbinova.com",
+      "subject": "ORBINOVA Automated Health Check",
+      "html": "<p>Verification of asynchronous transactional outbox.</p>",
+      "category": "blood_requests",
+      "metadata": {
+        "testId": "scenario-h-test"
+      }
+    },
+    "status": "published",
+    "createdAt": "2026-11-07T09:07:51.254Z",
+    "attempts": 1,
+    "publishedAt": "2026-11-07T09:16:59.820Z"
+  },
+  "outbox-1794042530244-32uds": {
+    "id": "outbox-1794042530244-32uds",
+    "eventType": "TEST_EMAIL_EVENT",
+    "payload": {
+      "to": "quality-assurance@orbinova.com",
+      "subject": "ORBINOVA Automated Health Check",
+      "html": "<p>Verification of asynchronous transactional outbox.</p>",
+      "category": "blood_requests",
+      "metadata": {
+        "testId": "scenario-h-test"
+      }
+    },
+    "status": "published",
+    "createdAt": "2026-11-07T09:08:50.244Z",
+    "attempts": 1,
+    "publishedAt": "2026-11-07T09:16:59.839Z"
+  },
+  "outbox-1794042716115-h53dp": {
+    "id": "outbox-1794042716115-h53dp",
+    "eventType": "TEST_EMAIL_EVENT",
+    "payload": {
+      "to": "quality-assurance@orbinova.com",
+      "subject": "ORBINOVA Automated Health Check",
+      "html": "<p>Verification of asynchronous transactional outbox.</p>",
+      "category": "blood_requests",
+      "metadata": {
+        "testId": "scenario-h-test"
+      }
+    },
+    "status": "published",
+    "createdAt": "2026-11-07T09:11:56.115Z",
+    "attempts": 1,
+    "publishedAt": "2026-11-07T09:16:59.865Z"
+  },
+  "outbox-1794042792703-gr5in": {
+    "id": "outbox-1794042792703-gr5in",
+    "eventType": "TEST_EMAIL_EVENT",
+    "payload": {
+      "to": "quality-assurance@orbinova.com",
+      "subject": "ORBINOVA Automated Health Check",
+      "html": "<p>Verification of asynchronous transactional outbox.</p>",
+      "category": "blood_requests",
+      "metadata": {
+        "testId": "scenario-h-test"
+      }
+    },
+    "status": "published",
+    "createdAt": "2026-11-07T09:13:12.703Z",
+    "attempts": 1,
+    "publishedAt": "2026-11-07T09:16:59.892Z"
+  },
+  "outbox-1794042953714-hqwwo": {
+    "id": "outbox-1794042953714-hqwwo",
+    "eventType": "TEST_EMAIL_EVENT",
+    "payload": {
+      "to": "quality-assurance@orbinova.com",
+      "subject": "ORBINOVA Automated Health Check",
+      "html": "<p>Verification of asynchronous transactional outbox.</p>",
+      "category": "blood_requests",
+      "metadata": {
+        "testId": "scenario-h-test"
+      }
+    },
+    "status": "published",
+    "createdAt": "2026-11-07T09:15:53.714Z",
+    "attempts": 1,
+    "publishedAt": "2026-11-07T09:16:59.918Z"
+  },
+  "outbox-1794043019696-01eal": {
+    "id": "outbox-1794043019696-01eal",
+    "eventType": "TEST_EMAIL_EVENT",
+    "payload": {
+      "to": "quality-assurance@orbinova.com",
+      "subject": "ORBINOVA Automated Health Check",
+      "html": "<p>Verification of asynchronous transactional outbox.</p>",
+      "category": "blood_requests",
+      "metadata": {
+        "testId": "scenario-h-test"
+      }
+    },
+    "status": "published",
+    "createdAt": "2026-11-07T09:16:59.696Z",
+    "attempts": 1,
+    "publishedAt": "2026-11-07T09:16:59.941Z"
+  },
+  "outbox-1794043306017-7r3lo": {
+    "id": "outbox-1794043306017-7r3lo",
+    "eventType": "TEST_EMAIL_EVENT",
+    "payload": {
+      "to": "quality-assurance@orbinova.com",
+      "subject": "ORBINOVA Automated Health Check",
+      "html": "<p>Verification of asynchronous transactional outbox.</p>",
+      "category": "blood_requests",
+      "metadata": {
+        "testId": "scenario-h-test"
+      }
+    },
+    "status": "published",
+    "createdAt": "2026-11-07T09:21:46.017Z",
+    "attempts": 1,
+    "publishedAt": "2026-11-07T09:21:46.156Z"
+  },
+  "outbox-1794046107411-kbm5h": {
+    "id": "outbox-1794046107411-kbm5h",
+    "eventType": "TEST_EMAIL_EVENT",
+    "payload": {
+      "to": "quality-assurance@orbinova.com",
+      "subject": "ORBINOVA Automated Health Check",
+      "html": "<p>Verification of asynchronous transactional outbox.</p>",
+      "category": "blood_requests",
+      "metadata": {
+        "testId": "scenario-h-test"
+      }
+    },
+    "status": "published",
+    "createdAt": "2026-11-07T10:08:27.411Z",
+    "attempts": 1,
+    "publishedAt": "2026-11-07T10:40:40.350Z"
+  },
+  "outbox-1794046252397-qonka": {
+    "id": "outbox-1794046252397-qonka",
+    "eventType": "TEST_EMAIL_EVENT",
+    "payload": {
+      "to": "quality-assurance@orbinova.com",
+      "subject": "ORBINOVA Automated Health Check",
+      "html": "<p>Verification of asynchronous transactional outbox.</p>",
+      "category": "blood_requests",
+      "metadata": {
+        "testId": "scenario-h-test"
+      }
+    },
+    "status": "published",
+    "createdAt": "2026-11-07T10:10:52.397Z",
+    "attempts": 1,
+    "publishedAt": "2026-11-07T10:40:40.371Z"
+  },
+  "outbox-1794046483205-bocut": {
+    "id": "outbox-1794046483205-bocut",
+    "eventType": "TEST_EMAIL_EVENT",
+    "payload": {
+      "to": "quality-assurance@orbinova.com",
+      "subject": "ORBINOVA Automated Health Check",
+      "html": "<p>Verification of asynchronous transactional outbox.</p>",
+      "category": "blood_requests",
+      "metadata": {
+        "testId": "scenario-h-test"
+      }
+    },
+    "status": "published",
+    "createdAt": "2026-11-07T10:14:43.205Z",
+    "attempts": 1,
+    "publishedAt": "2026-11-07T10:40:40.392Z"
+  },
+  "outbox-1794047696155-asupe": {
+    "id": "outbox-1794047696155-asupe",
+    "eventType": "TEST_EMAIL_EVENT",
+    "payload": {
+      "to": "quality-assurance@orbinova.com",
+      "subject": "ORBINOVA Automated Health Check",
+      "html": "<p>Verification of asynchronous transactional outbox.</p>",
+      "category": "blood_requests",
+      "metadata": {
+        "testId": "scenario-h-test"
+      }
+    },
+    "status": "published",
+    "createdAt": "2026-11-07T10:34:56.155Z",
+    "attempts": 1,
+    "publishedAt": "2026-11-07T10:40:40.413Z"
+  },
+  "outbox-1794047983704-r5l9h": {
+    "id": "outbox-1794047983704-r5l9h",
+    "eventType": "TEST_EMAIL_EVENT",
+    "payload": {
+      "to": "quality-assurance@orbinova.com",
+      "subject": "ORBINOVA Automated Health Check",
+      "html": "<p>Verification of asynchronous transactional outbox.</p>",
+      "category": "blood_requests",
+      "metadata": {
+        "testId": "scenario-h-test"
+      }
+    },
+    "status": "published",
+    "createdAt": "2026-11-07T10:39:43.704Z",
+    "attempts": 1,
+    "publishedAt": "2026-11-07T10:40:40.436Z"
+  },
+  "outbox-1794048040207-ezvk1": {
+    "id": "outbox-1794048040207-ezvk1",
+    "eventType": "TEST_EMAIL_EVENT",
+    "payload": {
+      "to": "quality-assurance@orbinova.com",
+      "subject": "ORBINOVA Automated Health Check",
+      "html": "<p>Verification of asynchronous transactional outbox.</p>",
+      "category": "blood_requests",
+      "metadata": {
+        "testId": "scenario-h-test"
+      }
+    },
+    "status": "published",
+    "createdAt": "2026-11-07T10:40:40.207Z",
+    "attempts": 1,
+    "publishedAt": "2026-11-07T10:40:40.456Z"
+  },
+  "outbox-1794049872995-c92np": {
+    "id": "outbox-1794049872995-c92np",
+    "eventType": "TEST_EMAIL_EVENT",
+    "payload": {
+      "to": "quality-assurance@orbinova.com",
+      "subject": "ORBINOVA Automated Health Check",
+      "html": "<p>Verification of asynchronous transactional outbox.</p>",
+      "category": "blood_requests",
+      "metadata": {
+        "testId": "scenario-h-test"
+      }
+    },
+    "status": "published",
+    "createdAt": "2026-11-07T11:11:12.995Z",
+    "attempts": 1,
+    "publishedAt": "2026-11-07T11:11:13.128Z"
+  },
+  "outbox-1794051439102-xazma": {
+    "id": "outbox-1794051439102-xazma",
+    "eventType": "BLOOD_REQUEST_BROADCAST",
+    "payload": {
+      "to": "bloodbank@orbinova.com",
+      "subject": "Blood Request: Need 2 Units AB- at Lagos University Teaching Hospital (LUTH)",
+      "html": "<!DOCTYPE html>\n<html lang=\"en\" xmlns:v=\"urn:schemas-microsoft-com:vml\">\n<head>\n  <meta charset=\"UTF-8\" />\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" />\n  <meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\" />\n  <title>Blood Request: Need 2 Units AB- at Lagos University Teaching Hospital (LUTH)</title>\n  <!--[if mso]>\n  <style type=\"text/css\">\n    body, table, td, a { font-family: Arial, Helvetica, sans-serif !important; }\n  </style>\n  <![endif]-->\n  <style type=\"text/css\">\n    body { margin: 0; padding: 0; width: 100% !important; background-color: #f1f5f9; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; -webkit-font-smoothing: antialiased; }\n    .wrapper { width: 100%; table-layout: fixed; background-color: #f1f5f9; padding: 40px 0; }\n    .main-table { max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 16px; border: 1px solid #e2e8f0; overflow: hidden; box-shadow: 0 4px 12px rgba(15, 23, 42, 0.05); }\n    .header { background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); padding: 32px 36px; border-bottom: 3px solid #0d9488; }\n    .brand-logo { color: #ffffff; font-size: 24px; font-weight: 800; letter-spacing: -0.5px; text-decoration: none; margin: 0; }\n    .brand-logo span { color: #14b8a6; }\n    .brand-tagline { color: #94a3b8; font-size: 11px; text-transform: uppercase; letter-spacing: 1.5px; margin-top: 6px; font-weight: 600; }\n    .content { padding: 36px 36px 28px 36px; line-height: 1.6; color: #334155; font-size: 15px; }\n    .greeting { font-size: 20px; font-weight: 700; color: #0f172a; margin-top: 0; margin-bottom: 16px; }\n    .btn-container { text-align: center; margin: 32px 0; }\n    .btn { display: inline-block; background-color: #0d9488; color: #ffffff !important; padding: 14px 32px; border-radius: 10px; font-size: 14px; font-weight: 700; text-decoration: none; text-align: center; box-shadow: 0 2px 4px rgba(13, 148, 136, 0.2); }\n    .badge { display: inline-block; padding: 4px 10px; border-radius: 9999px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }\n    .badge-emergency { background-color: #fef2f2; color: #b91c1c; border: 1px solid #fecaca; }\n    .badge-urgent { background-color: #fffbeb; color: #b45309; border: 1px solid #fde68a; }\n    .badge-success { background-color: #f0fdf4; color: #15803d; border: 1px solid #bbf7d0; }\n    .badge-info { background-color: #f0fdfa; color: #0f766e; border: 1px solid #ccfbf1; }\n    .info-card { background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 20px; margin: 24px 0; }\n    .info-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #f1f5f9; font-size: 13px; }\n    .info-row:last-child { border-bottom: none; }\n    .info-label { color: #64748b; font-weight: 500; }\n    .info-value { color: #0f172a; font-weight: 700; font-family: monospace; }\n    .footer { background-color: #f8fafc; padding: 24px 36px; text-align: center; border-top: 1px solid #e2e8f0; font-size: 12px; color: #94a3b8; line-height: 1.5; }\n    .footer a { color: #0d9488; text-decoration: none; }\n    @media only screen and (max-width: 620px) {\n      .main-table { width: 100% !important; border-radius: 0 !important; }\n      .header, .content, .footer { padding-left: 20px !important; padding-right: 20px !important; }\n      .btn { width: 85% !important; display: block !important; margin: 20px auto !important; }\n    }\n  </style>\n</head>\n<body>\n  <div style=\"display: none; max-height: 0px; overflow: hidden;\">\n    Blood Request: Need 2 Units AB- at Lagos University Teaching Hospital (LUTH) &zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;\n  </div>\n  <table role=\"presentation\" class=\"wrapper\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\">\n    <tr>\n      <td align=\"center\">\n        <table role=\"presentation\" class=\"main-table\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\">\n          <!-- Header -->\n          <tr>\n            <td class=\"header\">\n              <div class=\"brand-logo\">ORBI<span>NOVA</span></div>\n              <div class=\"brand-tagline\">Healthcare Intelligence &amp; Blood Coordination Network</div>\n            </td>\n          </tr>\n          <!-- Content Body -->\n          <tr>\n            <td class=\"content\">\n              \n    <h2 class=\"greeting\">Incoming Blood Supply Request</h2>\n    <p>\n      An authorized clinical request has been broadcast by <strong>Lagos University Teaching Hospital (LUTH)</strong> requiring compatible stock allocation.\n    </p>\n\n    <div class=\"info-card\">\n      <div class=\"info-row\">\n        <span class=\"info-label\">Urgency Level:</span>\n        <span class=\"info-value\"><span class=\"badge badge-urgent\">URGENT (LEVEL 2)</span></span>\n      </div>\n      <div class=\"info-row\">\n        <span class=\"info-label\">Required Blood Group:</span>\n        <span class=\"info-value\" style=\"font-size: 16px; color: #b91c1c;\">AB-</span>\n      </div>\n      <div class=\"info-row\">\n        <span class=\"info-label\">Units Needed:</span>\n        <span class=\"info-value\">2 Bags (450ml)</span>\n      </div>\n      <div class=\"info-row\">\n        <span class=\"info-label\">Requesting Hospital:</span>\n        <span class=\"info-value\">Lagos University Teaching Hospital (LUTH)</span>\n      </div>\n      \n      <div class=\"info-row\">\n        <span class=\"info-label\">Required By:</span>\n        <span class=\"info-value\">11/20/2026, 12:38:00 PM</span>\n      </div>\n      \n      \n    </div>\n\n    <p style=\"font-size: 14px; color: #475569;\">\n      Please inspect your facility stock ledger and confirm unit allocation or reservation immediately.\n    </p>\n  \n\n              \n              <div class=\"btn-container\">\n                <a href=\"http://localhost:3000/hospital/blood-requests/005d2efe-9be2-45ed-82e2-77df24f86f56\" class=\"btn\" target=\"_blank\" rel=\"noopener noreferrer\">Review & Allocate Stock</a>\n              </div>\n              \n\n              <p style=\"font-size: 12px; color: #64748b; margin-top: 28px; line-height: 1.5;\">Clinical Coordination Notice &bull; All transactions recorded in immutable audit ledger.</p>\n            </td>\n          </tr>\n          <!-- Footer -->\n          <tr>\n            <td class=\"footer\">\n              <p style=\"margin: 0 0 8px 0;\">\n                &copy; 2026 ORBINOVA Technologies Inc. All rights reserved.\n              </p>\n              <p style=\"margin: 0 0 8px 0;\">\n                Confidential Healthcare Communication &bull; Transmitted under strict data protection regulations.\n              </p>\n              \n            </td>\n          </tr>\n        </table>\n      </td>\n    </tr>\n  </table>\n</body>\n</html>",
+      "text": "ORBINOVA HEALTHCARE NETWORK\n--------------------------------------------------\nBLOOD REQUEST: NEED 2 UNITS AB- AT LAGOS UNIVERSITY TEACHING HOSPITAL (LUTH)\n--------------------------------------------------\n\nBLOOD SUPPLY BROADCAST: URGENT\nHospital: Lagos University Teaching Hospital (LUTH)\nBlood Group: AB- | Units: 2\nRequired By: 2026-11-20T11:38:00.000Z\nReview & Respond: http://localhost:3000/hospital/blood-requests/005d2efe-9be2-45ed-82e2-77df24f86f56\n\n>> Review & Allocate Stock: http://localhost:3000/hospital/blood-requests/005d2efe-9be2-45ed-82e2-77df24f86f56\n\nNote: Clinical Coordination Notice &bull; All transactions recorded in immutable audit ledger.\n\n--------------------------------------------------\n(c) 2026 ORBINOVA Technologies Inc. Confidential clinical communication.",
+      "category": "blood_requests",
+      "metadata": {
+        "referenceId": "005d2efe-9be2-45ed-82e2-77df24f86f56",
+        "referenceType": "blood_request_broadcast",
+        "idempotencyKey": "broadcast-005d2efe-9be2-45ed-82e2-77df24f86f56-bloodbank@orbinova.com"
+      }
+    },
+    "status": "published",
+    "createdAt": "2026-11-07T11:37:19.102Z",
+    "attempts": 1,
+    "publishedAt": "2026-11-07T11:37:19.152Z"
+  },
+  "outbox-1794052329898-0ru4y": {
+    "id": "outbox-1794052329898-0ru4y",
+    "eventType": "TEST_EMAIL_EVENT",
+    "payload": {
+      "to": "quality-assurance@orbinova.com",
+      "subject": "ORBINOVA Automated Health Check",
+      "html": "<p>Verification of asynchronous transactional outbox.</p>",
+      "category": "blood_requests",
+      "metadata": {
+        "testId": "scenario-h-test"
+      }
+    },
+    "status": "published",
+    "createdAt": "2026-11-07T11:52:09.898Z",
+    "attempts": 1,
+    "publishedAt": "2026-11-07T11:52:50.846Z"
+  },
+  "outbox-1794052370490-ntuxt": {
+    "id": "outbox-1794052370490-ntuxt",
+    "eventType": "TEST_EMAIL_EVENT",
+    "payload": {
+      "to": "quality-assurance@orbinova.com",
+      "subject": "ORBINOVA Automated Health Check",
+      "html": "<p>Verification of asynchronous transactional outbox.</p>",
+      "category": "blood_requests",
+      "metadata": {
+        "testId": "scenario-h-test"
+      }
+    },
+    "status": "published",
+    "createdAt": "2026-11-07T11:52:50.490Z",
+    "attempts": 1,
+    "publishedAt": "2026-11-07T11:52:50.922Z"
+  },
+  "outbox-1794055033990-891wt": {
+    "id": "outbox-1794055033990-891wt",
+    "eventType": "TEST_EMAIL_EVENT",
+    "payload": {
+      "to": "quality-assurance@orbinova.com",
+      "subject": "ORBINOVA Automated Health Check",
+      "html": "<p>Verification of asynchronous transactional outbox.</p>",
+      "category": "blood_requests",
+      "metadata": {
+        "testId": "scenario-h-test"
+      }
+    },
+    "status": "published",
+    "createdAt": "2026-11-07T12:37:13.990Z",
+    "attempts": 1,
+    "publishedAt": "2026-11-07T12:37:14.263Z"
+  },
+  "outbox-1794056267463-1guvh": {
+    "id": "outbox-1794056267463-1guvh",
+    "eventType": "TEST_EMAIL_EVENT",
+    "payload": {
+      "to": "quality-assurance@orbinova.com",
+      "subject": "ORBINOVA Automated Health Check",
+      "html": "<p>Verification of asynchronous transactional outbox.</p>",
+      "category": "blood_requests",
+      "metadata": {
+        "testId": "scenario-h-test"
+      }
+    },
+    "status": "published",
+    "createdAt": "2026-11-07T12:57:47.463Z",
+    "attempts": 1,
+    "publishedAt": "2026-11-07T12:57:47.753Z"
+  },
+  "outbox-1794056755775-edoq8": {
+    "id": "outbox-1794056755775-edoq8",
+    "eventType": "TEST_EMAIL_EVENT",
+    "payload": {
+      "to": "quality-assurance@orbinova.com",
+      "subject": "ORBINOVA Automated Health Check",
+      "html": "<p>Verification of asynchronous transactional outbox.</p>",
+      "category": "blood_requests",
+      "metadata": {
+        "testId": "scenario-h-test"
+      }
+    },
+    "status": "published",
+    "createdAt": "2026-11-07T13:05:55.775Z",
+    "attempts": 1,
+    "publishedAt": "2026-11-07T13:05:56.085Z"
+  }
+}

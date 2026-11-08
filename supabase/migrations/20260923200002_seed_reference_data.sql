@@ -1,0 +1,93 @@
+-- ==============================================================================
+-- SmartDonor Migration: Reference Seed Data (Blood Groups & Compatibility)
+-- ==============================================================================
+
+-- 1. Blood Groups
+INSERT INTO public.blood_groups (code, name, antigen_a, antigen_b, rh_factor, description, rarity_rank)
+VALUES
+  ('O+', 'O Positive', FALSE, FALSE, TRUE, 'Universal red cell donor for positive blood types; common in Nigeria.', 1),
+  ('O-', 'O Negative', FALSE, FALSE, FALSE, 'Universal red cell donor for all blood types; critical emergency reserve.', 7),
+  ('A+', 'A Positive', TRUE, FALSE, TRUE, 'Can give red cells to A+ and AB+; can receive from A+, A-, O+, O-.', 2),
+  ('A-', 'A Negative', TRUE, FALSE, FALSE, 'Can give red cells to A+, A-, AB+, AB-; can receive from A-, O-.', 6),
+  ('B+', 'B Positive', FALSE, TRUE, TRUE, 'Can give red cells to B+ and AB+; can receive from B+, B-, O+, O-.', 3),
+  ('B-', 'B Negative', FALSE, TRUE, FALSE, 'Can give red cells to B+, B-, AB+, AB-; can receive from B-, O-.', 8),
+  ('AB+', 'AB Positive', TRUE, TRUE, TRUE, 'Universal red cell recipient; universal plasma donor.', 4),
+  ('AB-', 'AB Negative', TRUE, TRUE, FALSE, 'Can give red cells to AB+, AB-; can receive from all negative types.', 5)
+ON CONFLICT (code) DO UPDATE SET
+  name = EXCLUDED.name,
+  antigen_a = EXCLUDED.antigen_a,
+  antigen_b = EXCLUDED.antigen_b,
+  rh_factor = EXCLUDED.rh_factor,
+  description = EXCLUDED.description,
+  rarity_rank = EXCLUDED.rarity_rank;
+
+-- 2. Blood Compatibility Matrix
+INSERT INTO public.blood_compatibility (donor_blood_group, recipient_blood_group, is_compatible, compatibility_type, notes)
+VALUES
+  ('O-', 'O-', TRUE, 'red_cells', 'Identical match'),
+  ('O-', 'O+', TRUE, 'red_cells', 'Compatible match'),
+  ('O-', 'A-', TRUE, 'red_cells', 'Compatible match'),
+  ('O-', 'A+', TRUE, 'red_cells', 'Compatible match'),
+  ('O-', 'B-', TRUE, 'red_cells', 'Compatible match'),
+  ('O-', 'B+', TRUE, 'red_cells', 'Compatible match'),
+  ('O-', 'AB-', TRUE, 'red_cells', 'Compatible match'),
+  ('O-', 'AB+', TRUE, 'red_cells', 'Compatible match'),
+  ('O+', 'O-', FALSE, 'red_cells', 'Rh incompatibility'),
+  ('O+', 'O+', TRUE, 'red_cells', 'Identical match'),
+  ('O+', 'A-', FALSE, 'red_cells', 'Rh incompatibility'),
+  ('O+', 'A+', TRUE, 'red_cells', 'Compatible match'),
+  ('O+', 'B-', FALSE, 'red_cells', 'Rh incompatibility'),
+  ('O+', 'B+', TRUE, 'red_cells', 'Compatible match'),
+  ('O+', 'AB-', FALSE, 'red_cells', 'Rh incompatibility'),
+  ('O+', 'AB+', TRUE, 'red_cells', 'Compatible match'),
+  ('A-', 'O-', FALSE, 'red_cells', 'Antigen mismatch'),
+  ('A-', 'O+', FALSE, 'red_cells', 'Antigen mismatch'),
+  ('A-', 'A-', TRUE, 'red_cells', 'Identical match'),
+  ('A-', 'A+', TRUE, 'red_cells', 'Compatible match'),
+  ('A-', 'B-', FALSE, 'red_cells', 'Antigen mismatch'),
+  ('A-', 'B+', FALSE, 'red_cells', 'Antigen mismatch'),
+  ('A-', 'AB-', TRUE, 'red_cells', 'Compatible match'),
+  ('A-', 'AB+', TRUE, 'red_cells', 'Compatible match'),
+  ('A+', 'O-', FALSE, 'red_cells', 'Antigen mismatch'),
+  ('A+', 'O+', FALSE, 'red_cells', 'Antigen mismatch'),
+  ('A+', 'A-', FALSE, 'red_cells', 'Rh incompatibility'),
+  ('A+', 'A+', TRUE, 'red_cells', 'Identical match'),
+  ('A+', 'B-', FALSE, 'red_cells', 'Antigen mismatch'),
+  ('A+', 'B+', FALSE, 'red_cells', 'Antigen mismatch'),
+  ('A+', 'AB-', FALSE, 'red_cells', 'Rh incompatibility'),
+  ('A+', 'AB+', TRUE, 'red_cells', 'Compatible match'),
+  ('B-', 'O-', FALSE, 'red_cells', 'Antigen mismatch'),
+  ('B-', 'O+', FALSE, 'red_cells', 'Antigen mismatch'),
+  ('B-', 'A-', FALSE, 'red_cells', 'Antigen mismatch'),
+  ('B-', 'A+', FALSE, 'red_cells', 'Antigen mismatch'),
+  ('B-', 'B-', TRUE, 'red_cells', 'Identical match'),
+  ('B-', 'B+', TRUE, 'red_cells', 'Compatible match'),
+  ('B-', 'AB-', TRUE, 'red_cells', 'Compatible match'),
+  ('B-', 'AB+', TRUE, 'red_cells', 'Compatible match'),
+  ('B+', 'O-', FALSE, 'red_cells', 'Antigen mismatch'),
+  ('B+', 'O+', FALSE, 'red_cells', 'Antigen mismatch'),
+  ('B+', 'A-', FALSE, 'red_cells', 'Antigen mismatch'),
+  ('B+', 'A+', FALSE, 'red_cells', 'Antigen mismatch'),
+  ('B+', 'B-', FALSE, 'red_cells', 'Rh incompatibility'),
+  ('B+', 'B+', TRUE, 'red_cells', 'Identical match'),
+  ('B+', 'AB-', FALSE, 'red_cells', 'Rh incompatibility'),
+  ('B+', 'AB+', TRUE, 'red_cells', 'Compatible match'),
+  ('AB-', 'O-', FALSE, 'red_cells', 'Antigen mismatch'),
+  ('AB-', 'O+', FALSE, 'red_cells', 'Antigen mismatch'),
+  ('AB-', 'A-', FALSE, 'red_cells', 'Antigen mismatch'),
+  ('AB-', 'A+', FALSE, 'red_cells', 'Antigen mismatch'),
+  ('AB-', 'B-', FALSE, 'red_cells', 'Antigen mismatch'),
+  ('AB-', 'B+', FALSE, 'red_cells', 'Antigen mismatch'),
+  ('AB-', 'AB-', TRUE, 'red_cells', 'Identical match'),
+  ('AB-', 'AB+', TRUE, 'red_cells', 'Compatible match'),
+  ('AB+', 'O-', FALSE, 'red_cells', 'Antigen mismatch'),
+  ('AB+', 'O+', FALSE, 'red_cells', 'Antigen mismatch'),
+  ('AB+', 'A-', FALSE, 'red_cells', 'Antigen mismatch'),
+  ('AB+', 'A+', FALSE, 'red_cells', 'Antigen mismatch'),
+  ('AB+', 'B-', FALSE, 'red_cells', 'Antigen mismatch'),
+  ('AB+', 'B+', FALSE, 'red_cells', 'Antigen mismatch'),
+  ('AB+', 'AB-', FALSE, 'red_cells', 'Rh incompatibility'),
+  ('AB+', 'AB+', TRUE, 'red_cells', 'Identical match')
+ON CONFLICT (donor_blood_group, recipient_blood_group, compatibility_type) DO UPDATE SET
+  is_compatible = EXCLUDED.is_compatible,
+  notes = EXCLUDED.notes;

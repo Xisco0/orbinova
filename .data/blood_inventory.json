@@ -1,0 +1,292 @@
+{
+  "test-hospital-org-123_A-": {
+    "id": "inv-test-hospital-org-123-A-",
+    "organization_id": "test-hospital-org-123",
+    "blood_group": "A-",
+    "quantity": 0,
+    "reserved_quantity": 0,
+    "available_quantity": 0,
+    "created_at": "2026-11-06T16:35:01.132Z",
+    "updated_at": "2026-11-07T08:32:59.320Z"
+  },
+  "a1111111-1111-1111-1111-111111111111_A-": {
+    "id": "inv-a1111111-1111-1111-1111-111111111111-A-",
+    "organization_id": "a1111111-1111-1111-1111-111111111111",
+    "blood_group": "A-",
+    "quantity": 0,
+    "reserved_quantity": 0,
+    "available_quantity": 0,
+    "created_at": "2026-11-07T08:13:36.550Z",
+    "updated_at": "2026-11-07T11:11:12.733Z"
+  },
+  "a1111111-1111-1111-1111-111111111111_O+": {
+    "id": "inv-a1111111-1111-1111-1111-111111111111-O+",
+    "organization_id": "a1111111-1111-1111-1111-111111111111",
+    "blood_group": "O+",
+    "quantity": 0,
+    "reserved_quantity": 0,
+    "available_quantity": 0,
+    "created_at": "2026-11-07T09:07:36.282Z",
+    "updated_at": "2026-11-07T10:40:39.490Z"
+  },
+  "b3333333-3333-3333-3333-333333333333_O+": {
+    "id": "inv-b3333333-3333-3333-3333-333333333333-O+",
+    "organization_id": "b3333333-3333-3333-3333-333333333333",
+    "blood_group": "O+",
+    "quantity": 3,
+    "reserved_quantity": 2,
+    "available_quantity": 1,
+    "created_at": "2026-11-07T09:07:36.294Z",
+    "updated_at": "2026-11-08T11:37:34.777Z"
+  },
+  "a1111111-1111-1111-1111-111111111111_B-": {
+    "id": "inv-a1111111-1111-1111-1111-111111111111-B-",
+    "organization_id": "a1111111-1111-1111-1111-111111111111",
+    "blood_group": "B-",
+    "quantity": 0,
+    "reserved_quantity": 0,
+    "available_quantity": 0,
+    "created_at": "2026-11-07T09:07:36.354Z",
+    "updated_at": "2026-11-07T10:40:39.578Z"
+  },
+  "b3333333-3333-3333-3333-333333333333_B-": {
+    "id": "inv-b3333333-3333-3333-3333-333333333333-B-",
+    "organization_id": "b3333333-3333-3333-3333-333333333333",
+    "blood_group": "B-",
+    "quantity": 0,
+    "reserved_quantity": 0,
+    "available_quantity": 0,
+    "created_at": "2026-11-07T09:07:36.370Z",
+    "updated_at": "2026-11-07T14:43:14.343Z"
+  },
+  "b4444444-4444-4444-4444-444444444444_A+": {
+    "id": "inv-b4444444-4444-4444-4444-444444444444-A+",
+    "organization_id": "b4444444-4444-4444-4444-444444444444",
+    "blood_group": "A+",
+    "quantity": 7,
+    "reserved_quantity": 0,
+    "available_quantity": 7,
+    "created_at": "2026-11-07T09:07:50.872Z",
+    "updated_at": "2026-11-07T13:05:54.417Z"
+  },
+  "a1111111-1111-1111-1111-111111111111_O-": {
+    "id": "inv-a1111111-1111-1111-1111-111111111111-O-",
+    "organization_id": "a1111111-1111-1111-1111-111111111111",
+    "blood_group": "O-",
+    "quantity": 0,
+    "reserved_quantity": 0,
+    "available_quantity": 0,
+    "created_at": "2026-11-07T09:07:51.021Z",
+    "updated_at": "2026-11-07T11:11:12.735Z"
+  },
+  "b2222222-2222-2222-2222-222222222222_O-": {
+    "id": "inv-b2222222-2222-2222-2222-222222222222-O-",
+    "organization_id": "b2222222-2222-2222-2222-222222222222",
+    "blood_group": "O-",
+    "quantity": 3,
+    "reserved_quantity": 0,
+    "available_quantity": 3,
+    "created_at": "2026-11-07T09:07:51.047Z",
+    "updated_at": "2026-11-07T14:43:15.070Z"
+  },
+  "b3333333-3333-3333-3333-333333333333_A-": {
+    "id": "inv-b3333333-3333-3333-3333-333333333333-A-",
+    "organization_id": "b3333333-3333-3333-3333-333333333333",
+    "blood_group": "A-",
+    "quantity": 3,
+    "reserved_quantity": 0,
+    "available_quantity": 3,
+    "created_at": "2026-11-07T09:07:51.111Z",
+    "updated_at": "2026-11-07T13:05:54.707Z"
+  },
+  "b2222222-2222-2222-2222-222222222222_B-": {
+    "id": "inv-b2222222-2222-2222-2222-222222222222-B-",
+    "organization_id": "b2222222-2222-2222-2222-222222222222",
+    "blood_group": "B-",
+    "quantity": 0,
+    "reserved_quantity": 0,
+    "available_quantity": 0,
+    "created_at": "2026-11-07T09:10:51.939Z",
+    "updated_at": "2026-11-07T14:43:14.060Z"
+  },
+  "b4444444-4444-4444-4444-444444444444_B-": {
+    "id": "inv-b4444444-4444-4444-4444-444444444444-B-",
+    "organization_id": "b4444444-4444-4444-4444-444444444444",
+    "blood_group": "B-",
+    "quantity": 0,
+    "reserved_quantity": 0,
+    "available_quantity": 0,
+    "created_at": "2026-11-07T09:10:51.950Z",
+    "updated_at": "2026-11-07T14:43:14.516Z"
+  },
+  "a1111111-1111-1111-1111-111111111111_AB+": {
+    "id": "inv-a1111111-1111-1111-1111-111111111111-AB+",
+    "organization_id": "a1111111-1111-1111-1111-111111111111",
+    "blood_group": "AB+",
+    "quantity": 0,
+    "reserved_quantity": 0,
+    "available_quantity": 0,
+    "created_at": "2026-11-07T09:11:13.445Z",
+    "updated_at": "2026-11-07T09:15:38.885Z"
+  },
+  "a2222222-2222-2222-2222-222222222222_AB+": {
+    "id": "inv-a2222222-2222-2222-2222-222222222222-AB+",
+    "organization_id": "a2222222-2222-2222-2222-222222222222",
+    "blood_group": "AB+",
+    "quantity": 0,
+    "reserved_quantity": 0,
+    "available_quantity": 0,
+    "created_at": "2026-11-07T09:11:13.458Z",
+    "updated_at": "2026-11-07T09:15:38.902Z"
+  },
+  "b2222222-2222-2222-2222-222222222222_AB+": {
+    "id": "inv-b2222222-2222-2222-2222-222222222222-AB+",
+    "organization_id": "b2222222-2222-2222-2222-222222222222",
+    "blood_group": "AB+",
+    "quantity": 0,
+    "reserved_quantity": 0,
+    "available_quantity": 0,
+    "created_at": "2026-11-07T09:11:13.472Z",
+    "updated_at": "2026-11-07T09:15:38.917Z"
+  },
+  "b3333333-3333-3333-3333-333333333333_AB+": {
+    "id": "inv-b3333333-3333-3333-3333-333333333333-AB+",
+    "organization_id": "b3333333-3333-3333-3333-333333333333",
+    "blood_group": "AB+",
+    "quantity": 0,
+    "reserved_quantity": 0,
+    "available_quantity": 0,
+    "created_at": "2026-11-07T09:11:13.485Z",
+    "updated_at": "2026-11-07T09:15:38.934Z"
+  },
+  "b4444444-4444-4444-4444-444444444444_AB+": {
+    "id": "inv-b4444444-4444-4444-4444-444444444444-AB+",
+    "organization_id": "b4444444-4444-4444-4444-444444444444",
+    "blood_group": "AB+",
+    "quantity": 0,
+    "reserved_quantity": 0,
+    "available_quantity": 0,
+    "created_at": "2026-11-07T09:11:13.501Z",
+    "updated_at": "2026-11-07T09:15:38.956Z"
+  },
+  "b3333333-3333-3333-3333-333333333333_O-": {
+    "id": "inv-b3333333-3333-3333-3333-333333333333-O-",
+    "organization_id": "b3333333-3333-3333-3333-333333333333",
+    "blood_group": "O-",
+    "quantity": 2,
+    "reserved_quantity": 2,
+    "available_quantity": 0,
+    "created_at": "2026-11-07T09:11:34.771Z",
+    "updated_at": "2026-11-07T13:05:54.609Z"
+  },
+  "b4444444-4444-4444-4444-444444444444_O-": {
+    "id": "inv-b4444444-4444-4444-4444-444444444444-O-",
+    "organization_id": "b4444444-4444-4444-4444-444444444444",
+    "blood_group": "O-",
+    "quantity": 0,
+    "reserved_quantity": 0,
+    "available_quantity": 0,
+    "created_at": "2026-11-07T09:11:34.783Z",
+    "updated_at": "2026-11-07T13:05:54.524Z"
+  },
+  "b2222222-2222-2222-2222-222222222222_O+": {
+    "id": "inv-b2222222-2222-2222-2222-222222222222-O+",
+    "organization_id": "b2222222-2222-2222-2222-222222222222",
+    "blood_group": "O+",
+    "quantity": 0,
+    "reserved_quantity": 0,
+    "available_quantity": 0,
+    "created_at": "2026-11-07T09:15:23.975Z",
+    "updated_at": "2026-11-07T13:05:53.430Z"
+  },
+  "b4444444-4444-4444-4444-444444444444_O+": {
+    "id": "inv-b4444444-4444-4444-4444-444444444444-O+",
+    "organization_id": "b4444444-4444-4444-4444-444444444444",
+    "blood_group": "O+",
+    "quantity": 0,
+    "reserved_quantity": 0,
+    "available_quantity": 0,
+    "created_at": "2026-11-07T09:15:23.986Z",
+    "updated_at": "2026-11-07T13:05:53.450Z"
+  },
+  "a1111111-1111-1111-1111-111111111111_AB-": {
+    "id": "inv-a1111111-1111-1111-1111-111111111111-AB-",
+    "organization_id": "a1111111-1111-1111-1111-111111111111",
+    "blood_group": "AB-",
+    "quantity": 0,
+    "reserved_quantity": 0,
+    "available_quantity": 0,
+    "created_at": "2026-11-07T09:16:44.970Z",
+    "updated_at": "2026-11-07T10:40:39.683Z"
+  },
+  "a2222222-2222-2222-2222-222222222222_AB-": {
+    "id": "inv-a2222222-2222-2222-2222-222222222222-AB-",
+    "organization_id": "a2222222-2222-2222-2222-222222222222",
+    "blood_group": "AB-",
+    "quantity": 0,
+    "reserved_quantity": 0,
+    "available_quantity": 0,
+    "created_at": "2026-11-07T09:16:44.995Z",
+    "updated_at": "2026-11-07T13:05:53.894Z"
+  },
+  "b2222222-2222-2222-2222-222222222222_AB-": {
+    "id": "inv-b2222222-2222-2222-2222-222222222222-AB-",
+    "organization_id": "b2222222-2222-2222-2222-222222222222",
+    "blood_group": "AB-",
+    "quantity": 0,
+    "reserved_quantity": 0,
+    "available_quantity": 0,
+    "created_at": "2026-11-07T09:16:45.017Z",
+    "updated_at": "2026-11-07T13:05:53.927Z"
+  },
+  "b3333333-3333-3333-3333-333333333333_AB-": {
+    "id": "inv-b3333333-3333-3333-3333-333333333333-AB-",
+    "organization_id": "b3333333-3333-3333-3333-333333333333",
+    "blood_group": "AB-",
+    "quantity": 1,
+    "reserved_quantity": 1,
+    "available_quantity": 0,
+    "created_at": "2026-11-07T09:16:45.036Z",
+    "updated_at": "2026-11-07T14:43:14.910Z"
+  },
+  "b4444444-4444-4444-4444-444444444444_AB-": {
+    "id": "inv-b4444444-4444-4444-4444-444444444444-AB-",
+    "organization_id": "b4444444-4444-4444-4444-444444444444",
+    "blood_group": "AB-",
+    "quantity": 0,
+    "reserved_quantity": 0,
+    "available_quantity": 0,
+    "created_at": "2026-11-07T09:16:45.059Z",
+    "updated_at": "2026-11-07T13:05:53.991Z"
+  },
+  "b3333333-3333-3333-3333-333333333333_A+": {
+    "id": "inv-b3333333-3333-3333-3333-333333333333-A+",
+    "organization_id": "b3333333-3333-3333-3333-333333333333",
+    "blood_group": "A+",
+    "quantity": 5,
+    "reserved_quantity": 0,
+    "available_quantity": 5,
+    "created_at": "2026-11-07T10:01:16.047Z",
+    "updated_at": "2026-11-07T14:43:14.776Z"
+  },
+  "b2222222-2222-2222-2222-222222222222_A-": {
+    "id": "inv-b2222222-2222-2222-2222-222222222222-A-",
+    "organization_id": "b2222222-2222-2222-2222-222222222222",
+    "blood_group": "A-",
+    "quantity": 3,
+    "reserved_quantity": 0,
+    "available_quantity": 3,
+    "created_at": "2026-11-07T11:11:12.733Z",
+    "updated_at": "2026-11-08T07:59:10.244Z"
+  },
+  "org-bb-race-test_B+": {
+    "id": "inv-org-bb-race-test-B+",
+    "organization_id": "org-bb-race-test",
+    "blood_group": "B+",
+    "quantity": 2,
+    "reserved_quantity": 2,
+    "available_quantity": 0,
+    "created_at": "2026-11-07T14:56:04.951Z",
+    "updated_at": "2026-11-07T18:15:59.113Z"
+  }
+}

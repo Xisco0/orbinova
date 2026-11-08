@@ -1,0 +1,172 @@
+{
+  "badmusnajeeb89@gmail.com": {
+    "email": "badmusnajeeb89@gmail.com",
+    "failedCount": 1,
+    "lockedUntil": null,
+    "lastAttemptAt": "2026-11-07T12:48:00.478Z"
+  },
+  "bamirinfrancis9@gmail.com": {
+    "email": "bamirinfrancis9@gmail.com",
+    "failedCount": 5,
+    "lockedUntil": 1794056744610,
+    "lastAttemptAt": "2026-11-07T12:50:44.610Z"
+  },
+  "lockout-test-1794056665011@orbinova.com": {
+    "email": "lockout-test-1794056665011@orbinova.com",
+    "failedCount": 0,
+    "isLocked": false,
+    "lockedAt": null,
+    "unlockedAt": "2026-11-07T13:04:26.079Z",
+    "unlockedBy": "admin-hospital-cmo-001",
+    "lastAttemptAt": "2026-11-07T13:04:26.079Z",
+    "lockedUntil": null
+  },
+  "lockout-test-1794056719022@orbinova.com": {
+    "email": "lockout-test-1794056719022@orbinova.com",
+    "failedCount": 0,
+    "isLocked": false,
+    "lockedAt": null,
+    "unlockedAt": "2026-11-07T13:05:19.487Z",
+    "unlockedBy": "admin-hospital-cmo-001",
+    "lastAttemptAt": "2026-11-07T13:05:19.487Z",
+    "lockedUntil": null
+  },
+  "lockout-test-1794056754726@orbinova.com": {
+    "email": "lockout-test-1794056754726@orbinova.com",
+    "failedCount": 0,
+    "isLocked": false,
+    "lockedAt": null,
+    "unlockedAt": "2026-11-07T13:05:55.752Z",
+    "unlockedBy": "system_administrator",
+    "lastAttemptAt": "2026-11-07T13:05:55.752Z",
+    "lockedUntil": null
+  },
+  "lockout-test-1794056915734@orbinova.com": {
+    "email": "lockout-test-1794056915734@orbinova.com",
+    "failedCount": 0,
+    "isLocked": false,
+    "lockedAt": null,
+    "unlockedAt": "2026-11-07T13:08:37.515Z",
+    "unlockedBy": "admin-hospital-cmo-001",
+    "lastAttemptAt": "2026-11-07T13:08:37.515Z",
+    "lockedUntil": null
+  },
+  "hospital@orbinova": {
+    "email": "hospital@orbinova",
+    "failedCount": 4,
+    "isLocked": false,
+    "lockedAt": null,
+    "unlockedAt": null,
+    "unlockedBy": null,
+    "lastAttemptAt": "2026-11-07T13:13:51.391Z"
+  },
+  "concur-doc-1794057935210@orbinova.com": {
+    "email": "concur-doc-1794057935210@orbinova.com",
+    "failedCount": 5,
+    "isLocked": true,
+    "lockedAt": "2026-11-07T13:25:50.308Z",
+    "unlockedAt": null,
+    "unlockedBy": null,
+    "lastAttemptAt": "2026-11-07T13:25:50.308Z",
+    "lockedUntil": 1794058850308
+  },
+  "concur-doc-1794058865379@orbinova.com": {
+    "email": "concur-doc-1794058865379@orbinova.com",
+    "failedCount": 5,
+    "isLocked": true,
+    "lockedAt": "2026-11-07T13:41:20.042Z",
+    "unlockedAt": null,
+    "unlockedBy": null,
+    "lastAttemptAt": "2026-11-07T13:41:20.042Z",
+    "lockedUntil": 1794059780042
+  },
+  "doctor@orbinova.com": {
+    "email": "doctor@orbinova.com",
+    "failedCount": 1,
+    "isLocked": false,
+    "lockedAt": null,
+    "unlockedAt": "2026-11-07T13:56:08.025Z",
+    "unlockedBy": "system_administrator",
+    "lastAttemptAt": "2026-11-07T13:56:09.084Z",
+    "lockedUntil": null
+  },
+  "concur-doc-1794060503747@orbinova.com": {
+    "email": "concur-doc-1794060503747@orbinova.com",
+    "failedCount": 5,
+    "isLocked": true,
+    "lockedAt": "2026-11-07T14:08:39.149Z",
+    "unlockedAt": null,
+    "unlockedBy": null,
+    "lastAttemptAt": "2026-11-07T14:08:39.149Z",
+    "lockedUntil": 1794061419149
+  },
+  "qa-doctor-1794062472965@orbinova.com": {
+    "email": "qa-doctor-1794062472965@orbinova.com",
+    "failedCount": 0,
+    "isLocked": false,
+    "lockedAt": null,
+    "unlockedAt": "2026-11-07T14:41:34.377Z",
+    "unlockedBy": "user-qa-1794062472965",
+    "lastAttemptAt": "2026-11-07T14:41:34.377Z",
+    "lockedUntil": null
+  },
+  "concur-doc-1794062540755@orbinova.com": {
+    "email": "concur-doc-1794062540755@orbinova.com",
+    "failedCount": 5,
+    "isLocked": true,
+    "lockedAt": "2026-11-07T14:42:36.598Z",
+    "unlockedAt": null,
+    "unlockedBy": null,
+    "lastAttemptAt": "2026-11-07T14:42:36.598Z",
+    "lockedUntil": 1794063456598
+  },
+  "qa-doctor-1794063709786@orbinova.com": {
+    "email": "qa-doctor-1794063709786@orbinova.com",
+    "failedCount": 0,
+    "isLocked": false,
+    "lockedAt": null,
+    "unlockedAt": "2026-11-07T15:02:04.223Z",
+    "unlockedBy": "user-qa-1794063709786",
+    "lastAttemptAt": "2026-11-07T15:02:04.223Z",
+    "lockedUntil": null
+  },
+  "concur-doc-1794074961104@orbinova.com": {
+    "email": "concur-doc-1794074961104@orbinova.com",
+    "failedCount": 5,
+    "isLocked": true,
+    "lockedAt": "2026-11-07T18:09:40.522Z",
+    "unlockedAt": null,
+    "unlockedBy": null,
+    "lastAttemptAt": "2026-11-07T18:09:40.522Z",
+    "lockedUntil": 1794075880522
+  },
+  "concur-doc-1794077399613@orbinova.com": {
+    "email": "concur-doc-1794077399613@orbinova.com",
+    "failedCount": 5,
+    "isLocked": true,
+    "lockedAt": "2026-11-07T18:50:14.299Z",
+    "unlockedAt": null,
+    "unlockedBy": null,
+    "lastAttemptAt": "2026-11-07T18:50:14.299Z",
+    "lockedUntil": 1794078314299
+  },
+  "bamirinfrancis89@gmail.com": {
+    "email": "bamirinfrancis89@gmail.com",
+    "failedCount": 3,
+    "isLocked": false,
+    "lockedAt": null,
+    "unlockedAt": null,
+    "unlockedBy": null,
+    "lastAttemptAt": "2026-11-07T21:28:51.902Z"
+  },
+  "concur-doc-1794079549697@orbinova.com": {
+    "email": "concur-doc-1794079549697@orbinova.com",
+    "failedCount": 5,
+    "isLocked": true,
+    "lockedAt": "2026-11-07T19:26:10.569Z",
+    "unlockedAt": null,
+    "unlockedBy": null,
+    "lastAttemptAt": "2026-11-07T19:26:10.569Z",
+    "lockedUntil": 1794080470569
+  }
+}

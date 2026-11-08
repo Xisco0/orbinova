@@ -1,0 +1,1202 @@
+[
+  {
+    "id": "audit-1794056665038-zzuz4",
+    "user_id": null,
+    "organization_id": null,
+    "action": "ACCOUNT_UNLOCKED",
+    "entity_type": "account_security",
+    "entity_id": "lockout-test-1794056665011@orbinova.com",
+    "metadata": {
+      "previousState": "active",
+      "unlockedBy": "system_administrator",
+      "actorRole": "administrator",
+      "unlockedAt": "2026-11-07T13:04:25.018Z"
+    },
+    "ip_address": null,
+    "user_agent": null,
+    "created_at": "2026-11-07T13:04:25.038Z"
+  },
+  {
+    "id": "audit-1794056666023-063vx",
+    "user_id": null,
+    "organization_id": null,
+    "action": "ACCOUNT_LOCKED",
+    "entity_type": "account_security",
+    "entity_id": "lockout-test-1794056665011@orbinova.com",
+    "metadata": {
+      "reason": "5 consecutive failed password attempts",
+      "failedCount": 5,
+      "lockedAt": "2026-11-07T13:04:26.019Z",
+      "ip": "192.168.1.64"
+    },
+    "ip_address": "192.168.1.64",
+    "user_agent": null,
+    "created_at": "2026-11-07T13:04:26.023Z"
+  },
+  {
+    "id": "audit-1794056666084-0cpns",
+    "user_id": "admin-hospital-cmo-001",
+    "organization_id": "a1111111-1111-1111-1111-111111111111",
+    "action": "ACCOUNT_UNLOCKED",
+    "entity_type": "account_security",
+    "entity_id": "lockout-test-1794056665011@orbinova.com",
+    "metadata": {
+      "previousState": "locked",
+      "unlockedBy": "admin-hospital-cmo-001",
+      "actorRole": "hospital_admin",
+      "unlockedAt": "2026-11-07T13:04:26.079Z"
+    },
+    "ip_address": "192.168.1.64",
+    "user_agent": null,
+    "created_at": "2026-11-07T13:04:26.084Z"
+  },
+  {
+    "id": "audit-1794056719030-1zg04",
+    "user_id": null,
+    "organization_id": null,
+    "action": "ACCOUNT_UNLOCKED",
+    "entity_type": "account_security",
+    "entity_id": "lockout-test-1794056719022@orbinova.com",
+    "metadata": {
+      "previousState": "active",
+      "unlockedBy": "system_administrator",
+      "actorRole": "administrator",
+      "unlockedAt": "2026-11-07T13:05:19.025Z"
+    },
+    "ip_address": null,
+    "user_agent": null,
+    "created_at": "2026-11-07T13:05:19.030Z"
+  },
+  {
+    "id": "audit-1794056719437-lzj1s",
+    "user_id": null,
+    "organization_id": null,
+    "action": "ACCOUNT_LOCKED",
+    "entity_type": "account_security",
+    "entity_id": "lockout-test-1794056719022@orbinova.com",
+    "metadata": {
+      "reason": "5 consecutive failed password attempts",
+      "failedCount": 5,
+      "lockedAt": "2026-11-07T13:05:19.432Z",
+      "ip": "192.168.1.80"
+    },
+    "ip_address": "192.168.1.80",
+    "user_agent": null,
+    "created_at": "2026-11-07T13:05:19.437Z"
+  },
+  {
+    "id": "audit-1794056719492-l8a10",
+    "user_id": "admin-hospital-cmo-001",
+    "organization_id": "a1111111-1111-1111-1111-111111111111",
+    "action": "ACCOUNT_UNLOCKED",
+    "entity_type": "account_security",
+    "entity_id": "lockout-test-1794056719022@orbinova.com",
+    "metadata": {
+      "previousState": "locked",
+      "unlockedBy": "admin-hospital-cmo-001",
+      "actorRole": "hospital_admin",
+      "unlockedAt": "2026-11-07T13:05:19.487Z"
+    },
+    "ip_address": "192.168.1.80",
+    "user_agent": null,
+    "created_at": "2026-11-07T13:05:19.492Z"
+  },
+  {
+    "id": "audit-1794056754736-lrl94",
+    "user_id": null,
+    "organization_id": null,
+    "action": "ACCOUNT_UNLOCKED",
+    "entity_type": "account_security",
+    "entity_id": "lockout-test-1794056754726@orbinova.com",
+    "metadata": {
+      "previousState": "active",
+      "unlockedBy": "system_administrator",
+      "actorRole": "administrator",
+      "unlockedAt": "2026-11-07T13:05:54.729Z"
+    },
+    "ip_address": null,
+    "user_agent": null,
+    "created_at": "2026-11-07T13:05:54.736Z"
+  },
+  {
+    "id": "audit-1794056755680-qmsjb",
+    "user_id": null,
+    "organization_id": null,
+    "action": "ACCOUNT_LOCKED",
+    "entity_type": "account_security",
+    "entity_id": "lockout-test-1794056754726@orbinova.com",
+    "metadata": {
+      "reason": "5 consecutive failed password attempts",
+      "failedCount": 5,
+      "lockedAt": "2026-11-07T13:05:55.670Z",
+      "ip": null
+    },
+    "ip_address": null,
+    "user_agent": null,
+    "created_at": "2026-11-07T13:05:55.680Z"
+  },
+  {
+    "id": "audit-1794056755762-3xrg2",
+    "user_id": null,
+    "organization_id": null,
+    "action": "ACCOUNT_UNLOCKED",
+    "entity_type": "account_security",
+    "entity_id": "lockout-test-1794056754726@orbinova.com",
+    "metadata": {
+      "previousState": "locked",
+      "unlockedBy": "system_administrator",
+      "actorRole": "administrator",
+      "unlockedAt": "2026-11-07T13:05:55.752Z"
+    },
+    "ip_address": null,
+    "user_agent": null,
+    "created_at": "2026-11-07T13:05:55.762Z"
+  },
+  {
+    "id": "audit-1794056915748-8l75t",
+    "user_id": null,
+    "organization_id": null,
+    "action": "ACCOUNT_UNLOCKED",
+    "entity_type": "account_security",
+    "entity_id": "lockout-test-1794056915734@orbinova.com",
+    "metadata": {
+      "previousState": "active",
+      "unlockedBy": "system_administrator",
+      "actorRole": "administrator",
+      "unlockedAt": "2026-11-07T13:08:35.738Z"
+    },
+    "ip_address": null,
+    "user_agent": null,
+    "created_at": "2026-11-07T13:08:35.749Z"
+  },
+  {
+    "id": "audit-1794056917368-q8kra",
+    "user_id": null,
+    "organization_id": null,
+    "action": "ACCOUNT_LOCKED",
+    "entity_type": "account_security",
+    "entity_id": "lockout-test-1794056915734@orbinova.com",
+    "metadata": {
+      "reason": "5 consecutive failed password attempts",
+      "failedCount": 5,
+      "lockedAt": "2026-11-07T13:08:37.363Z",
+      "ip": "192.168.1.131"
+    },
+    "ip_address": "192.168.1.131",
+    "user_agent": null,
+    "created_at": "2026-11-07T13:08:37.368Z"
+  },
+  {
+    "id": "audit-1794056917531-6prj7",
+    "user_id": "admin-hospital-cmo-001",
+    "organization_id": "a1111111-1111-1111-1111-111111111111",
+    "action": "ACCOUNT_UNLOCKED",
+    "entity_type": "account_security",
+    "entity_id": "lockout-test-1794056915734@orbinova.com",
+    "metadata": {
+      "previousState": "locked",
+      "unlockedBy": "admin-hospital-cmo-001",
+      "actorRole": "hospital_admin",
+      "unlockedAt": "2026-11-07T13:08:37.515Z"
+    },
+    "ip_address": "192.168.1.131",
+    "user_agent": null,
+    "created_at": "2026-11-07T13:08:37.531Z"
+  },
+  {
+    "id": "audit-1794057935216-nbiox",
+    "user_id": null,
+    "organization_id": null,
+    "action": "ACCOUNT_UNLOCKED",
+    "entity_type": "account_security",
+    "entity_id": "verified-doctor-1794057935210@orbinova.com",
+    "metadata": {
+      "previousState": "active",
+      "unlockedBy": "system_administrator",
+      "actorRole": "administrator",
+      "unlockedAt": "2026-11-07T13:25:35.214Z"
+    },
+    "ip_address": null,
+    "user_agent": null,
+    "created_at": "2026-11-07T13:25:35.216Z"
+  },
+  {
+    "id": "audit-1794057950072-etgul",
+    "user_id": null,
+    "organization_id": null,
+    "action": "ACCOUNT_LOCKED",
+    "entity_type": "account_security",
+    "entity_id": "verified-doctor-1794057935210@orbinova.com",
+    "metadata": {
+      "reason": "5 consecutive failed password attempts",
+      "failedCount": 5,
+      "lockedAt": "2026-11-07T13:25:50.069Z",
+      "ip": "192.168.2.19"
+    },
+    "ip_address": "192.168.2.19",
+    "user_agent": null,
+    "created_at": "2026-11-07T13:25:50.072Z"
+  },
+  {
+    "id": "audit-1794057950131-bev88",
+    "user_id": "admin-hospital-owner-001",
+    "organization_id": "a1111111-1111-1111-1111-111111111111",
+    "action": "ACCOUNT_UNLOCKED",
+    "entity_type": "account_security",
+    "entity_id": "verified-doctor-1794057935210@orbinova.com",
+    "metadata": {
+      "previousState": "locked",
+      "unlockedBy": "admin-hospital-owner-001",
+      "actorRole": "owner",
+      "unlockedAt": "2026-11-07T13:25:50.120Z"
+    },
+    "ip_address": "192.168.2.19",
+    "user_agent": null,
+    "created_at": "2026-11-07T13:25:50.131Z"
+  },
+  {
+    "id": "audit-1794057950311-sxti0",
+    "user_id": null,
+    "organization_id": null,
+    "action": "ACCOUNT_LOCKED",
+    "entity_type": "account_security",
+    "entity_id": "concur-doc-1794057935210@orbinova.com",
+    "metadata": {
+      "reason": "5 consecutive failed password attempts",
+      "failedCount": 5,
+      "lockedAt": "2026-11-07T13:25:50.308Z",
+      "ip": "192.168.2.19"
+    },
+    "ip_address": "192.168.2.19",
+    "user_agent": null,
+    "created_at": "2026-11-07T13:25:50.311Z"
+  },
+  {
+    "id": "audit-1794058855696-027c5",
+    "user_id": null,
+    "organization_id": null,
+    "action": "ACCOUNT_UNLOCKED",
+    "entity_type": "account_security",
+    "entity_id": "bamirinfrancis89@gmail.com",
+    "metadata": {
+      "previousState": "active",
+      "unlockedBy": "system_administrator",
+      "actorRole": "administrator",
+      "unlockedAt": "2026-11-07T13:40:55.692Z"
+    },
+    "ip_address": null,
+    "user_agent": null,
+    "created_at": "2026-11-07T13:40:55.696Z"
+  },
+  {
+    "id": "audit-1794058865386-mwxaj",
+    "user_id": null,
+    "organization_id": null,
+    "action": "ACCOUNT_UNLOCKED",
+    "entity_type": "account_security",
+    "entity_id": "verified-doctor-1794058865379@orbinova.com",
+    "metadata": {
+      "previousState": "active",
+      "unlockedBy": "system_administrator",
+      "actorRole": "administrator",
+      "unlockedAt": "2026-11-07T13:41:05.383Z"
+    },
+    "ip_address": null,
+    "user_agent": null,
+    "created_at": "2026-11-07T13:41:05.386Z"
+  },
+  {
+    "id": "audit-1794058879793-g02jz",
+    "user_id": null,
+    "organization_id": null,
+    "action": "ACCOUNT_LOCKED",
+    "entity_type": "account_security",
+    "entity_id": "verified-doctor-1794058865379@orbinova.com",
+    "metadata": {
+      "reason": "5 consecutive failed password attempts",
+      "failedCount": 5,
+      "lockedAt": "2026-11-07T13:41:19.790Z",
+      "ip": "192.168.2.39"
+    },
+    "ip_address": "192.168.2.39",
+    "user_agent": null,
+    "created_at": "2026-11-07T13:41:19.793Z"
+  },
+  {
+    "id": "audit-1794058879835-ggnq2",
+    "user_id": "admin-hospital-owner-001",
+    "organization_id": "a1111111-1111-1111-1111-111111111111",
+    "action": "ACCOUNT_UNLOCKED",
+    "entity_type": "account_security",
+    "entity_id": "verified-doctor-1794058865379@orbinova.com",
+    "metadata": {
+      "previousState": "locked",
+      "unlockedBy": "admin-hospital-owner-001",
+      "actorRole": "owner",
+      "unlockedAt": "2026-11-07T13:41:19.831Z"
+    },
+    "ip_address": "192.168.2.39",
+    "user_agent": null,
+    "created_at": "2026-11-07T13:41:19.836Z"
+  },
+  {
+    "id": "audit-1794058880045-jcmsz",
+    "user_id": null,
+    "organization_id": null,
+    "action": "ACCOUNT_LOCKED",
+    "entity_type": "account_security",
+    "entity_id": "concur-doc-1794058865379@orbinova.com",
+    "metadata": {
+      "reason": "5 consecutive failed password attempts",
+      "failedCount": 5,
+      "lockedAt": "2026-11-07T13:41:20.042Z",
+      "ip": "192.168.2.39"
+    },
+    "ip_address": "192.168.2.39",
+    "user_agent": null,
+    "created_at": "2026-11-07T13:41:20.045Z"
+  },
+  {
+    "id": "audit-1794059658505-guh5l",
+    "user_id": null,
+    "organization_id": null,
+    "action": "ACCOUNT_UNLOCKED",
+    "entity_type": "account_security",
+    "entity_id": "doctor@orbinova.com",
+    "metadata": {
+      "previousState": "active",
+      "unlockedBy": "system_administrator",
+      "actorRole": "admin",
+      "unlockedAt": "2026-11-07T13:54:18.496Z"
+    },
+    "ip_address": null,
+    "user_agent": null,
+    "created_at": "2026-11-07T13:54:18.505Z"
+  },
+  {
+    "id": "audit-1794059720029-1ovf3",
+    "user_id": null,
+    "organization_id": null,
+    "action": "ACCOUNT_UNLOCKED",
+    "entity_type": "account_security",
+    "entity_id": "doctor@orbinova.com",
+    "metadata": {
+      "previousState": "active",
+      "unlockedBy": "system_administrator",
+      "actorRole": "admin",
+      "unlockedAt": "2026-11-07T13:55:20.022Z"
+    },
+    "ip_address": null,
+    "user_agent": null,
+    "created_at": "2026-11-07T13:55:20.029Z"
+  },
+  {
+    "id": "audit-1794059768031-mm9mg",
+    "user_id": null,
+    "organization_id": null,
+    "action": "ACCOUNT_UNLOCKED",
+    "entity_type": "account_security",
+    "entity_id": "doctor@orbinova.com",
+    "metadata": {
+      "previousState": "active",
+      "unlockedBy": "system_administrator",
+      "actorRole": "admin",
+      "unlockedAt": "2026-11-07T13:56:08.025Z"
+    },
+    "ip_address": null,
+    "user_agent": null,
+    "created_at": "2026-11-07T13:56:08.031Z"
+  },
+  {
+    "id": "audit-1794059852231-akym7",
+    "user_id": null,
+    "organization_id": null,
+    "action": "ACCOUNT_UNLOCKED",
+    "entity_type": "account_security",
+    "entity_id": "hospital@orbinova.com",
+    "metadata": {
+      "previousState": "active",
+      "unlockedBy": "system_administrator",
+      "actorRole": "admin",
+      "unlockedAt": "2026-11-07T13:57:32.224Z"
+    },
+    "ip_address": null,
+    "user_agent": null,
+    "created_at": "2026-11-07T13:57:32.231Z"
+  },
+  {
+    "id": "audit-1794059982572-9r4mz",
+    "user_id": null,
+    "organization_id": null,
+    "action": "ACCOUNT_UNLOCKED",
+    "entity_type": "account_security",
+    "entity_id": "hospital@orbinova.com",
+    "metadata": {
+      "previousState": "active",
+      "unlockedBy": "system_administrator",
+      "actorRole": "admin",
+      "unlockedAt": "2026-11-07T13:59:42.563Z"
+    },
+    "ip_address": null,
+    "user_agent": null,
+    "created_at": "2026-11-07T13:59:42.572Z"
+  },
+  {
+    "id": "audit-1794060357457-u58s0",
+    "user_id": null,
+    "organization_id": null,
+    "action": "ACCOUNT_UNLOCKED",
+    "entity_type": "account_security",
+    "entity_id": "hospital@orbinova.com",
+    "metadata": {
+      "previousState": "active",
+      "unlockedBy": "system_administrator",
+      "actorRole": "admin",
+      "unlockedAt": "2026-11-07T14:05:57.447Z"
+    },
+    "ip_address": null,
+    "user_agent": null,
+    "created_at": "2026-11-07T14:05:57.457Z"
+  },
+  {
+    "id": "audit-1794060503769-2p1h6",
+    "user_id": null,
+    "organization_id": null,
+    "action": "ACCOUNT_UNLOCKED",
+    "entity_type": "account_security",
+    "entity_id": "verified-doctor-1794060503747@orbinova.com",
+    "metadata": {
+      "previousState": "active",
+      "unlockedBy": "system_administrator",
+      "actorRole": "administrator",
+      "unlockedAt": "2026-11-07T14:08:23.762Z"
+    },
+    "ip_address": null,
+    "user_agent": null,
+    "created_at": "2026-11-07T14:08:23.770Z"
+  },
+  {
+    "id": "audit-1794060518711-vt0p6",
+    "user_id": null,
+    "organization_id": null,
+    "action": "ACCOUNT_LOCKED",
+    "entity_type": "account_security",
+    "entity_id": "verified-doctor-1794060503747@orbinova.com",
+    "metadata": {
+      "reason": "5 consecutive failed password attempts",
+      "failedCount": 5,
+      "lockedAt": "2026-11-07T14:08:38.698Z",
+      "ip": "192.168.2.75"
+    },
+    "ip_address": "192.168.2.75",
+    "user_agent": null,
+    "created_at": "2026-11-07T14:08:38.711Z"
+  },
+  {
+    "id": "audit-1794060518781-ru4ma",
+    "user_id": "admin-hospital-owner-001",
+    "organization_id": "a1111111-1111-1111-1111-111111111111",
+    "action": "ACCOUNT_UNLOCKED",
+    "entity_type": "account_security",
+    "entity_id": "verified-doctor-1794060503747@orbinova.com",
+    "metadata": {
+      "previousState": "locked",
+      "unlockedBy": "admin-hospital-owner-001",
+      "actorRole": "owner",
+      "unlockedAt": "2026-11-07T14:08:38.772Z"
+    },
+    "ip_address": "192.168.2.75",
+    "user_agent": null,
+    "created_at": "2026-11-07T14:08:38.781Z"
+  },
+  {
+    "id": "audit-1794060519157-rtabf",
+    "user_id": null,
+    "organization_id": null,
+    "action": "ACCOUNT_LOCKED",
+    "entity_type": "account_security",
+    "entity_id": "concur-doc-1794060503747@orbinova.com",
+    "metadata": {
+      "reason": "5 consecutive failed password attempts",
+      "failedCount": 5,
+      "lockedAt": "2026-11-07T14:08:39.149Z",
+      "ip": "192.168.2.75"
+    },
+    "ip_address": "192.168.2.75",
+    "user_agent": null,
+    "created_at": "2026-11-07T14:08:39.157Z"
+  },
+  {
+    "id": "audit-1794060532742-g1pcz",
+    "user_id": null,
+    "organization_id": null,
+    "action": "ACCOUNT_UNLOCKED",
+    "entity_type": "account_security",
+    "entity_id": "bamirinfrancis89@gmail.com",
+    "metadata": {
+      "previousState": "active",
+      "unlockedBy": "system_administrator",
+      "actorRole": "admin",
+      "unlockedAt": "2026-11-07T14:08:52.733Z"
+    },
+    "ip_address": null,
+    "user_agent": null,
+    "created_at": "2026-11-07T14:08:52.742Z"
+  },
+  {
+    "id": "audit-1794062423995-phrk5",
+    "user_id": "user-qa-1794062395827",
+    "organization_id": "a1111111-1111-1111-1111-111111111111",
+    "action": "ACCOUNT_UNLOCKED",
+    "entity_type": "account_security",
+    "entity_id": "qa-doctor-1794062395827@orbinova.com",
+    "metadata": {
+      "previousState": "active",
+      "unlockedBy": "user-qa-1794062395827",
+      "actorRole": "hospital",
+      "unlockedAt": "2026-11-07T14:40:23.991Z"
+    },
+    "ip_address": null,
+    "user_agent": null,
+    "created_at": "2026-11-07T14:40:23.995Z"
+  },
+  {
+    "id": "audit-1794062487337-vuirt",
+    "user_id": "user-qa-1794062472965",
+    "organization_id": "a1111111-1111-1111-1111-111111111111",
+    "action": "ACCOUNT_UNLOCKED",
+    "entity_type": "account_security",
+    "entity_id": "qa-doctor-1794062472965@orbinova.com",
+    "metadata": {
+      "previousState": "active",
+      "unlockedBy": "user-qa-1794062472965",
+      "actorRole": "hospital",
+      "unlockedAt": "2026-11-07T14:41:27.332Z"
+    },
+    "ip_address": null,
+    "user_agent": null,
+    "created_at": "2026-11-07T14:41:27.337Z"
+  },
+  {
+    "id": "audit-1794062492855-7qxxw",
+    "user_id": null,
+    "organization_id": null,
+    "action": "ACCOUNT_LOCKED",
+    "entity_type": "account_security",
+    "entity_id": "qa-doctor-1794062472965@orbinova.com",
+    "metadata": {
+      "reason": "5 consecutive failed password attempts",
+      "failedCount": 5,
+      "lockedAt": "2026-11-07T14:41:32.846Z",
+      "ip": null
+    },
+    "ip_address": null,
+    "user_agent": null,
+    "created_at": "2026-11-07T14:41:32.855Z"
+  },
+  {
+    "id": "audit-1794062494383-odz6l",
+    "user_id": "user-qa-1794062472965",
+    "organization_id": "a1111111-1111-1111-1111-111111111111",
+    "action": "ACCOUNT_UNLOCKED",
+    "entity_type": "account_security",
+    "entity_id": "qa-doctor-1794062472965@orbinova.com",
+    "metadata": {
+      "previousState": "locked",
+      "unlockedBy": "user-qa-1794062472965",
+      "actorRole": "hospital",
+      "unlockedAt": "2026-11-07T14:41:34.377Z"
+    },
+    "ip_address": null,
+    "user_agent": null,
+    "created_at": "2026-11-07T14:41:34.383Z"
+  },
+  {
+    "id": "audit-1794062540770-sfvo8",
+    "user_id": null,
+    "organization_id": null,
+    "action": "ACCOUNT_UNLOCKED",
+    "entity_type": "account_security",
+    "entity_id": "verified-doctor-1794062540755@orbinova.com",
+    "metadata": {
+      "previousState": "active",
+      "unlockedBy": "system_administrator",
+      "actorRole": "administrator",
+      "unlockedAt": "2026-11-07T14:42:20.764Z"
+    },
+    "ip_address": null,
+    "user_agent": null,
+    "created_at": "2026-11-07T14:42:20.770Z"
+  },
+  {
+    "id": "audit-1794062556079-1e1hg",
+    "user_id": null,
+    "organization_id": null,
+    "action": "ACCOUNT_LOCKED",
+    "entity_type": "account_security",
+    "entity_id": "verified-doctor-1794062540755@orbinova.com",
+    "metadata": {
+      "reason": "5 consecutive failed password attempts",
+      "failedCount": 5,
+      "lockedAt": "2026-11-07T14:42:36.053Z",
+      "ip": "192.168.2.126"
+    },
+    "ip_address": "192.168.2.126",
+    "user_agent": null,
+    "created_at": "2026-11-07T14:42:36.079Z"
+  },
+  {
+    "id": "audit-1794062556233-rxsg8",
+    "user_id": "admin-hospital-owner-001",
+    "organization_id": "a1111111-1111-1111-1111-111111111111",
+    "action": "ACCOUNT_UNLOCKED",
+    "entity_type": "account_security",
+    "entity_id": "verified-doctor-1794062540755@orbinova.com",
+    "metadata": {
+      "previousState": "locked",
+      "unlockedBy": "admin-hospital-owner-001",
+      "actorRole": "owner",
+      "unlockedAt": "2026-11-07T14:42:36.228Z"
+    },
+    "ip_address": "192.168.2.126",
+    "user_agent": null,
+    "created_at": "2026-11-07T14:42:36.233Z"
+  },
+  {
+    "id": "audit-1794062556606-o76tj",
+    "user_id": null,
+    "organization_id": null,
+    "action": "ACCOUNT_LOCKED",
+    "entity_type": "account_security",
+    "entity_id": "concur-doc-1794062540755@orbinova.com",
+    "metadata": {
+      "reason": "5 consecutive failed password attempts",
+      "failedCount": 5,
+      "lockedAt": "2026-11-07T14:42:36.598Z",
+      "ip": "192.168.2.126"
+    },
+    "ip_address": "192.168.2.126",
+    "user_agent": null,
+    "created_at": "2026-11-07T14:42:36.606Z"
+  },
+  {
+    "id": "audit-1794062581627-2to47",
+    "user_id": null,
+    "organization_id": null,
+    "action": "ACCOUNT_UNLOCKED",
+    "entity_type": "account_security",
+    "entity_id": "bamirinfrancis89@gmail.com",
+    "metadata": {
+      "previousState": "active",
+      "unlockedBy": "system_administrator",
+      "actorRole": "admin",
+      "unlockedAt": "2026-11-07T14:43:01.615Z"
+    },
+    "ip_address": null,
+    "user_agent": null,
+    "created_at": "2026-11-07T14:43:01.627Z"
+  },
+  {
+    "id": "audit-1794062623377-485l2",
+    "user_id": null,
+    "organization_id": null,
+    "action": "ACCOUNT_UNLOCKED",
+    "entity_type": "account_security",
+    "entity_id": "hospital@orbinova.com",
+    "metadata": {
+      "previousState": "active",
+      "unlockedBy": "system_administrator",
+      "actorRole": "admin",
+      "unlockedAt": "2026-11-07T14:43:43.369Z"
+    },
+    "ip_address": null,
+    "user_agent": null,
+    "created_at": "2026-11-07T14:43:43.377Z"
+  },
+  {
+    "id": "audit-1794063365322-mcdqc",
+    "user_id": "user-audit-tester",
+    "organization_id": "org-luth",
+    "action": "blood_stock_allocated",
+    "entity_type": "blood_unit",
+    "entity_id": "unit-sample-test",
+    "metadata": {
+      "transactionId": "tx-1794063365318-xv2a",
+      "reason": "Automated fulfillment allocation",
+      "checksum": "a63bb8328dcf3e0b95f0e370ae58f36328ff129f8bfef389959c25772fabb791"
+    },
+    "ip_address": null,
+    "user_agent": null,
+    "created_at": "2026-11-07T14:56:05.322Z"
+  },
+  {
+    "id": "audit-1794063423307-tj68n",
+    "user_id": "user-audit-tester",
+    "organization_id": "org-luth",
+    "action": "blood_stock_allocated",
+    "entity_type": "blood_unit",
+    "entity_id": "unit-sample-test",
+    "metadata": {
+      "transactionId": "tx-1794063423304-jqyy",
+      "reason": "Automated fulfillment allocation",
+      "checksum": "4027e4e6aadff2fb6af49c4335a90d0cc72af9b086547ffb7093a5ae30dc4299"
+    },
+    "ip_address": null,
+    "user_agent": null,
+    "created_at": "2026-11-07T14:57:03.307Z"
+  },
+  {
+    "id": "audit-1794063495884-pudwk",
+    "user_id": "user-audit-tester",
+    "organization_id": "org-luth",
+    "action": "blood_stock_allocated",
+    "entity_type": "blood_unit",
+    "entity_id": "unit-sample-test",
+    "metadata": {
+      "transactionId": "tx-1794063495880-a3kd",
+      "reason": "Automated fulfillment allocation",
+      "checksum": "216abec1c5a34e0cf15bae68d4abb2004da54f1e34b3a79ebf61abb7d0c802c2"
+    },
+    "ip_address": null,
+    "user_agent": null,
+    "created_at": "2026-11-07T14:58:15.884Z"
+  },
+  {
+    "id": "audit-1794063668325-klbiq",
+    "user_id": "user-audit-tester",
+    "organization_id": "org-luth",
+    "action": "blood_stock_allocated",
+    "entity_type": "blood_unit",
+    "entity_id": "unit-sample-test",
+    "metadata": {
+      "transactionId": "tx-1794063668317-hjcv",
+      "reason": "Automated fulfillment allocation",
+      "checksum": "c8fee25f64a038b08a4dc4da9e6b98c7bf6af8899cfdfbf0e6d0d8b867c6e537"
+    },
+    "ip_address": null,
+    "user_agent": null,
+    "created_at": "2026-11-07T15:01:08.325Z"
+  },
+  {
+    "id": "audit-1794063718149-jofxu",
+    "user_id": "user-qa-1794063709786",
+    "organization_id": "a1111111-1111-1111-1111-111111111111",
+    "action": "ACCOUNT_UNLOCKED",
+    "entity_type": "account_security",
+    "entity_id": "qa-doctor-1794063709786@orbinova.com",
+    "metadata": {
+      "previousState": "active",
+      "unlockedBy": "user-qa-1794063709786",
+      "actorRole": "hospital",
+      "unlockedAt": "2026-11-07T15:01:58.144Z"
+    },
+    "ip_address": null,
+    "user_agent": null,
+    "created_at": "2026-11-07T15:01:58.149Z"
+  },
+  {
+    "id": "audit-1794063722794-6ydwd",
+    "user_id": null,
+    "organization_id": null,
+    "action": "ACCOUNT_LOCKED",
+    "entity_type": "account_security",
+    "entity_id": "qa-doctor-1794063709786@orbinova.com",
+    "metadata": {
+      "reason": "5 consecutive failed password attempts",
+      "failedCount": 5,
+      "lockedAt": "2026-11-07T15:02:02.777Z",
+      "ip": "127.0.0.1"
+    },
+    "ip_address": "127.0.0.1",
+    "user_agent": null,
+    "created_at": "2026-11-07T15:02:02.794Z"
+  },
+  {
+    "id": "audit-1794063724273-ut38w",
+    "user_id": "user-qa-1794063709786",
+    "organization_id": "a1111111-1111-1111-1111-111111111111",
+    "action": "ACCOUNT_UNLOCKED",
+    "entity_type": "account_security",
+    "entity_id": "qa-doctor-1794063709786@orbinova.com",
+    "metadata": {
+      "previousState": "locked",
+      "unlockedBy": "user-qa-1794063709786",
+      "actorRole": "hospital",
+      "unlockedAt": "2026-11-07T15:02:04.223Z"
+    },
+    "ip_address": null,
+    "user_agent": null,
+    "created_at": "2026-11-07T15:02:04.273Z"
+  },
+  {
+    "id": "audit-1794063833173-j9dji",
+    "user_id": "user-audit-tester",
+    "organization_id": "org-luth",
+    "action": "blood_stock_allocated",
+    "entity_type": "blood_unit",
+    "entity_id": "unit-sample-test",
+    "metadata": {
+      "transactionId": "tx-1794063833169-1s88",
+      "reason": "Automated fulfillment allocation",
+      "checksum": "b4c9d9761ea97d44c3e1a5796a596bc28eb4ac9903f25a9c43f2059abd12acaa"
+    },
+    "ip_address": null,
+    "user_agent": null,
+    "created_at": "2026-11-07T15:03:53.173Z"
+  },
+  {
+    "id": "audit-1794074228691-b9f52",
+    "user_id": null,
+    "organization_id": null,
+    "action": "ACCOUNT_UNLOCKED",
+    "entity_type": "account_security",
+    "entity_id": "hospital@orbinova.com",
+    "metadata": {
+      "previousState": "active",
+      "unlockedBy": "system_administrator",
+      "actorRole": "admin",
+      "unlockedAt": "2026-11-07T17:57:08.687Z"
+    },
+    "ip_address": null,
+    "user_agent": null,
+    "created_at": "2026-11-07T17:57:08.691Z"
+  },
+  {
+    "id": "audit-1794074304003-e7jgb",
+    "user_id": null,
+    "organization_id": null,
+    "action": "ACCOUNT_UNLOCKED",
+    "entity_type": "account_security",
+    "entity_id": "hospital@orbinova.com",
+    "metadata": {
+      "previousState": "active",
+      "unlockedBy": "system_administrator",
+      "actorRole": "admin",
+      "unlockedAt": "2026-11-07T17:58:23.997Z"
+    },
+    "ip_address": null,
+    "user_agent": null,
+    "created_at": "2026-11-07T17:58:24.003Z"
+  },
+  {
+    "id": "audit-1794074357604-tz6id",
+    "user_id": "user-audit-tester",
+    "organization_id": "org-luth",
+    "action": "blood_stock_allocated",
+    "entity_type": "blood_unit",
+    "entity_id": "unit-sample-test",
+    "metadata": {
+      "transactionId": "tx-1794074357593-c7kd",
+      "reason": "Automated fulfillment allocation",
+      "checksum": "47fab9590d7bfdf08121c51faada09addb795e2fef91be63d03f5d178bcfa4df"
+    },
+    "ip_address": null,
+    "user_agent": null,
+    "created_at": "2026-11-07T17:59:17.604Z"
+  },
+  {
+    "id": "audit-1794074925030-u5r3v",
+    "user_id": null,
+    "organization_id": null,
+    "action": "ACCOUNT_UNLOCKED",
+    "entity_type": "account_security",
+    "entity_id": "hospital@orbinova.com",
+    "metadata": {
+      "previousState": "active",
+      "unlockedBy": "system_administrator",
+      "actorRole": "admin",
+      "unlockedAt": "2026-11-07T18:08:45.023Z"
+    },
+    "ip_address": null,
+    "user_agent": null,
+    "created_at": "2026-11-07T18:08:45.030Z"
+  },
+  {
+    "id": "audit-1794074961111-m560u",
+    "user_id": null,
+    "organization_id": null,
+    "action": "ACCOUNT_UNLOCKED",
+    "entity_type": "account_security",
+    "entity_id": "verified-doctor-1794074961104@orbinova.com",
+    "metadata": {
+      "previousState": "active",
+      "unlockedBy": "system_administrator",
+      "actorRole": "administrator",
+      "unlockedAt": "2026-11-07T18:09:21.109Z"
+    },
+    "ip_address": null,
+    "user_agent": null,
+    "created_at": "2026-11-07T18:09:21.111Z"
+  },
+  {
+    "id": "audit-1794074980212-zkuck",
+    "user_id": null,
+    "organization_id": null,
+    "action": "ACCOUNT_LOCKED",
+    "entity_type": "account_security",
+    "entity_id": "verified-doctor-1794074961104@orbinova.com",
+    "metadata": {
+      "reason": "5 consecutive failed password attempts",
+      "failedCount": 5,
+      "lockedAt": "2026-11-07T18:09:40.205Z",
+      "ip": "192.168.2.164"
+    },
+    "ip_address": "192.168.2.164",
+    "user_agent": null,
+    "created_at": "2026-11-07T18:09:40.212Z"
+  },
+  {
+    "id": "audit-1794074980269-9sf2d",
+    "user_id": "admin-hospital-owner-001",
+    "organization_id": "a1111111-1111-1111-1111-111111111111",
+    "action": "ACCOUNT_UNLOCKED",
+    "entity_type": "account_security",
+    "entity_id": "verified-doctor-1794074961104@orbinova.com",
+    "metadata": {
+      "previousState": "locked",
+      "unlockedBy": "admin-hospital-owner-001",
+      "actorRole": "owner",
+      "unlockedAt": "2026-11-07T18:09:40.265Z"
+    },
+    "ip_address": "192.168.2.164",
+    "user_agent": null,
+    "created_at": "2026-11-07T18:09:40.269Z"
+  },
+  {
+    "id": "audit-1794074980528-27p8e",
+    "user_id": null,
+    "organization_id": null,
+    "action": "ACCOUNT_LOCKED",
+    "entity_type": "account_security",
+    "entity_id": "concur-doc-1794074961104@orbinova.com",
+    "metadata": {
+      "reason": "5 consecutive failed password attempts",
+      "failedCount": 5,
+      "lockedAt": "2026-11-07T18:09:40.522Z",
+      "ip": "192.168.2.164"
+    },
+    "ip_address": "192.168.2.164",
+    "user_agent": null,
+    "created_at": "2026-11-07T18:09:40.528Z"
+  },
+  {
+    "id": "audit-1794074991326-8puvy",
+    "user_id": null,
+    "organization_id": null,
+    "action": "ACCOUNT_UNLOCKED",
+    "entity_type": "account_security",
+    "entity_id": "bamirinfrancis89@gmail.com",
+    "metadata": {
+      "previousState": "active",
+      "unlockedBy": "system_administrator",
+      "actorRole": "admin",
+      "unlockedAt": "2026-11-07T18:09:51.321Z"
+    },
+    "ip_address": null,
+    "user_agent": null,
+    "created_at": "2026-11-07T18:09:51.326Z"
+  },
+  {
+    "id": "audit-1794075316271-9f2sk",
+    "user_id": null,
+    "organization_id": null,
+    "action": "ACCOUNT_UNLOCKED",
+    "entity_type": "account_security",
+    "entity_id": "hospital@orbinova.com",
+    "metadata": {
+      "previousState": "active",
+      "unlockedBy": "system_administrator",
+      "actorRole": "admin",
+      "unlockedAt": "2026-11-07T18:15:16.268Z"
+    },
+    "ip_address": null,
+    "user_agent": null,
+    "created_at": "2026-11-07T18:15:16.271Z"
+  },
+  {
+    "id": "audit-1794075359147-xwjfy",
+    "user_id": "user-audit-tester",
+    "organization_id": "org-luth",
+    "action": "blood_stock_allocated",
+    "entity_type": "blood_unit",
+    "entity_id": "unit-sample-test",
+    "metadata": {
+      "transactionId": "tx-1794075359144-mqn6",
+      "reason": "Automated fulfillment allocation",
+      "checksum": "576af40ff650e0f91d64ec95e9d159739b06b9572599c82d786adc96fca0ef3d"
+    },
+    "ip_address": null,
+    "user_agent": null,
+    "created_at": "2026-11-07T18:15:59.147Z"
+  },
+  {
+    "id": "audit-1794076514865-2vid1",
+    "user_id": null,
+    "organization_id": null,
+    "action": "ACCOUNT_UNLOCKED",
+    "entity_type": "account_security",
+    "entity_id": "hospital@orbinova.com",
+    "metadata": {
+      "previousState": "active",
+      "unlockedBy": "system_administrator",
+      "actorRole": "admin",
+      "unlockedAt": "2026-11-07T18:35:14.860Z"
+    },
+    "ip_address": null,
+    "user_agent": null,
+    "created_at": "2026-11-07T18:35:14.865Z"
+  },
+  {
+    "id": "audit-1794077399620-vejzv",
+    "user_id": null,
+    "organization_id": null,
+    "action": "ACCOUNT_UNLOCKED",
+    "entity_type": "account_security",
+    "entity_id": "verified-doctor-1794077399613@orbinova.com",
+    "metadata": {
+      "previousState": "active",
+      "unlockedBy": "system_administrator",
+      "actorRole": "administrator",
+      "unlockedAt": "2026-11-07T18:49:59.617Z"
+    },
+    "ip_address": null,
+    "user_agent": null,
+    "created_at": "2026-11-07T18:49:59.620Z"
+  },
+  {
+    "id": "audit-1794077414111-o71ui",
+    "user_id": null,
+    "organization_id": null,
+    "action": "ACCOUNT_LOCKED",
+    "entity_type": "account_security",
+    "entity_id": "verified-doctor-1794077399613@orbinova.com",
+    "metadata": {
+      "reason": "5 consecutive failed password attempts",
+      "failedCount": 5,
+      "lockedAt": "2026-11-07T18:50:14.105Z",
+      "ip": "192.168.2.171"
+    },
+    "ip_address": "192.168.2.171",
+    "user_agent": null,
+    "created_at": "2026-11-07T18:50:14.111Z"
+  },
+  {
+    "id": "audit-1794077414140-al7if",
+    "user_id": "admin-hospital-owner-001",
+    "organization_id": "a1111111-1111-1111-1111-111111111111",
+    "action": "ACCOUNT_UNLOCKED",
+    "entity_type": "account_security",
+    "entity_id": "verified-doctor-1794077399613@orbinova.com",
+    "metadata": {
+      "previousState": "locked",
+      "unlockedBy": "admin-hospital-owner-001",
+      "actorRole": "owner",
+      "unlockedAt": "2026-11-07T18:50:14.136Z"
+    },
+    "ip_address": "192.168.2.171",
+    "user_agent": null,
+    "created_at": "2026-11-07T18:50:14.140Z"
+  },
+  {
+    "id": "audit-1794077414302-3dvjq",
+    "user_id": null,
+    "organization_id": null,
+    "action": "ACCOUNT_LOCKED",
+    "entity_type": "account_security",
+    "entity_id": "concur-doc-1794077399613@orbinova.com",
+    "metadata": {
+      "reason": "5 consecutive failed password attempts",
+      "failedCount": 5,
+      "lockedAt": "2026-11-07T18:50:14.299Z",
+      "ip": "192.168.2.171"
+    },
+    "ip_address": "192.168.2.171",
+    "user_agent": null,
+    "created_at": "2026-11-07T18:50:14.302Z"
+  },
+  {
+    "id": "audit-1794079549718-comjz",
+    "user_id": null,
+    "organization_id": null,
+    "action": "ACCOUNT_UNLOCKED",
+    "entity_type": "account_security",
+    "entity_id": "verified-doctor-1794079549697@orbinova.com",
+    "metadata": {
+      "previousState": "active",
+      "unlockedBy": "system_administrator",
+      "actorRole": "administrator",
+      "unlockedAt": "2026-11-07T19:25:49.711Z"
+    },
+    "ip_address": null,
+    "user_agent": null,
+    "created_at": "2026-11-07T19:25:49.718Z"
+  },
+  {
+    "id": "audit-1794079569969-7w0g1",
+    "user_id": null,
+    "organization_id": null,
+    "action": "ACCOUNT_LOCKED",
+    "entity_type": "account_security",
+    "entity_id": "verified-doctor-1794079549697@orbinova.com",
+    "metadata": {
+      "reason": "5 consecutive failed password attempts",
+      "failedCount": 5,
+      "lockedAt": "2026-11-07T19:26:09.943Z",
+      "ip": "192.168.2.180"
+    },
+    "ip_address": "192.168.2.180",
+    "user_agent": null,
+    "created_at": "2026-11-07T19:26:09.969Z"
+  },
+  {
+    "id": "audit-1794079570138-ivd83",
+    "user_id": "admin-hospital-owner-001",
+    "organization_id": "a1111111-1111-1111-1111-111111111111",
+    "action": "ACCOUNT_UNLOCKED",
+    "entity_type": "account_security",
+    "entity_id": "verified-doctor-1794079549697@orbinova.com",
+    "metadata": {
+      "previousState": "locked",
+      "unlockedBy": "admin-hospital-owner-001",
+      "actorRole": "owner",
+      "unlockedAt": "2026-11-07T19:26:10.134Z"
+    },
+    "ip_address": "192.168.2.180",
+    "user_agent": null,
+    "created_at": "2026-11-07T19:26:10.138Z"
+  },
+  {
+    "id": "audit-1794079570586-gwqsq",
+    "user_id": null,
+    "organization_id": null,
+    "action": "ACCOUNT_LOCKED",
+    "entity_type": "account_security",
+    "entity_id": "concur-doc-1794079549697@orbinova.com",
+    "metadata": {
+      "reason": "5 consecutive failed password attempts",
+      "failedCount": 5,
+      "lockedAt": "2026-11-07T19:26:10.569Z",
+      "ip": "192.168.2.180"
+    },
+    "ip_address": "192.168.2.180",
+    "user_agent": null,
+    "created_at": "2026-11-07T19:26:10.586Z"
+  },
+  {
+    "id": "audit-1794079586914-u9gk4",
+    "user_id": null,
+    "organization_id": null,
+    "action": "ACCOUNT_UNLOCKED",
+    "entity_type": "account_security",
+    "entity_id": "hospital@orbinova.com",
+    "metadata": {
+      "previousState": "active",
+      "unlockedBy": "system_administrator",
+      "actorRole": "admin",
+      "unlockedAt": "2026-11-07T19:26:26.906Z"
+    },
+    "ip_address": null,
+    "user_agent": null,
+    "created_at": "2026-11-07T19:26:26.914Z"
+  }
+]
