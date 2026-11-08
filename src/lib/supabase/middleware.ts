@@ -190,7 +190,13 @@ async function resolveAndValidatePortalUser(
   }
 
   if (!sessionId) {
-    return { status: "unauthenticated" };
+    // If the user has a valid Supabase authentication token, generate a session identifier
+    // and attach it to the response so the session cookie is established without breaking the session.
+    sessionId = `sess_${Date.now().toString(36)}_${Math.random().toString(36).substring(2, 10)}${Math.random().toString(36).substring(2, 10)}`;
+    supabaseResponse.cookies.set(sidCookieName, sessionId, {
+      ...PORTAL_COOKIE_OPTIONS,
+      name: sidCookieName,
+    });
   }
 
   // 4. Resolve Profile and Active Status

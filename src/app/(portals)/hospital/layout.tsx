@@ -15,7 +15,7 @@ export default async function HospitalPortalLayout({
   const user = await getCurrentUser("hospital");
 
   if (!user) {
-    redirect("/login?redirect=/hospital");
+    redirect("/login?redirect=/hospital/dashboard");
   }
 
   const role = user.profile?.role;

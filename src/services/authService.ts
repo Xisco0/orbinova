@@ -55,7 +55,7 @@ export const authService = {
         success: true,
         role: data.role as UserRole,
         mustChangePassword: Boolean(data.mustChangePassword),
-        redirectTo: data.redirectTo || (data.role === "admin" ? "/admin/dashboard" : ROLE_PORTAL_MAP[data.role as UserRole] || "/hospital"),
+        redirectTo: data.redirectTo || (data.role === "admin" ? "/admin/dashboard" : ROLE_PORTAL_MAP[data.role as UserRole] || "/hospital/dashboard"),
       };
     } catch {
       const normalizedEmail = email.trim().toLowerCase();
@@ -88,7 +88,7 @@ export const authService = {
       return {
         success: true,
         role,
-        redirectTo: ROLE_PORTAL_MAP[role] || "/hospital",
+        redirectTo: ROLE_PORTAL_MAP[role] || "/hospital/dashboard",
       };
     }
   },

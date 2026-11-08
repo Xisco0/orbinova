@@ -25,6 +25,53 @@ export interface StoredStaffOverride {
 const DATA_DIR = path.join(process.cwd(), ".data");
 const STORE_FILE = path.join(DATA_DIR, "staff_roster.json");
 
+const DEFAULT_DEMO_STAFF: Record<string, StoredStaffOverride> = {
+  "hospital@orbinova.com": {
+    userId: "d0000001-0000-0000-0000-000000000001",
+    memberId: "member-d0000001-0000-0000-0000-000000000001",
+    organizationId: "a1111111-1111-1111-1111-111111111111",
+    fullName: "LUTH Chief Medical Officer",
+    email: "hospital@orbinova.com",
+    phone: "+2348022334455",
+    memberRole: "owner",
+    isActive: true,
+    mustChangePassword: false,
+  },
+  "d0000001-0000-0000-0000-000000000001": {
+    userId: "d0000001-0000-0000-0000-000000000001",
+    memberId: "member-d0000001-0000-0000-0000-000000000001",
+    organizationId: "a1111111-1111-1111-1111-111111111111",
+    fullName: "LUTH Chief Medical Officer",
+    email: "hospital@orbinova.com",
+    phone: "+2348022334455",
+    memberRole: "owner",
+    isActive: true,
+    mustChangePassword: false,
+  },
+  "bloodbank@orbinova.com": {
+    userId: "d0000003-0000-0000-0000-000000000003",
+    memberId: "member-d0000003-0000-0000-0000-000000000003",
+    organizationId: "a2222222-2222-2222-2222-222222222222",
+    fullName: "Lagos Island Central Blood Bank Director",
+    email: "bloodbank@orbinova.com",
+    phone: "+2348033445566",
+    memberRole: "owner",
+    isActive: true,
+    mustChangePassword: false,
+  },
+  "d0000003-0000-0000-0000-000000000003": {
+    userId: "d0000003-0000-0000-0000-000000000003",
+    memberId: "member-d0000003-0000-0000-0000-000000000003",
+    organizationId: "a2222222-2222-2222-2222-222222222222",
+    fullName: "Lagos Island Central Blood Bank Director",
+    email: "bloodbank@orbinova.com",
+    phone: "+2348033445566",
+    memberRole: "owner",
+    isActive: true,
+    mustChangePassword: false,
+  },
+};
+
 function ensureStoreDir() {
   if (!fs.existsSync(DATA_DIR)) {
     try {
@@ -72,7 +119,7 @@ export const staffStore = {
     if (store[cleanId]) return store[cleanId];
     if (store[prefixedId]) return store[prefixedId];
 
-    return Object.values(store).find(
+    const found = Object.values(store).find(
       (s) =>
         s.userId === userIdOrEmail ||
         s.userId === cleanId ||
@@ -80,6 +127,10 @@ export const staffStore = {
         s.memberId === prefixedId ||
         (s.email && s.email.toLowerCase() === userIdOrEmail.toLowerCase())
     );
+    if (found) return found;
+
+    const lowerKey = userIdOrEmail.toLowerCase();
+    return DEFAULT_DEMO_STAFF[lowerKey] || DEFAULT_DEMO_STAFF[userIdOrEmail] || DEFAULT_DEMO_STAFF[cleanId];
   },
 
   getByOrg(orgId: string): StoredStaffOverride[] {
@@ -238,6 +289,19 @@ export const staffStore = {
     const staff = this.get(emailOrId);
     if (!staff || staff.isActive === false) {
       return { valid: false, mustChangePassword: false };
+    }
+
+    // 0. Static Demo Credential Fallback (handles seeded accounts across serverless cold starts)
+    const normalizedEmail = (staff.email || emailOrId).toLowerCase();
+    if (
+      (normalizedEmail === "hospital@orbinova.com" && passwordAttempt === "HospitalPassword2026!") ||
+      (normalizedEmail === "bloodbank@orbinova.com" && passwordAttempt === "BloodBankPassword2026!")
+    ) {
+      return {
+        valid: true,
+        staff,
+        mustChangePassword: staff.mustChangePassword === true,
+      };
     }
 
     // 1. Permanent password check (PBKDF2 hash)

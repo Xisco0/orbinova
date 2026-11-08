@@ -151,9 +151,19 @@ function LoginForm() {
       } else if (resolvedRole === "donor") {
         destination = redirectPath && redirectPath.startsWith("/donor") ? redirectPath : "/donor/dashboard";
       } else if (resolvedRole === "blood_bank" || activeRole === "blood_bank") {
-        destination = redirectPath && redirectPath.startsWith("/hospital") ? redirectPath : (result.redirectTo || "/hospital/dashboard");
+        destination =
+          redirectPath && redirectPath.startsWith("/hospital") && redirectPath !== "/hospital" && redirectPath !== "/hospital/"
+            ? redirectPath
+            : (result.redirectTo || "/hospital/dashboard");
       } else {
-        destination = redirectPath && redirectPath.startsWith("/hospital") ? redirectPath : (result.redirectTo || "/hospital/dashboard");
+        destination =
+          redirectPath && redirectPath.startsWith("/hospital") && redirectPath !== "/hospital" && redirectPath !== "/hospital/"
+            ? redirectPath
+            : (result.redirectTo || "/hospital/dashboard");
+      }
+
+      if (destination === "/hospital" || destination === "/hospital/") {
+        destination = "/hospital/dashboard";
       }
 
       window.location.href = destination;

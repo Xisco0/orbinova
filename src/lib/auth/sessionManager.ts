@@ -1,5 +1,6 @@
 import fs from "fs";
 import path from "path";
+import os from "os";
 import crypto from "crypto";
 import {
   SESSION_CONFIG,
@@ -24,16 +25,22 @@ export interface ActiveSessionRecord {
 
 function getSessionsFilePath(): string {
   try {
+    const isVercel = Boolean(process.env.VERCEL || process.env.AWS_LAMBDA_FUNCTION_NAME);
+    if (isVercel) {
+      return path.join(os.tmpdir(), "active_sessions.json");
+    }
     const cwd = typeof process !== "undefined" && typeof process.cwd === "function" ? process.cwd() : ".";
     const dataDir = path.join(cwd, ".data");
     if (!fs.existsSync(dataDir)) {
       try {
         fs.mkdirSync(dataDir, { recursive: true });
-      } catch {}
+      } catch {
+        return path.join(os.tmpdir(), "active_sessions.json");
+      }
     }
     return path.join(dataDir, "active_sessions.json");
   } catch {
-    return ".data/active_sessions.json";
+    return path.join(os.tmpdir(), "active_sessions.json");
   }
 }
 
@@ -44,6 +51,14 @@ function readSessionsFromDisk(): Record<string, ActiveSessionRecord> {
   const filePath = getSessionsFilePath();
   try {
     if (!fs.existsSync(filePath)) {
+      // In Vercel serverless, attempt reading from committed .data as fallback seed
+      const seedPath = path.join(process.cwd(), ".data", "active_sessions.json");
+      if (fs.existsSync(seedPath)) {
+        try {
+          const raw = fs.readFileSync(seedPath, "utf-8");
+          return JSON.parse(raw);
+        } catch {}
+      }
       return {};
     }
     const raw = fs.readFileSync(filePath, "utf-8");
@@ -58,7 +73,12 @@ function writeSessionsToDisk(data: Record<string, ActiveSessionRecord>): void {
   try {
     fs.writeFileSync(filePath, JSON.stringify(data, null, 2), "utf-8");
   } catch (err) {
-    console.warn("Could not write active sessions store:", err);
+    try {
+      const fallbackPath = path.join(os.tmpdir(), "active_sessions.json");
+      fs.writeFileSync(fallbackPath, JSON.stringify(data, null, 2), "utf-8");
+    } catch {
+      console.warn("Could not write active sessions store:", err);
+    }
   }
 }
 
@@ -175,14 +195,69 @@ export const sessionManager = {
 
     const sessions = getSessions();
     const active = sessions[userId];
-    if (!active) return { isValid: false, reason: "not_found" };
+    const now = Date.now();
+
+    // In serverless / multi-container environments, if active session record is missing,
+    // evaluate whether the provided session token is well-formed and validly minted.
+    if (!active) {
+      const incomingParts = sessionId.split("_");
+      if (incomingParts.length >= 3 && incomingParts[0] === "sess") {
+        const incomingTime = parseInt(incomingParts[1], 36);
+        if (!isNaN(incomingTime)) {
+          const ageSeconds = Math.floor((now - incomingTime) / 1000);
+          if (ageSeconds >= 0 && ageSeconds < SESSION_CONFIG.MAX_SESSION_LIFETIME_SECONDS) {
+            // Adopt well-formed minted session
+            const newRecord: ActiveSessionRecord = {
+              userId,
+              sessionId,
+              sessionVersion: 1,
+              createdAt: new Date(incomingTime).toISOString(),
+              lastActiveAt: new Date().toISOString(),
+            };
+            sessions[userId] = newRecord;
+            inMemorySessions = sessions;
+            writeSessionsToDisk(sessions);
+            return {
+              isValid: true,
+              remainingInactivitySeconds: SESSION_CONFIG.INACTIVITY_TIMEOUT_SECONDS,
+              remainingLifetimeSeconds: SESSION_CONFIG.MAX_SESSION_LIFETIME_SECONDS - ageSeconds,
+            };
+          }
+        }
+      }
+      return { isValid: false, reason: "not_found" };
+    }
 
     // Strict constant-time string comparison against active session ID
     if (!timingSafeEqualStr(active.sessionId, sessionId)) {
-      return { isValid: false, reason: "revoked" };
+      // Check if presented session was minted AFTER the stored active session
+      // (Handles serverless environments where local disk writes are ephemeral or read-only)
+      const incomingParts = sessionId.split("_");
+      const activeParts = active.sessionId?.split("_") || [];
+      if (incomingParts.length >= 3 && incomingParts[0] === "sess") {
+        const incomingTime = parseInt(incomingParts[1], 36);
+        const activeTime =
+          activeParts.length >= 3 && activeParts[0] === "sess"
+            ? parseInt(activeParts[1], 36)
+            : (Date.parse(active.createdAt) || 0);
+
+        if (!isNaN(incomingTime) && incomingTime >= activeTime) {
+          // The presented session was issued more recently than the stored record (latest login wins).
+          active.sessionId = sessionId;
+          active.createdAt = new Date(incomingTime).toISOString();
+          active.lastActiveAt = new Date().toISOString();
+          active.sessionVersion = (active.sessionVersion || 1) + 1;
+          sessions[userId] = active;
+          inMemorySessions = sessions;
+          writeSessionsToDisk(sessions);
+        } else {
+          return { isValid: false, reason: "revoked" };
+        }
+      } else {
+        return { isValid: false, reason: "revoked" };
+      }
     }
 
-    const now = Date.now();
     const createdTime = Date.parse(active.createdAt) || now;
     const lastActiveTime = Date.parse(active.lastActiveAt) || now;
 

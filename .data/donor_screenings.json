@@ -452,5 +452,157 @@
     "deferral_until": "2026-12-15",
     "cancellation_reason": "Emergency request fulfilled by emergency batch",
     "cancelled_at": "2026-11-08T19:06:03.570Z"
+  },
+  "screen-1794168755122-wbzwd": {
+    "id": "screen-1794168755122-wbzwd",
+    "blood_request_id": "br-test-1794168755019",
+    "donor_request_id": "dr-1794168755051-n2akq",
+    "donor_id": "1776af45-264a-4dc7-a9c3-3378c64e6f9c",
+    "donor_user_id": "d0000004-0000-0000-0000-000000000004",
+    "donor_ref": "DONOR-LAG-004",
+    "donor_email": "donor@orbinova.com",
+    "blood_group": "O+",
+    "hospital_id": "a1111111-1111-1111-1111-111111111111",
+    "hospital_name": "Lagos University Teaching Hospital",
+    "hospital_address": "Idi-Araba, Surulere, Lagos",
+    "screening_type": "scheduled",
+    "scheduled_date": "2026-11-15",
+    "scheduled_time": "11:30",
+    "instructions": "Cancelled: Emergency request fulfilled by emergency batch",
+    "status": "cancelled",
+    "medical_eligibility": "temporarily_deferred",
+    "history": [
+      {
+        "action": "SCREENING_SCHEDULED",
+        "timestamp": "2026-11-08T20:12:35.122Z",
+        "actorUserId": "staff-101",
+        "details": {
+          "screening_type": "asap"
+        }
+      },
+      {
+        "action": "ATTENDANCE_CONFIRMED",
+        "timestamp": "2026-11-08T20:12:35.185Z",
+        "actorUserId": "d0000004-0000-0000-0000-000000000004",
+        "details": {
+          "note": "On my way, arriving in 20 minutes"
+        }
+      },
+      {
+        "action": "APPOINTMENT_RESCHEDULED",
+        "timestamp": "2026-11-08T20:12:35.210Z",
+        "details": {
+          "previousDate": null,
+          "previousTime": null,
+          "newDate": "2026-11-15",
+          "newTime": "11:30",
+          "screeningType": "scheduled"
+        }
+      },
+      {
+        "action": "RESCHEDULING_REQUESTED",
+        "timestamp": "2026-11-08T20:12:35.234Z",
+        "actorUserId": "d0000004-0000-0000-0000-000000000004",
+        "details": {
+          "reason": "I have an exam on that morning",
+          "proposedDate": "2026-11-16",
+          "proposedTime": "14:00"
+        }
+      },
+      {
+        "action": "UNABLE_TO_ATTEND",
+        "timestamp": "2026-11-08T20:12:35.259Z",
+        "actorUserId": "d0000004-0000-0000-0000-000000000004",
+        "details": {
+          "reason": "Emergency work travel to Abuja"
+        }
+      },
+      {
+        "action": "SCREENING_COMPLETED",
+        "timestamp": "2026-11-08T20:12:35.358Z",
+        "actorUserId": "dr-ade-101",
+        "details": {
+          "notes": "BP 118/78, Hb 13.8 g/dL, pulse 70 bpm, temperature 36.6 C"
+        }
+      },
+      {
+        "action": "MEDICAL_OUTCOME_ELIGIBLE",
+        "timestamp": "2026-11-08T20:12:35.414Z",
+        "actorUserId": "dr-ade-101",
+        "details": {
+          "outcome": "eligible",
+          "notes": "Cleared for 450 mL whole blood phlebotomy"
+        }
+      },
+      {
+        "action": "MEDICAL_OUTCOME_TEMPORARILY_DEFERRED",
+        "timestamp": "2026-11-08T20:12:35.477Z",
+        "actorUserId": "dr-ade-101",
+        "details": {
+          "outcome": "temporarily_deferred",
+          "notes": "Low Hb 11.9 g/dL",
+          "deferralReason": "Mild iron deficiency",
+          "deferralUntil": "2026-12-15"
+        }
+      },
+      {
+        "action": "APPOINTMENT_CANCELLED",
+        "timestamp": "2026-11-08T20:12:35.561Z",
+        "actorUserId": "staff-101",
+        "details": {
+          "reason": "Emergency request fulfilled by emergency batch"
+        }
+      }
+    ],
+    "created_at": "2026-11-08T20:12:35.122Z",
+    "updated_at": "2026-11-08T20:12:35.561Z",
+    "donor_response_note": "Emergency work travel to Abuja",
+    "donor_confirmed_at": "2026-11-08T20:12:35.185Z",
+    "reschedule_reason": "I have an exam on that morning",
+    "proposed_date": "2026-11-16",
+    "proposed_time": "14:00",
+    "reschedule_history": [
+      {
+        "action": "SCREENING_SCHEDULED",
+        "timestamp": "2026-11-08T20:12:35.122Z",
+        "actorUserId": "staff-101",
+        "details": {
+          "screening_type": "asap"
+        }
+      },
+      {
+        "action": "ATTENDANCE_CONFIRMED",
+        "timestamp": "2026-11-08T20:12:35.185Z",
+        "actorUserId": "d0000004-0000-0000-0000-000000000004",
+        "details": {
+          "note": "On my way, arriving in 20 minutes"
+        }
+      },
+      {
+        "action": "APPOINTMENT_RESCHEDULED",
+        "timestamp": "2026-11-08T20:12:35.210Z",
+        "details": {
+          "previousDate": null,
+          "previousTime": null,
+          "newDate": "2026-11-15",
+          "newTime": "11:30",
+          "screeningType": "scheduled"
+        }
+      }
+    ],
+    "donor_reschedule_reason": "I have an exam on that morning",
+    "donor_proposed_date": "2026-11-16",
+    "donor_proposed_time": "14:00",
+    "donor_unable_reason": "Emergency work travel to Abuja",
+    "screening_completed_at": "2026-11-08T20:12:35.358Z",
+    "screened_at": "2026-11-08T20:12:35.358Z",
+    "screened_by": "dr-ade-101",
+    "screened_by_name": "Dr. Adeyemi",
+    "medical_notes": "Low Hb 11.9 g/dL",
+    "screening_notes": "BP 118/78, Hb 13.8 g/dL, pulse 70 bpm, temperature 36.6 C",
+    "deferral_reason": "Mild iron deficiency",
+    "deferral_until": "2026-12-15",
+    "cancellation_reason": "Emergency request fulfilled by emergency batch",
+    "cancelled_at": "2026-11-08T20:12:35.561Z"
   }
 }

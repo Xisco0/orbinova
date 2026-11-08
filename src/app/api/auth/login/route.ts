@@ -318,7 +318,7 @@ export async function POST(request: NextRequest) {
       ? "/donor/dashboard"
       : effectiveScope === "imaging" || (role as string) === "radiologist" || staffRecord?.memberRole === "radiologist"
       ? "/imaging"
-      : ROLE_PORTAL_MAP[role] || "/hospital";
+      : ROLE_PORTAL_MAP[role] || "/hospital/dashboard";
 
     // Set cookie headers on response and return payload
     const finalResponse = NextResponse.json({

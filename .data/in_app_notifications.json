@@ -1,5 +1,20 @@
 [
   {
+    "id": "notif-1794168755142-1fmwj",
+    "user_id": "d0000004-0000-0000-0000-000000000004",
+    "organization_id": null,
+    "type": "blood_request",
+    "title": "Urgent Screening Request (ASAP)",
+    "message": "Lagos University Teaching Hospital has requested immediate screening for Blood Request REQ-BR-TEST-.",
+    "data": {
+      "screening_id": "screen-1794168755122-wbzwd",
+      "screening_type": "asap"
+    },
+    "is_read": false,
+    "read_at": null,
+    "created_at": "2026-11-08T20:12:35.142Z"
+  },
+  {
     "id": "notif-1794164763294-c95dg",
     "user_id": "d0000004-0000-0000-0000-000000000004",
     "organization_id": null,

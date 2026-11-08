@@ -178,5 +178,15 @@
     "unlockedBy": "user-qa-1794164819879",
     "lastAttemptAt": "2026-11-08T19:07:14.407Z",
     "lockedUntil": null
+  },
+  "qa-doctor-1794168862129@orbinova.com": {
+    "email": "qa-doctor-1794168862129@orbinova.com",
+    "failedCount": 0,
+    "isLocked": false,
+    "lockedAt": null,
+    "unlockedAt": "2026-11-08T20:14:28.270Z",
+    "unlockedBy": "user-qa-1794168862129",
+    "lastAttemptAt": "2026-11-08T20:14:28.270Z",
+    "lockedUntil": null
   }
 }
