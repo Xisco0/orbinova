@@ -8,10 +8,59 @@ import { ModuleAccessButton } from "@/components/ui/ModuleAccessButton";
 import { HeroVisual } from "@/components/public/HeroVisual";
 import { BRAND } from "@/constants/theme";
 
+const productionDomain =
+  process.env.NEXT_PUBLIC_APP_URL &&
+  !process.env.NEXT_PUBLIC_APP_URL.includes("localhost") &&
+  !process.env.NEXT_PUBLIC_APP_URL.includes("127.0.0.1")
+    ? process.env.NEXT_PUBLIC_APP_URL.replace(/\/+$/, "")
+    : process.env.VERCEL_PROJECT_PRODUCTION_URL
+    ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`.replace(/\/+$/, "")
+    : "https://www.orbinova.com";
+
+const siteUrl = productionDomain;
+const ogImageUrl = `${siteUrl}/orbinova-og.png`;
+const canonicalUrl = `${siteUrl}/`;
+
 export const metadata: Metadata = {
-  title: "ORBINOVA | Integrated Healthcare Intelligence Platform",
+  metadataBase: new URL(siteUrl),
+  title: {
+    absolute: "ORBINOVA | Integrated Healthcare Intelligence",
+  },
   description:
-    "ORBINOVA connects healthcare institutions, donor coordination, and AI-assisted medical imaging through an integrated healthcare intelligence platform.",
+    "ORBINOVA connects healthcare through technology and artificial intelligence, advancing donor matching, blood bank coordination, and AI-assisted medical imaging.",
+  alternates: {
+    canonical: canonicalUrl,
+  },
+  openGraph: {
+    type: "website",
+    siteName: "ORBINOVA",
+    title: "ORBINOVA | Integrated Healthcare Intelligence",
+    description:
+      "ORBINOVA connects healthcare through technology and artificial intelligence, advancing donor matching, blood bank coordination, and AI-assisted medical imaging.",
+    url: canonicalUrl,
+    images: [
+      {
+        url: ogImageUrl,
+        width: 1200,
+        height: 630,
+        alt: "ORBINOVA Integrated Healthcare Intelligence platform banner.",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "ORBINOVA | Integrated Healthcare Intelligence",
+    description:
+      "ORBINOVA connects healthcare through technology and artificial intelligence, advancing donor matching, blood bank coordination, and AI-assisted medical imaging.",
+    images: [
+      {
+        url: ogImageUrl,
+        alt: "ORBINOVA Integrated Healthcare Intelligence platform banner.",
+        width: 1200,
+        height: 630,
+      },
+    ],
+  },
 };
 
 export default function OrbinovaHomePage() {

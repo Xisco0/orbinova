@@ -10,14 +10,27 @@ export const viewport: Viewport = {
   themeColor: "#2563EB",
 };
 
+const productionDomain =
+  process.env.NEXT_PUBLIC_APP_URL &&
+  !process.env.NEXT_PUBLIC_APP_URL.includes("localhost") &&
+  !process.env.NEXT_PUBLIC_APP_URL.includes("127.0.0.1")
+    ? process.env.NEXT_PUBLIC_APP_URL.replace(/\/+$/, "")
+    : process.env.VERCEL_PROJECT_PRODUCTION_URL
+    ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`.replace(/\/+$/, "")
+    : "https://www.orbinova.com";
+
+const siteUrl = productionDomain;
+const ogImageUrl = `${siteUrl}/orbinova-og.png`;
+const canonicalUrl = `${siteUrl}/`;
+
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || "https://www.orbinova.com"),
+  metadataBase: new URL(siteUrl),
   title: {
     template: "%s | ORBINOVA",
-    default: "ORBINOVA | Integrated Healthcare Intelligence Platform",
+    default: "ORBINOVA | Integrated Healthcare Intelligence",
   },
   description:
-    "ORBINOVA connects healthcare institutions, donor coordination, and AI-assisted medical imaging through an integrated healthcare intelligence platform.",
+    "ORBINOVA connects healthcare through technology and artificial intelligence, advancing donor matching, blood bank coordination, and AI-assisted medical imaging.",
   keywords: [
     "ORBINOVA",
     "healthcare intelligence",
@@ -29,24 +42,42 @@ export const metadata: Metadata = {
     "blood bank coordination",
     "hospital intelligence",
   ],
+  alternates: {
+    canonical: canonicalUrl,
+  },
   icons: {
     icon: "/images/orbinova-logo.png",
     shortcut: "/images/orbinova-logo.png",
     apple: "/images/orbinova-logo.png",
   },
   openGraph: {
-    title: "ORBINOVA | Integrated Healthcare Intelligence Platform",
-    description:
-      "Connecting Healthcare. Advancing Intelligence. Saving Lives. Integrated platform for donor coordination and AI-assisted medical imaging.",
+    type: "website",
     siteName: "ORBINOVA",
     locale: "en_US",
-    type: "website",
+    title: "ORBINOVA | Integrated Healthcare Intelligence",
+    description:
+      "ORBINOVA connects healthcare through technology and artificial intelligence, advancing donor matching, blood bank coordination, and AI-assisted medical imaging.",
+    url: canonicalUrl,
     images: [
       {
-        url: "/images/orbinova-logo.png",
-        width: 800,
-        height: 800,
-        alt: "ORBINOVA Integrated Healthcare Intelligence",
+        url: ogImageUrl,
+        width: 1200,
+        height: 630,
+        alt: "ORBINOVA Integrated Healthcare Intelligence platform banner.",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "ORBINOVA | Integrated Healthcare Intelligence",
+    description:
+      "ORBINOVA connects healthcare through technology and artificial intelligence, advancing donor matching, blood bank coordination, and AI-assisted medical imaging.",
+    images: [
+      {
+        url: ogImageUrl,
+        alt: "ORBINOVA Integrated Healthcare Intelligence platform banner.",
+        width: 1200,
+        height: 630,
       },
     ],
   },

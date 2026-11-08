@@ -61,5 +61,19 @@
     "windowStart": 1794086911688,
     "cooldownUntil": null,
     "lastAttemptAt": "2026-11-07T21:28:49.855Z"
+  },
+  "login:::ffff:127.0.0.1:hospital@orbinova.com": {
+    "key": "login:::ffff:127.0.0.1:hospital@orbinova.com",
+    "count": 3,
+    "windowStart": 1794172022318,
+    "cooldownUntil": null,
+    "lastAttemptAt": "2026-11-08T21:07:17.707Z"
+  },
+  "login:::ffff:127.0.0.1:hospital1@orbinova.com": {
+    "key": "login:::ffff:127.0.0.1:hospital1@orbinova.com",
+    "count": 6,
+    "windowStart": 1794172044317,
+    "cooldownUntil": 1794172353340,
+    "lastAttemptAt": "2026-11-08T21:07:33.341Z"
   }
 }
