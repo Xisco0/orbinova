@@ -36,5 +36,14 @@
     "lastActiveAt": "2026-11-08T17:50:42.652Z",
     "ip": "::ffff:127.0.0.1",
     "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:160.0) Gecko/20100101 Firefox/160.0"
+  },
+  "user-qa-1794164790354": {
+    "userId": "user-qa-1794164790354",
+    "sessionId": "sess_mw87eap8_0bdcf31a508f8e60d43e9f3aa73ff2b88659c1f5d8d9475e73968525ea022269",
+    "sessionVersion": 2,
+    "portalScope": "hospital",
+    "createdAt": "2026-11-08T19:06:38.636Z",
+    "lastActiveAt": "2026-11-08T19:06:38.636Z",
+    "ip": "127.0.0.1"
   }
 }

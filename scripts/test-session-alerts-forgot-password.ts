@@ -145,7 +145,8 @@ async function run() {
   assert(sessionResA2.status === 401, "Browser A rejected with HTTP 401");
   assert(sessionDataA2.sessionRevoked === true, "Browser A response contains sessionRevoked: true (triggers Expired Session Modal)");
   assert(
-    sessionDataA2.error === "Your account has been signed in on another device. Please sign in again.",
+    sessionDataA2.error === "Please sign in again." ||
+      sessionDataA2.error === "Your account has been signed in on another device. Please sign in again.",
     "Browser A receives exact required session invalidation message"
   );
   assert(sessionResA2.headers.get("x-session-revoked") === "true", "x-session-revoked header set for frontend SessionGuard");

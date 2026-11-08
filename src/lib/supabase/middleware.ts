@@ -8,7 +8,7 @@ import {
   PORTAL_COOKIE_OPTIONS,
   isRoleAuthorizedForPortal,
 } from "@/lib/auth/portalAuth";
-import { sessionManager, getSessionCookieName } from "@/lib/auth/sessionManager";
+import { getSessionCookieName } from "@/lib/auth/sessionConfig";
 
 /**
  * Creates a scoped Supabase server client inside Next.js Middleware.
@@ -191,16 +191,6 @@ async function resolveAndValidatePortalUser(
 
   if (!sessionId) {
     return { status: "unauthenticated" };
-  }
-
-  // If a session ID is present, validate against authoritative active session store.
-  // If an active session is recorded for this user but doesn't match this request,
-  // this session has been revoked because the account logged in elsewhere!
-  const activeRecord = sessionManager.getActiveSession(userId);
-  if (activeRecord) {
-    if (!sessionManager.validateSession(userId, sessionId)) {
-      return { status: "revoked" };
-    }
   }
 
   // 4. Resolve Profile and Active Status

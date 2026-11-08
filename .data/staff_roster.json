@@ -653,5 +653,29 @@
     "updatedAt": "2026-11-08T09:58:23.263Z",
     "passwordHash": "42b857eecfd49671f729f77106156366:b8704bd59752f5583e10f0949b18267411008fc275fbe347754eefcdd3e32097ca2b37395cb31cf1d630f2babea9fe51625eca4f5be0ce18f630191c1977eecb",
     "passwordChangedAt": "2026-11-08T09:23:00.085Z"
+  },
+  "user-qa-1794164790354": {
+    "userId": "user-qa-1794164790354",
+    "memberId": "member-1794164790354",
+    "organizationId": "a1111111-1111-1111-1111-111111111111",
+    "fullName": "Dr. Gregory House",
+    "email": "qa-doctor-1794164790354@orbinova.com",
+    "memberRole": "doctor",
+    "isActive": true,
+    "temporaryPassword": "StaffPassword2026!",
+    "mustChangePassword": false,
+    "updatedAt": "2026-11-08T19:06:30.362Z"
+  },
+  "user-qa-1794164819879": {
+    "userId": "user-qa-1794164819879",
+    "memberId": "member-1794164819879",
+    "organizationId": "a1111111-1111-1111-1111-111111111111",
+    "fullName": "Dr. Gregory House",
+    "email": "qa-doctor-1794164819879@orbinova.com",
+    "memberRole": "doctor",
+    "isActive": true,
+    "temporaryPassword": "UnlockedAccountPassword2026@!",
+    "mustChangePassword": false,
+    "updatedAt": "2026-11-08T19:07:14.402Z"
   }
 }

@@ -28,3 +28,9 @@ export const SESSION_MESSAGES = {
   MAX_LIFETIME_EXPIRED: "Your session has reached its maximum 7-day duration. Please sign in again to continue.",
   GENERIC_EXPIRED: "Please sign in again.",
 } as const;
+
+export const SESSION_COOKIE_NAME_PREFIX = "orbinova_sid";
+
+export function getSessionCookieName(portalScope: string = "hospital"): string {
+  return `${SESSION_COOKIE_NAME_PREFIX}_${portalScope}`;
+}

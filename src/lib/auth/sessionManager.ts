@@ -1,4 +1,14 @@
-import { SESSION_CONFIG, SESSION_MESSAGES } from "./sessionConfig";
+import fs from "fs";
+import path from "path";
+import crypto from "crypto";
+import {
+  SESSION_CONFIG,
+  SESSION_MESSAGES,
+  SESSION_COOKIE_NAME_PREFIX,
+  getSessionCookieName,
+} from "./sessionConfig";
+
+export { SESSION_COOKIE_NAME_PREFIX, getSessionCookieName };
 
 export interface ActiveSessionRecord {
   userId: string;
@@ -12,51 +22,31 @@ export interface ActiveSessionRecord {
   userAgent?: string;
 }
 
-// Dynamically load Node.js modules in Node.js runtime without breaking Next.js Edge Runtime bundler
-function getNodeModule<T = any>(name: string): T | null {
-  if (typeof process === "undefined" || process.env.NEXT_RUNTIME === "edge") {
-    return null;
-  }
-  try {
-    return eval("require")(name);
-  } catch {
-    return null;
-  }
-}
-
-function getSessionsFilePath(): string | null {
-  const nodeFs = getNodeModule("fs");
-  const nodePath = getNodeModule("path");
-  if (!nodeFs || !nodePath) return null;
-
+function getSessionsFilePath(): string {
   try {
     const cwd = typeof process !== "undefined" && typeof process.cwd === "function" ? process.cwd() : ".";
-    const dataDir = nodePath.join(cwd, ".data");
-    if (!nodeFs.existsSync(dataDir)) {
+    const dataDir = path.join(cwd, ".data");
+    if (!fs.existsSync(dataDir)) {
       try {
-        nodeFs.mkdirSync(dataDir, { recursive: true });
+        fs.mkdirSync(dataDir, { recursive: true });
       } catch {}
     }
-    return nodePath.join(dataDir, "active_sessions.json");
+    return path.join(dataDir, "active_sessions.json");
   } catch {
-    return null;
+    return ".data/active_sessions.json";
   }
 }
 
-// In-memory cache for fast, zero-latency validation across both Edge and Node
+// In-memory cache for fast, zero-latency validation
 let inMemorySessions: Record<string, ActiveSessionRecord> | null = null;
 
 function readSessionsFromDisk(): Record<string, ActiveSessionRecord> {
   const filePath = getSessionsFilePath();
-  const nodeFs = getNodeModule("fs");
-  if (!filePath || !nodeFs) {
-    return inMemorySessions || {};
-  }
   try {
-    if (!nodeFs.existsSync(filePath)) {
+    if (!fs.existsSync(filePath)) {
       return {};
     }
-    const raw = nodeFs.readFileSync(filePath, "utf-8");
+    const raw = fs.readFileSync(filePath, "utf-8");
     return JSON.parse(raw);
   } catch {
     return inMemorySessions || {};
@@ -65,10 +55,8 @@ function readSessionsFromDisk(): Record<string, ActiveSessionRecord> {
 
 function writeSessionsToDisk(data: Record<string, ActiveSessionRecord>): void {
   const filePath = getSessionsFilePath();
-  const nodeFs = getNodeModule("fs");
-  if (!filePath || !nodeFs) return;
   try {
-    nodeFs.writeFileSync(filePath, JSON.stringify(data, null, 2), "utf-8");
+    fs.writeFileSync(filePath, JSON.stringify(data, null, 2), "utf-8");
   } catch (err) {
     console.warn("Could not write active sessions store:", err);
   }
@@ -101,53 +89,31 @@ async function runWithLock<T>(fn: () => Promise<T> | T): Promise<T> {
 }
 
 /**
- * Portable constant-time string comparison preventing timing attacks across Node and Edge runtimes.
+ * Portable constant-time string comparison preventing timing attacks.
  */
 function timingSafeEqualStr(a: string, b: string): boolean {
   if (typeof a !== "string" || typeof b !== "string") return false;
   if (a.length !== b.length) return false;
-  let diff = 0;
-  for (let i = 0; i < a.length; i++) {
-    diff |= a.charCodeAt(i) ^ b.charCodeAt(i);
+  try {
+    return crypto.timingSafeEqual(Buffer.from(a), Buffer.from(b));
+  } catch {
+    let diff = 0;
+    for (let i = 0; i < a.length; i++) {
+      diff |= a.charCodeAt(i) ^ b.charCodeAt(i);
+    }
+    return diff === 0;
   }
-  return diff === 0;
 }
 
-export const SESSION_COOKIE_NAME_PREFIX = "orbinova_sid";
 export const SESSION_EXPIRED_MESSAGE = "Please sign in again.";
-
-export function getSessionCookieName(portalScope: string = "hospital"): string {
-  return `${SESSION_COOKIE_NAME_PREFIX}_${portalScope}`;
-}
 
 export const sessionManager = {
   /**
    * Generates a cryptographically secure session identifier.
-   * Works seamlessly in Node.js, Next.js Edge Runtime, and browser environments.
    */
   generateSessionId(): string {
     const timestamp = Date.now().toString(36);
-    let randomHex = "";
-
-    const nodeCrypto = getNodeModule("crypto");
-    if (nodeCrypto && typeof nodeCrypto.randomBytes === "function") {
-      try {
-        randomHex = nodeCrypto.randomBytes(32).toString("hex");
-      } catch {}
-    }
-
-    if (!randomHex && typeof globalThis !== "undefined" && globalThis.crypto?.getRandomValues) {
-      try {
-        const arr = new Uint8Array(32);
-        globalThis.crypto.getRandomValues(arr);
-        randomHex = Array.from(arr, (b) => b.toString(16).padStart(2, "0")).join("");
-      } catch {}
-    }
-
-    if (!randomHex) {
-      randomHex = Math.random().toString(36).substring(2) + Math.random().toString(36).substring(2);
-    }
-
+    const randomHex = crypto.randomBytes(32).toString("hex");
     return `sess_${timestamp}_${randomHex}`;
   },
 
