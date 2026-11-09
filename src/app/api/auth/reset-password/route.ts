@@ -123,9 +123,16 @@ export async function POST(request: NextRequest) {
         temporaryPassword: newPassword,
         mustChangePassword: false,
       });
+      staffStore.setPassword(staff.userId, newPassword);
     }
 
-    // B. Supabase Auth update
+    // B. Donor Store update
+    const donor = donorStore.get(email) || donorStore.get(userId);
+    if (donor) {
+      donorStore.setPassword(donor.userId, newPassword);
+    }
+
+    // C. Supabase Auth & Profile update
     try {
       const adminSupabase = createAdminClient();
       await adminSupabase.auth.admin.updateUserById(userId, {
@@ -134,8 +141,14 @@ export async function POST(request: NextRequest) {
           must_change_password: false,
         },
       });
+      await (adminSupabase.from("profiles") as any)
+        .update({
+          must_change_password: false,
+          updated_at: new Date().toISOString(),
+        })
+        .eq("id", userId);
     } catch {
-      // In local or mock dev environments, staffStore handles local fallback
+      // In local or mock dev environments, staffStore & donorStore handle local fallback
     }
 
     // 5. Invalidate existing sessions for this user (Single Active Session Policy)
@@ -145,14 +158,14 @@ export async function POST(request: NextRequest) {
     await accountSecurity.unlockAccount(email, {
       userId,
       role: portalScope,
-      organizationId: staff?.organizationId,
+      organizationId: staff?.organizationId || donor?.organizationId,
     });
 
     // 7. Enqueue password changed security notification email
     try {
       await orbinovaEmail.sendPasswordChangedAlert({
         userEmail: email,
-        fullName: staff?.fullName || "Healthcare User",
+        fullName: staff?.fullName || donor?.fullName || "Healthcare User",
         timestamp: new Date().toISOString(),
       });
     } catch {

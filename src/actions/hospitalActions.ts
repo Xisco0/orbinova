@@ -1050,6 +1050,8 @@ export async function registerHospitalDonorAction(data: {
       eligibilityStatus: data.eligibilityStatus || "eligible",
       availabilityStatus: "available",
       isActive: true,
+      temporaryPassword: isLinkedAccount ? undefined : "DonorPassword2026!",
+      mustChangePassword: !isLinkedAccount,
       lastDonationDate: null,
       updatedAt: nowIso,
     });

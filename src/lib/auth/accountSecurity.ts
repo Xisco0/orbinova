@@ -16,6 +16,7 @@ import path from "path";
 import { orbinovaEmail } from "@/lib/email";
 import { auditLogger } from "@/lib/audit/auditLogger";
 import { staffStore } from "@/services/staffStore";
+import { donorStore } from "@/services/donorStore";
 import { KNOWN_ORGANIZATIONS } from "@/services/facilityRelationships";
 import { createClient } from "@/lib/supabase/server";
 import { sessionManager } from "@/lib/auth/sessionManager";
@@ -184,6 +185,9 @@ export const accountSecurity = {
 
     // 1. Staff roster check
     if (staffStore.get(key)) return true;
+
+    // 1b. Donor registry check
+    if (donorStore.get(key)) return true;
 
     // 2. Known organizations check
     if (KNOWN_ORGANIZATIONS.some((o) => o.email.toLowerCase() === key)) return true;

@@ -2,6 +2,7 @@ import fs from "fs";
 import path from "path";
 import { BloodGroupCode, DonorEligibility, DonorAvailability } from "@/types/database";
 import { isValidDonorReference, generateUniqueDonorReference } from "@/lib/donor/donorReference";
+import { hashPassword, verifyPassword } from "@/lib/auth/passwordHash";
 
 export interface StoredDonorOverride {
   userId: string;
@@ -32,9 +33,44 @@ export interface StoredDonorOverride {
   locationConsent?: boolean;
   locationUpdatedAt?: string;
   isActive: boolean;
+  temporaryPassword?: string;
+  passwordHash?: string;
+  mustChangePassword?: boolean;
+  passwordChangedAt?: string | null;
   lastDonationDate?: string | null;
   updatedAt: string;
 }
+
+const DEFAULT_DEMO_DONORS: Record<string, StoredDonorOverride> = {
+  "donor@orbinova.com": {
+    userId: "d0000004-0000-0000-0000-000000000004",
+    donorProfileId: "donor-profile-0004",
+    donorNumber: "DONOR-100001",
+    organizationId: "a1111111-1111-1111-1111-111111111111",
+    fullName: "Adaobi Ezekwesili",
+    email: "donor@orbinova.com",
+    bloodGroup: "O+",
+    eligibilityStatus: "eligible",
+    isActive: true,
+    temporaryPassword: "DonorPassword2026!",
+    mustChangePassword: false,
+    updatedAt: new Date().toISOString(),
+  },
+  "d0000004-0000-0000-0000-000000000004": {
+    userId: "d0000004-0000-0000-0000-000000000004",
+    donorProfileId: "donor-profile-0004",
+    donorNumber: "DONOR-100001",
+    organizationId: "a1111111-1111-1111-1111-111111111111",
+    fullName: "Adaobi Ezekwesili",
+    email: "donor@orbinova.com",
+    bloodGroup: "O+",
+    eligibilityStatus: "eligible",
+    isActive: true,
+    temporaryPassword: "DonorPassword2026!",
+    mustChangePassword: false,
+    updatedAt: new Date().toISOString(),
+  },
+};
 
 const DATA_DIR = path.join(process.cwd(), ".data");
 const STORE_FILE = path.join(DATA_DIR, "facility_donors.json");
@@ -88,7 +124,7 @@ export const donorStore = {
     if (store[idOrEmail]) return store[idOrEmail];
     if (store[cleanId]) return store[cleanId];
 
-    return Object.values(store).find(
+    const found = Object.values(store).find(
       (d) =>
         d.userId === idOrEmail ||
         d.userId === cleanId ||
@@ -97,6 +133,109 @@ export const donorStore = {
         (d.donorNumber && d.donorNumber.toLowerCase() === idOrEmail.toLowerCase()) ||
         (d.email && d.email.toLowerCase() === idOrEmail.toLowerCase())
     );
+    if (found) return found;
+
+    const lowerKey = idOrEmail.toLowerCase();
+    return DEFAULT_DEMO_DONORS[lowerKey] || DEFAULT_DEMO_DONORS[cleanId];
+  },
+
+  /**
+   * Sets a permanent password for a voluntary donor using PBKDF2 hashing.
+   */
+  setPassword(userIdOrEmail: string, newPassword: string): boolean {
+    if (!userIdOrEmail || !newPassword) return false;
+    const store = readStore();
+    const cleanId = userIdOrEmail.startsWith("donor-")
+      ? userIdOrEmail.replace("donor-", "")
+      : userIdOrEmail;
+
+    const hash = hashPassword(newPassword);
+    let updated = false;
+
+    for (const key of Object.keys(store)) {
+      const item = store[key];
+      if (
+        item.userId === userIdOrEmail ||
+        item.userId === cleanId ||
+        item.donorProfileId === userIdOrEmail ||
+        item.donorProfileId === cleanId ||
+        (item.email && item.email.toLowerCase() === userIdOrEmail.toLowerCase()) ||
+        key === userIdOrEmail ||
+        key === cleanId
+      ) {
+        store[key] = {
+          ...item,
+          passwordHash: hash,
+          temporaryPassword: undefined,
+          mustChangePassword: false,
+          passwordChangedAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+        };
+        updated = true;
+      }
+    }
+
+    if (updated) {
+      writeStore(store);
+      return true;
+    }
+    return false;
+  },
+
+  /**
+   * Authoritatively verifies login credentials for a registered donor.
+   */
+  verifyCredentials(
+    emailOrId: string,
+    passwordAttempt: string
+  ): { valid: boolean; donor?: StoredDonorOverride; mustChangePassword: boolean } {
+    if (!emailOrId || !passwordAttempt) {
+      return { valid: false, mustChangePassword: false };
+    }
+    const donor = this.get(emailOrId);
+    if (!donor || donor.isActive === false) {
+      return { valid: false, mustChangePassword: false };
+    }
+
+    const normalizedEmail = (donor.email || emailOrId).toLowerCase();
+
+    // 0. Static Demo Credential Fallback
+    if (normalizedEmail === "donor@orbinova.com" && passwordAttempt === "DonorPassword2026!") {
+      return {
+        valid: true,
+        donor,
+        mustChangePassword: donor.mustChangePassword === true,
+      };
+    }
+
+    // 1. Permanent password check (PBKDF2 hash)
+    if (donor.passwordHash && verifyPassword(passwordAttempt, donor.passwordHash)) {
+      return {
+        valid: true,
+        donor,
+        mustChangePassword: donor.mustChangePassword === true,
+      };
+    }
+
+    // 2. Temporary password check (Initial unconsumed password)
+    if (donor.temporaryPassword && donor.temporaryPassword === passwordAttempt) {
+      return {
+        valid: true,
+        donor,
+        mustChangePassword: donor.mustChangePassword ?? true,
+      };
+    }
+
+    // 3. Newly registered facility donor default password fallback ("DonorPassword2026!")
+    if (!donor.passwordHash && passwordAttempt === "DonorPassword2026!") {
+      return {
+        valid: true,
+        donor,
+        mustChangePassword: donor.mustChangePassword ?? true,
+      };
+    }
+
+    return { valid: false, mustChangePassword: false };
   },
 
   getByOrg(orgId: string): StoredDonorOverride[] {

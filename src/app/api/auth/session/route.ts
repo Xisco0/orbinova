@@ -8,6 +8,7 @@ import {
   isRoleAuthorizedForPortal,
 } from "@/lib/auth/portalAuth";
 import { staffStore } from "@/services/staffStore";
+import { donorStore } from "@/services/donorStore";
 import { sessionManager, getSessionCookieName } from "@/lib/auth/sessionManager";
 import { centralizedAuditService } from "@/services/centralizedAuditService";
 
@@ -53,6 +54,7 @@ async function handleSessionCheck(request: NextRequest, isExplicitActivity: bool
     let authenticatedUserId: string | null = null;
     let baseUser: any = null;
     let isStaffSession = false;
+    let isDonorSession = false;
 
     const sidCookieName = getSessionCookieName(portalScope);
     let sessionId = request.cookies.get(sidCookieName)?.value;
@@ -79,6 +81,34 @@ async function handleSessionCheck(request: NextRequest, isExplicitActivity: bool
                 email: staff.email || payload.email,
                 role: payload.role || "hospital",
                 fullName: staff.fullName,
+              };
+            }
+          }
+        } catch {}
+      }
+
+      // Check for voluntary donor session cookie
+      const donorCookie =
+        request.cookies.get("orbinova_donor")?.value ||
+        request.cookies.get(`orbinova_donor_${portalScope}`)?.value;
+      if (!authenticatedUserId && donorCookie) {
+        try {
+          const payload = JSON.parse(Buffer.from(donorCookie, "base64").toString("utf-8"));
+          if (payload?.userId) {
+            const donor =
+              donorStore.get(payload.userId) ||
+              (payload.email ? donorStore.get(payload.email) : undefined);
+            if (donor && donor.isActive !== false) {
+              authenticatedUserId = donor.userId;
+              isDonorSession = true;
+              if (!sessionId && payload.sessionId) {
+                sessionId = payload.sessionId;
+              }
+              baseUser = {
+                id: donor.userId,
+                email: donor.email || payload.email,
+                role: "donor",
+                fullName: donor.fullName,
               };
             }
           }
@@ -178,8 +208,8 @@ async function handleSessionCheck(request: NextRequest, isExplicitActivity: bool
       );
     }
 
-    if (isStaffSession) {
-      const role = (baseUser.role || "hospital") as UserRole;
+    if (isStaffSession || isDonorSession) {
+      const role = (baseUser.role || (isDonorSession ? "donor" : "hospital")) as UserRole;
       const isAuthorized = isRoleAuthorizedForPortal(role, portalScope);
       return NextResponse.json({
         authenticated: true,

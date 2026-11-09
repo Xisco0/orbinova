@@ -141,6 +141,7 @@ export async function getCurrentUser(portalScope?: PortalScope) {
     let authenticatedUserId: string | null = null;
     let baseUser: any = null;
     let isStaffSession = false;
+    let isDonorSession = false;
 
     if (!authError && user) {
       authenticatedUserId = user.id;
@@ -183,6 +184,49 @@ export async function getCurrentUser(portalScope?: PortalScope) {
           }
         } catch {}
       }
+
+      // Authoritative Voluntary Donor Session Fallback
+      const donorCookie =
+        cookieStore?.get("orbinova_donor")?.value ||
+        cookieStore?.get(`orbinova_donor_${resolvedPortal}`)?.value;
+      if (!authenticatedUserId && donorCookie) {
+        try {
+          const payload = JSON.parse(Buffer.from(donorCookie, "base64").toString("utf-8"));
+          if (payload?.userId) {
+            const donor =
+              donorStore.get(payload.userId) ||
+              (payload.email ? donorStore.get(payload.email) : undefined);
+            if (donor && donor.isActive !== false) {
+              authenticatedUserId = donor.userId;
+              if (!sessionId && payload.sessionId) {
+                sessionId = payload.sessionId;
+              }
+              isDonorSession = true;
+              baseUser = {
+                id: donor.userId,
+                email: donor.email || payload.email,
+                user_metadata: {
+                  full_name: donor.fullName,
+                  role: "donor",
+                  must_change_password: donor.mustChangePassword ?? false,
+                  organization_id: donor.organizationId,
+                },
+                profile: {
+                  id: donor.userId,
+                  full_name: donor.fullName,
+                  email: donor.email || payload.email,
+                  phone: donor.phone || null,
+                  role: "donor",
+                  avatar_url: null,
+                  is_active: true,
+                  created_at: donor.updatedAt || new Date().toISOString(),
+                  updated_at: donor.updatedAt || new Date().toISOString(),
+                } as Profile,
+              };
+            }
+          }
+        } catch {}
+      }
     }
 
     if (!authenticatedUserId || !baseUser) {
@@ -217,8 +261,8 @@ export async function getCurrentUser(portalScope?: PortalScope) {
       }
     }
 
-    if (isStaffSession) {
-      const role = (baseUser.user_metadata?.role || "hospital") as UserRole;
+    if (isStaffSession || isDonorSession) {
+      const role = (baseUser.user_metadata?.role || (isDonorSession ? "donor" : "hospital")) as UserRole;
       if (portalScope && !isRoleAuthorizedForPortal(role, portalScope)) {
         return null;
       }

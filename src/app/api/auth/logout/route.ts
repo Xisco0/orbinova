@@ -62,6 +62,19 @@ export async function POST(request: NextRequest) {
             }
           } catch {}
         }
+
+        const donorCookie =
+          request.cookies.get("orbinova_donor")?.value ||
+          request.cookies.get(`orbinova_donor_${portalScope}`)?.value;
+        if (donorCookie) {
+          try {
+            const payload = JSON.parse(Buffer.from(donorCookie, "base64").toString("utf-8"));
+            if (payload?.userId) userId = payload.userId;
+            if (payload?.sessionId) {
+              await sessionManager.revokeBySessionId(payload.sessionId);
+            }
+          } catch {}
+        }
       }
 
       if (userId) {
@@ -100,6 +113,8 @@ export async function POST(request: NextRequest) {
         c.name === targetCookie ||
         c.name.startsWith(`${targetCookie}.`) ||
         c.name === `orbinova_staff_${portalScope}` ||
+        c.name === "orbinova_donor" ||
+        c.name === "orbinova_donor_donor" ||
         c.name === sidCookieName
       ) {
         response.cookies.delete(c.name);

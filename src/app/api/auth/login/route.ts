@@ -194,6 +194,7 @@ export async function POST(request: NextRequest) {
     let authRole: UserRole = "hospital";
     let authFullName: string | null = null;
     let isStaffSession = false;
+    let isDonorSession = false;
 
     let authData: any = null;
     let authError: any = null;
@@ -233,6 +234,24 @@ export async function POST(request: NextRequest) {
         };
         authFullName = staffVerify.staff.fullName;
         authRole = "hospital";
+      } else {
+        // Authoritative Voluntary Donor Credential Verification
+        const donorVerify = donorStore.verifyCredentials(normalizedEmail, password);
+        if (donorVerify.valid && donorVerify.donor && donorVerify.donor.isActive !== false) {
+          isDonorSession = true;
+          authUser = {
+            id: donorVerify.donor.userId,
+            email: donorVerify.donor.email || normalizedEmail,
+            user_metadata: {
+              full_name: donorVerify.donor.fullName,
+              role: "donor",
+              must_change_password: donorVerify.mustChangePassword,
+              organization_id: donorVerify.donor.organizationId,
+            },
+          };
+          authFullName = donorVerify.donor.fullName;
+          authRole = "donor";
+        }
       }
     }
 
@@ -317,7 +336,7 @@ export async function POST(request: NextRequest) {
     let profileFullName = authFullName;
     let profileMustChange = false;
 
-    if (!isStaffSession) {
+    if (!isStaffSession && !isDonorSession) {
       const { data: profileData } = await (supabase
         .from("profiles") as any)
         .select("role, is_active, is_suspended, full_name, must_change_password")
@@ -336,6 +355,12 @@ export async function POST(request: NextRequest) {
       isSuspended = profile?.is_suspended === true || !isActive;
       profileFullName = profile?.full_name || authUser.user_metadata?.full_name || null;
       profileMustChange = profile?.must_change_password === true;
+    } else if (isDonorSession) {
+      role = "donor";
+      isActive = true;
+      isSuspended = false;
+      profileFullName = authFullName;
+      profileMustChange = authUser.user_metadata?.must_change_password === true;
     }
 
     if (isSuspended || !isActive) {
@@ -351,7 +376,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Strict portal authorization check with shared identity & multi-profile support
-    const hasDonor = !!(donorStore.get(authUser.id) || donorStore.get(normalizedEmail));
+    const hasDonor = isDonorSession || !!(donorStore.get(authUser.id) || donorStore.get(normalizedEmail));
     const hasStaff = isStaffSession || !!(staffStore.get(authUser.id) || staffStore.get(normalizedEmail));
 
     const isAuthorized = isUserAuthorizedForPortal(authUser.id, normalizedEmail, role, scope, {
@@ -371,9 +396,12 @@ export async function POST(request: NextRequest) {
     }
 
     const staffRecord = staffStore.get(normalizedEmail) || staffStore.get(authUser.id);
+    const donorRecord = donorStore.get(normalizedEmail) || donorStore.get(authUser.id);
     const mustChangePassword =
       staffRecord?.mustChangePassword !== undefined
         ? staffRecord.mustChangePassword
+        : donorRecord?.mustChangePassword !== undefined
+        ? donorRecord.mustChangePassword
         : (profileMustChange || authUser.user_metadata?.must_change_password === true);
 
     // For admin users, guarantee that the session and cookies are strictly admin-scoped
@@ -458,6 +486,27 @@ export async function POST(request: NextRequest) {
       ).toString("base64");
 
       finalResponse.cookies.set(`orbinova_staff_${scope}`, staffSessionToken, {
+        ...PORTAL_COOKIE_OPTIONS,
+      });
+    }
+
+    // Set orbinova_donor session cookie for donor sessions
+    if (isDonorSession || scope === "donor" || role === "donor" || donorRecord) {
+      const donorSessionToken = Buffer.from(
+        JSON.stringify({
+          userId: authUser.id,
+          email: authUser.email,
+          role: "donor",
+          scope: "donor",
+          sessionId: activeSessionId,
+          iat: Date.now(),
+        })
+      ).toString("base64");
+
+      finalResponse.cookies.set("orbinova_donor", donorSessionToken, {
+        ...PORTAL_COOKIE_OPTIONS,
+      });
+      finalResponse.cookies.set("orbinova_donor_donor", donorSessionToken, {
         ...PORTAL_COOKIE_OPTIONS,
       });
     }
