@@ -4,6 +4,7 @@ import { Database, UserRole, Profile } from "@/types/database";
 import { staffStore } from "@/services/staffStore";
 import { donorStore } from "@/services/donorStore";
 import { sessionManager, getSessionCookieName } from "@/lib/auth/sessionManager";
+import { accountSecurity } from "@/lib/auth/accountSecurity";
 import {
   PortalScope,
   PORTAL_COOKIE_NAMES,
@@ -188,6 +189,24 @@ export async function getCurrentUser(portalScope?: PortalScope) {
       return null;
     }
 
+    // ADMINISTRATIVE SUSPENSION & SECURITY LOCKOUT BARRIER
+    // Neither administratively suspended accounts nor security-locked accounts can access protected resources
+    const suspension = await accountSecurity.isAccountSuspended(authenticatedUserId);
+    if (suspension.isSuspended) {
+      return null;
+    }
+
+    if (baseUser.email) {
+      const emailSuspension = await accountSecurity.isAccountSuspended(baseUser.email);
+      if (emailSuspension.isSuspended) {
+        return null;
+      }
+      const lockout = accountSecurity.isAccountLocked(baseUser.email);
+      if (lockout.isLocked) {
+        return null;
+      }
+    }
+
     // SINGLE ACTIVE SESSION PER ACCOUNT ENFORCEMENT
     // Validate that the request's session matches the authoritative active session for this user.
     // If the account logged in on another browser/device, activeRecord will not match and access is immediately revoked.
@@ -212,7 +231,11 @@ export async function getCurrentUser(portalScope?: PortalScope) {
       .eq("id", baseUser.id)
       .single();
 
-    const profile = profileData as Profile | null;
+    const profile = profileData as (Profile & { is_suspended?: boolean }) | null;
+
+    if (profile && (profile.is_active === false || profile.is_suspended === true)) {
+      return null;
+    }
 
     if (profileError || !profile) {
       // Fallback role resolution

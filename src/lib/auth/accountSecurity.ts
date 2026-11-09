@@ -38,13 +38,37 @@ export interface LockoutStatus {
   remainingMinutes?: number;
 }
 
+export interface AccountSuspensionRecord {
+  id: string;
+  email?: string;
+  userId?: string;
+  isSuspended: boolean;
+  suspendedAt: string | null;
+  suspendedBy: string | null;
+  reason: string | null;
+  reactivatedAt?: string | null;
+  reactivatedBy?: string | null;
+  updatedAt: string;
+}
+
+export interface SuspensionStatus {
+  isSuspended: boolean;
+  suspendedAt?: string | null;
+  suspendedBy?: string | null;
+  reason?: string | null;
+  message?: string;
+}
+
 const DATA_DIR = path.join(process.cwd(), ".data");
 const ATTEMPTS_FILE = path.join(DATA_DIR, "login_attempts.json");
+const SUSPENSIONS_FILE = path.join(DATA_DIR, "account_suspensions.json");
 
 export const ACCOUNT_SECURITY_CONFIG = {
   MAX_FAILED_ATTEMPTS: 5,
   LOCKOUT_MESSAGE:
-    "Your account has been locked due to multiple unsuccessful login attempts. Please contact your institution administrator for assistance.",
+    "Your account has been locked due to multiple unsuccessful login attempts. Please contact your administrator for assistance.",
+  SUSPENSION_MESSAGE:
+    "Your account has been suspended. Please contact your administrator for assistance.",
   GENERIC_INVALID_MESSAGE: "Invalid email or password.",
 };
 
@@ -108,6 +132,34 @@ function writeAttempts(data: Record<string, AccountLockoutRecord>) {
       fs.writeFileSync(ATTEMPTS_FILE, JSON.stringify(data, null, 2), "utf-8");
     } catch (e) {
       console.warn("Could not write login attempts store:", e);
+    }
+  }
+}
+
+function readSuspensions(): Record<string, AccountSuspensionRecord> {
+  ensureStoreDir();
+  if (!fs.existsSync(SUSPENSIONS_FILE)) {
+    return {};
+  }
+  try {
+    const raw = fs.readFileSync(SUSPENSIONS_FILE, "utf-8");
+    return JSON.parse(raw);
+  } catch {
+    return {};
+  }
+}
+
+function writeSuspensions(data: Record<string, AccountSuspensionRecord>) {
+  ensureStoreDir();
+  const tempFile = `${SUSPENSIONS_FILE}.tmp.${Date.now()}.${Math.random().toString(36).substring(2, 6)}`;
+  try {
+    fs.writeFileSync(tempFile, JSON.stringify(data, null, 2), "utf-8");
+    fs.renameSync(tempFile, SUSPENSIONS_FILE);
+  } catch {
+    try {
+      fs.writeFileSync(SUSPENSIONS_FILE, JSON.stringify(data, null, 2), "utf-8");
+    } catch (e) {
+      console.warn("Could not write account suspensions store:", e);
     }
   }
 }
@@ -390,10 +442,201 @@ export const accountSecurity = {
   },
 
   /**
-   * Resets all lockout records (for testing and maintenance)
+   * Administratively suspends an account.
+   * Distinct from automated security lockout: sets administrative suspension,
+   * revokes active sessions, and records audit trail without erasing lockout logs.
+   */
+  async suspendAccount(
+    identifier: string,
+    details?: {
+      userId?: string;
+      email?: string;
+      suspendedBy?: string;
+      reason?: string;
+    }
+  ): Promise<void> {
+    if (!identifier) return;
+    const cleanId = identifier.trim().toLowerCase();
+    const suspensions = readSuspensions();
+    const nowIso = new Date().toISOString();
+
+    const record: AccountSuspensionRecord = {
+      id: cleanId,
+      userId: details?.userId || (cleanId.includes("-") ? cleanId : undefined),
+      email: details?.email || (cleanId.includes("@") ? cleanId : undefined),
+      isSuspended: true,
+      suspendedAt: nowIso,
+      suspendedBy: details?.suspendedBy || "system_administrator",
+      reason: details?.reason || "Administrative suspension by authorized administrator",
+      updatedAt: nowIso,
+    };
+
+    suspensions[cleanId] = record;
+    if (details?.userId && details.userId.toLowerCase() !== cleanId) {
+      suspensions[details.userId.toLowerCase()] = record;
+    }
+    if (details?.email && details.email.toLowerCase() !== cleanId) {
+      suspensions[details.email.toLowerCase()] = record;
+    }
+    writeSuspensions(suspensions);
+
+    // Update staff store if staff member
+    try {
+      const staff = staffStore.get(cleanId);
+      if (staff) {
+        staffStore.save({
+          ...staff,
+          isActive: false,
+          updatedAt: nowIso,
+        });
+      }
+    } catch {}
+
+    // Revoke any active session immediately upon administrative suspension
+    try {
+      await sessionManager.revokeSession(cleanId);
+      if (details?.userId && details.userId !== cleanId) {
+        await sessionManager.revokeSession(details.userId);
+      }
+      if (details?.email && details.email.toLowerCase() !== cleanId) {
+        await sessionManager.revokeSession(details.email.toLowerCase());
+      }
+    } catch {}
+
+    // Central audit log
+    await auditLogger.log({
+      userId: details?.suspendedBy || null,
+      action: "ACCOUNT_SUSPENDED",
+      entityType: "account_security",
+      entityId: cleanId,
+      metadata: {
+        targetIdentifier: cleanId,
+        suspendedBy: details?.suspendedBy || "system_administrator",
+        reason: record.reason,
+        suspendedAt: record.suspendedAt,
+      },
+    });
+  },
+
+  /**
+   * Reactivates an administratively suspended account.
+   * Only clears the administrative suspension; does NOT clear independent
+   * failed-login security lockouts unless explicitly unlocked via unlockAccount.
+   */
+  async reactivateAccount(
+    identifier: string,
+    details?: {
+      reactivatedBy?: string;
+    }
+  ): Promise<void> {
+    if (!identifier) return;
+    const cleanId = identifier.trim().toLowerCase();
+    const suspensions = readSuspensions();
+    const nowIso = new Date().toISOString();
+
+    if (suspensions[cleanId]) {
+      suspensions[cleanId] = {
+        ...suspensions[cleanId],
+        isSuspended: false,
+        suspendedAt: null,
+        suspendedBy: null,
+        reason: null,
+        reactivatedAt: nowIso,
+        reactivatedBy: details?.reactivatedBy || "system_administrator",
+        updatedAt: nowIso,
+      };
+      writeSuspensions(suspensions);
+    }
+
+    // Also update staff store if staff
+    try {
+      const staff = staffStore.get(cleanId);
+      if (staff) {
+        staffStore.save({
+          ...staff,
+          isActive: true,
+          updatedAt: nowIso,
+        });
+      }
+    } catch {}
+
+    // Central audit log
+    await auditLogger.log({
+      userId: details?.reactivatedBy || null,
+      action: "ACCOUNT_REACTIVATED",
+      entityType: "account_security",
+      entityId: cleanId,
+      metadata: {
+        targetIdentifier: cleanId,
+        reactivatedBy: details?.reactivatedBy || "system_administrator",
+        reactivatedAt: nowIso,
+      },
+    });
+  },
+
+  /**
+   * Checks whether an account is administratively suspended.
+   * Checks local suspension records, staffStore, and DB profiles table.
+   */
+  async isAccountSuspended(
+    identifier: string
+  ): Promise<SuspensionStatus> {
+    if (!identifier) return { isSuspended: false };
+    const key = identifier.trim().toLowerCase();
+
+    // 1. Check local suspension store
+    const suspensions = readSuspensions();
+    const rec = suspensions[key];
+    if (rec && rec.isSuspended) {
+      return {
+        isSuspended: true,
+        suspendedAt: rec.suspendedAt,
+        suspendedBy: rec.suspendedBy,
+        reason: rec.reason,
+        message: ACCOUNT_SECURITY_CONFIG.SUSPENSION_MESSAGE,
+      };
+    }
+
+    // 2. Check staff store
+    const staff = staffStore.get(key);
+    if (staff && staff.isActive === false) {
+      return {
+        isSuspended: true,
+        suspendedAt: staff.updatedAt || null,
+        reason: "Administratively deactivated staff account",
+        message: ACCOUNT_SECURITY_CONFIG.SUSPENSION_MESSAGE,
+      };
+    }
+
+    // 3. Check Supabase profiles table
+    try {
+      const supabase = await createClient();
+      const { data: profile } = await (supabase
+        .from("profiles") as any)
+        .select("id, email, is_active, is_suspended, suspended_at, suspended_by, suspension_reason")
+        .or(`id.eq.${key},email.eq.${key}`)
+        .maybeSingle();
+
+      if (profile && (profile.is_suspended === true || profile.is_active === false)) {
+        return {
+          isSuspended: true,
+          suspendedAt: profile.suspended_at || null,
+          suspendedBy: profile.suspended_by || null,
+          reason: profile.suspension_reason || "Account is not active",
+          message: ACCOUNT_SECURITY_CONFIG.SUSPENSION_MESSAGE,
+        };
+      }
+    } catch {}
+
+    return { isSuspended: false };
+  },
+
+  /**
+   * Resets all lockout and suspension records (for testing and maintenance)
    */
   resetAll(): void {
     writeAttempts({});
+    writeSuspensions({});
     unknownEmailAttempts.clear();
     knownTestAccounts.clear();
   },

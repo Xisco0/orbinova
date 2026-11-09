@@ -13,6 +13,8 @@ import { revalidatePath } from "next/cache";
 import { normalizeAdminRole } from "@/constants/permissions";
 import { orbinovaEmail } from "@/lib/email";
 import { accountSecurity } from "@/lib/auth/accountSecurity";
+import { sessionManager } from "@/lib/auth/sessionManager";
+import { centralizedAuditService } from "@/services/centralizedAuditService";
 import { rateLimiter } from "@/lib/auth/rateLimiter";
 import { donorStore } from "@/services/donorStore";
 import { generateUniqueDonorReference } from "@/lib/donor/donorReference";
@@ -783,9 +785,12 @@ export async function updateOrganizationStatusAction(
 }
 
 /**
- * Toggles user active/inactive status
+ * Toggles user active/suspended status (Administrative Suspension & Reactivation)
+ * Distinct from 5-attempt security lockouts:
+ * - Setting isActive: false marks the account SUSPENDED, records admin metadata, and revokes sessions.
+ * - Setting isActive: true clears suspension without erasing security lockout history.
  */
-export async function toggleUserStatusAction(userId: string, isActive: boolean) {
+export async function toggleUserStatusAction(userId: string, isActive: boolean, reason?: string) {
   try {
     const adminUser = await requireAdminClearance();
     const supabase = await createClient();
@@ -795,21 +800,61 @@ export async function toggleUserStatusAction(userId: string, isActive: boolean) 
       return { success: false, error: "You cannot deactivate your own administrative account." };
     }
 
+    const nowIso = new Date().toISOString();
+    const suspensionReason = reason?.trim() || (isActive ? undefined : "Administratively suspended by platform administrator");
+
+    const updatePayload: any = {
+      is_active: isActive,
+      is_suspended: !isActive,
+      suspended_at: isActive ? null : nowIso,
+      suspended_by: isActive ? null : adminUser.id,
+      suspension_reason: isActive ? null : suspensionReason,
+      updated_at: nowIso,
+    };
+
     const { error } = await (supabase
       .from("profiles") as any)
-      .update({ is_active: isActive, updated_at: new Date().toISOString() })
+      .update(updatePayload)
       .eq("id", userId);
 
     if (error) throw new Error(error.message);
 
-    // Record Audit Log
-    await (supabase.from("audit_logs") as any).insert({
-      user_id: adminUser.id,
-      action: isActive ? "USER_ACTIVATED" : "USER_DEACTIVATED",
-      entity_type: "profiles",
-      entity_id: userId,
-      metadata: { target_user_id: userId, is_active: isActive },
-    });
+    // Synchronize authoritative account security suspension records
+    if (!isActive) {
+      await accountSecurity.suspendAccount(userId, {
+        userId,
+        suspendedBy: adminUser.id,
+        reason: suspensionReason,
+      });
+      await sessionManager.revokeSession(userId);
+    } else {
+      await accountSecurity.reactivateAccount(userId, {
+        reactivatedBy: adminUser.id,
+      });
+    }
+
+    // Record Centralized Audit Log
+    try {
+      await centralizedAuditService.record({
+        userId: adminUser.id,
+        actorName: adminUser.profile?.full_name || "Platform Administrator",
+        actorRole: adminUser.profile?.role || "admin",
+        action: isActive ? "USER_REACTIVATED" : "USER_SUSPENDED",
+        category: "system_security",
+        entityType: "profiles",
+        entityId: userId,
+        description: isActive
+          ? `User account ${userId} reactivated by ${adminUser.profile?.full_name || "Administrator"}`
+          : `User account ${userId} administratively suspended: ${suspensionReason}`,
+        metadata: {
+          target_user_id: userId,
+          is_active: isActive,
+          is_suspended: !isActive,
+          suspended_by: isActive ? null : adminUser.id,
+          reason: suspensionReason,
+        },
+      });
+    } catch {}
 
     revalidatePath(`/admin/admins`);
     revalidatePath(`/admin/users`);
@@ -818,7 +863,7 @@ export async function toggleUserStatusAction(userId: string, isActive: boolean) 
 
     return {
       success: true,
-      message: `User ${isActive ? "activated" : "deactivated"} successfully.`,
+      message: `User account ${isActive ? "reactivated" : "suspended"} successfully.`,
     };
   } catch (err: any) {
     return { success: false, error: err.message || "Failed to update user status." };

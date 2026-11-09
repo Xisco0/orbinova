@@ -9,7 +9,7 @@ import {
   isUserAuthorizedForPortal,
 } from "@/lib/auth/portalAuth";
 import { ROLE_PORTAL_MAP } from "@/constants/theme";
-import { accountSecurity } from "@/lib/auth/accountSecurity";
+import { accountSecurity, ACCOUNT_SECURITY_CONFIG } from "@/lib/auth/accountSecurity";
 import { rateLimiter } from "@/lib/auth/rateLimiter";
 import { staffStore } from "@/services/staffStore";
 import { donorStore } from "@/services/donorStore";
@@ -72,7 +72,42 @@ export async function POST(request: NextRequest) {
     }
 
     // =========================================================================
-    // 2. PROTECTION B: ACCOUNT LOCKOUT (5 Consecutive Incorrect Passwords)
+    // 2. PROTECTION B: ADMINISTRATIVE SUSPENSION CHECK
+    // Administratively suspended accounts must ALWAYS receive the suspension message
+    // regardless of whether credentials are correct or incorrect, and never the lockout message.
+    // =========================================================================
+    const suspensionStatus = await accountSecurity.isAccountSuspended(normalizedEmail);
+    if (suspensionStatus.isSuspended) {
+      await centralizedAuditService.record({
+        action: "SUSPENDED_ACCOUNT_LOGIN_ATTEMPT_BLOCKED",
+        category: "authentication",
+        entityType: "profiles",
+        status: "failure",
+        ipAddress: clientIp,
+        userAgent: request.headers.get("user-agent") || undefined,
+        description: `Blocked login attempt for administratively suspended account: ${normalizedEmail}`,
+        metadata: {
+          email: normalizedEmail,
+          suspendedAt: suspensionStatus.suspendedAt,
+          suspendedBy: suspensionStatus.suspendedBy,
+          reason: suspensionStatus.reason,
+        },
+      });
+
+      return NextResponse.json(
+        {
+          success: false,
+          error: ACCOUNT_SECURITY_CONFIG.SUSPENSION_MESSAGE,
+          isSuspended: true,
+          suspendedAt: suspensionStatus.suspendedAt,
+          reason: suspensionStatus.reason,
+        },
+        { status: 403 }
+      );
+    }
+
+    // =========================================================================
+    // 3. PROTECTION C: ACCOUNT SECURITY LOCKOUT (5 Consecutive Incorrect Passwords)
     // Requires authorized administrator recovery. Does NOT auto-unlock on timer.
     // =========================================================================
     const lockoutStatus = accountSecurity.isAccountLocked(normalizedEmail);
@@ -80,8 +115,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json(
         {
           success: false,
-          error:
-            "Your account has been locked due to multiple unsuccessful login attempts. Please contact your institution administrator for assistance.",
+          error: ACCOUNT_SECURITY_CONFIG.LOCKOUT_MESSAGE,
           isLocked: true,
           lockedAt: lockoutStatus.lockedAt,
         },
@@ -224,8 +258,7 @@ export async function POST(request: NextRequest) {
         return NextResponse.json(
           {
             success: false,
-            error:
-              "Your account has been locked due to multiple unsuccessful login attempts. Please contact your institution administrator for assistance.",
+            error: ACCOUNT_SECURITY_CONFIG.LOCKOUT_MESSAGE,
             isLocked: true,
           },
           { status: 423 }
@@ -247,7 +280,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json(
         {
           success: false,
-          error: "Invalid email or password.",
+          error: ACCOUNT_SECURITY_CONFIG.GENERIC_INVALID_MESSAGE,
           isLocked: false,
         },
         { status: 401 }
@@ -261,30 +294,58 @@ export async function POST(request: NextRequest) {
     await rateLimiter.clearLimit({ ip: clientIp, email: normalizedEmail });
     accountSecurity.recordSuccessfulLogin(normalizedEmail);
 
+    // Administrative suspension check by authenticated user ID
+    const userSuspensionCheck = await accountSecurity.isAccountSuspended(authUser.id);
+    if (userSuspensionCheck.isSuspended) {
+      await supabase.auth.signOut();
+      return NextResponse.json(
+        {
+          success: false,
+          error: ACCOUNT_SECURITY_CONFIG.SUSPENSION_MESSAGE,
+          isSuspended: true,
+          suspendedAt: userSuspensionCheck.suspendedAt,
+          reason: userSuspensionCheck.reason,
+        },
+        { status: 403 }
+      );
+    }
+
     // Role and active status verification
     let role: UserRole = authRole;
     let isActive = true;
+    let isSuspended = false;
     let profileFullName = authFullName;
     let profileMustChange = false;
 
     if (!isStaffSession) {
-      const { data: profileData } = await supabase
-        .from("profiles")
-        .select("role, is_active, full_name, must_change_password")
+      const { data: profileData } = await (supabase
+        .from("profiles") as any)
+        .select("role, is_active, is_suspended, full_name, must_change_password")
         .eq("id", authUser.id)
         .single();
 
-      const profile = profileData as { role?: UserRole; is_active?: boolean; full_name?: string; must_change_password?: boolean } | null;
+      const profile = profileData as {
+        role?: UserRole;
+        is_active?: boolean;
+        is_suspended?: boolean;
+        full_name?: string;
+        must_change_password?: boolean;
+      } | null;
       role = (profile?.role || authUser.user_metadata?.role || "donor") as UserRole;
       isActive = profile?.is_active ?? true;
+      isSuspended = profile?.is_suspended === true || !isActive;
       profileFullName = profile?.full_name || authUser.user_metadata?.full_name || null;
       profileMustChange = profile?.must_change_password === true;
     }
 
-    if (!isActive) {
+    if (isSuspended || !isActive) {
       await supabase.auth.signOut();
       return NextResponse.json(
-        { success: false, error: "Your account has been deactivated. Please contact support." },
+        {
+          success: false,
+          error: ACCOUNT_SECURITY_CONFIG.SUSPENSION_MESSAGE,
+          isSuspended: true,
+        },
         { status: 403 }
       );
     }

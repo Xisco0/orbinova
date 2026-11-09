@@ -500,13 +500,18 @@ export async function updateStaffMemberAction(data: {
     const targetOrgId = context.organization.id;
 
     // 1. Update public.profiles
+    const nowIso = new Date().toISOString();
     const profileUpdate: any = {
       full_name: normalizedFullName,
       phone: data.phone?.trim() || null,
-      updated_at: new Date().toISOString(),
+      updated_at: nowIso,
     };
     if (typeof data.isActive === "boolean") {
       profileUpdate.is_active = data.isActive;
+      profileUpdate.is_suspended = !data.isActive;
+      profileUpdate.suspended_at = data.isActive ? null : nowIso;
+      profileUpdate.suspended_by = data.isActive ? null : user.id;
+      profileUpdate.suspension_reason = data.isActive ? null : "Suspended by facility management";
     }
 
     const { error: profErr } = await (supabase.from("profiles") as any)
@@ -522,7 +527,7 @@ export async function updateStaffMemberAction(data: {
       const memberUpdate: any = {
         member_role: targetRole,
         role: targetRole,
-        updated_at: new Date().toISOString(),
+        updated_at: nowIso,
       };
       if (typeof data.isActive === "boolean") {
         memberUpdate.is_active = data.isActive;
@@ -550,8 +555,23 @@ export async function updateStaffMemberAction(data: {
       phone: data.phone?.trim() || undefined,
       memberRole: targetRole,
       isActive: typeof data.isActive === "boolean" ? data.isActive : true,
-      updatedAt: new Date().toISOString(),
+      updatedAt: nowIso,
     });
+
+    if (data.isActive === false) {
+      await accountSecurity.suspendAccount(data.userId, {
+        userId: data.userId,
+        suspendedBy: user.id,
+        reason: "Suspended by facility management",
+      });
+      try {
+        await sessionManager.revokeSession(data.userId);
+      } catch {}
+    } else if (data.isActive === true) {
+      await accountSecurity.reactivateAccount(data.userId, {
+        reactivatedBy: user.id,
+      });
+    }
 
     // 3. Audit Log
     try {
