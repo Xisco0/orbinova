@@ -54,7 +54,7 @@ export const TextField: React.FC<TextFieldProps> = ({
     max,
     step,
     required,
-    placeholder: placeholder || " ",
+    placeholder: " ",
   };
 
   if (value !== undefined) {
@@ -67,32 +67,34 @@ export const TextField: React.FC<TextFieldProps> = ({
   }
 
   return (
-    <div className={styles.formGroup} id={`${inputId}_container`}>
-      {isTextArea ? (
-        <textarea
-          {...inputProps}
-          className={`${styles.floatingTextArea} ${
-            errorMessage ? styles.inputError : ""
-          } ${className}`}
-        />
-      ) : (
-        <input
-          {...inputProps}
-          type={type}
-          inputMode={inputMode as any}
-          autoComplete={autoComplete}
-          className={`${styles.floatingInput} ${
-            errorMessage ? styles.inputError : ""
-          } ${className}`}
-        />
-      )}
+    <div className={`w-full ${className}`} id={`${inputId}_container`}>
+      <div className={styles.formGroup}>
+        {isTextArea ? (
+          <textarea
+            {...inputProps}
+            className={`${styles.floatingTextArea} ${
+              errorMessage ? styles.inputError : ""
+            }`}
+          />
+        ) : (
+          <input
+            {...inputProps}
+            type={type}
+            inputMode={inputMode as any}
+            autoComplete={autoComplete}
+            className={`${styles.floatingInput} ${
+              errorMessage ? styles.inputError : ""
+            }`}
+          />
+        )}
 
-      {/* Floating Label */}
-      {label && (
-        <label htmlFor={inputId} className={styles.floatingLabel}>
-          {cleanLabel} {required && <span className="text-red-500">*</span>}
-        </label>
-      )}
+        {/* Floating Label */}
+        {label && (
+          <label htmlFor={inputId} className={styles.floatingLabel}>
+            {cleanLabel} {required && <span className="text-red-500">*</span>}
+          </label>
+        )}
+      </div>
 
       {/* Validation Issue / Error Text */}
       {errorMessage && (

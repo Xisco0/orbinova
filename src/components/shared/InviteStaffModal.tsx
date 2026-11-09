@@ -376,7 +376,6 @@ export const InviteStaffModal: React.FC<InviteStaffModalProps> = ({
                       required
                       value={fullName}
                       onChange={(e) => setFullName(e.target.value)}
-                      placeholder="Surname Firstname (e.g. Okafor Kelechi)"
                       helperText="Enter surname first. A temporary password will be emailed."
                     />
                   </div>
@@ -392,7 +391,6 @@ export const InviteStaffModal: React.FC<InviteStaffModalProps> = ({
                   required
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
-                  placeholder="e.g. 08012345678 or +2348012345678"
                 />
               </div>
 
@@ -409,7 +407,6 @@ export const InviteStaffModal: React.FC<InviteStaffModalProps> = ({
                     if (emailError) setEmailError(null);
                   }}
                   onBlur={handleEmailBlur}
-                  placeholder="e.g. colleague@institution.health.org"
                   issueText={emailError || undefined}
                   helperText={
                     emailChecking

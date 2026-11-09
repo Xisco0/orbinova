@@ -135,7 +135,6 @@ export default function ForgotPasswordPage() {
               id="forgot-email"
               label="Email Address *"
               type="email"
-              placeholder="name@institution.org.ng"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required

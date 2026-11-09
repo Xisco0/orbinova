@@ -256,7 +256,6 @@ export function ChangePasswordModal({
                 type={showCurrentPassword ? "text" : "password"}
                 value={currentPassword}
                 onChange={(e) => setCurrentPassword(e.target.value)}
-                placeholder="Enter your current password"
                 required
                 disabled={isLoading}
               />
@@ -284,7 +283,6 @@ export function ChangePasswordModal({
                   type={showNewPassword ? "text" : "password"}
                   value={newPassword}
                   onChange={(e) => setNewPassword(e.target.value)}
-                  placeholder="Create a strong password (min 8 characters)"
                   required
                   disabled={isLoading}
                 />
@@ -339,7 +337,6 @@ export function ChangePasswordModal({
                   type={showConfirmPassword ? "text" : "password"}
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
-                  placeholder="Re-enter your new password"
                   required
                   disabled={isLoading}
                 />

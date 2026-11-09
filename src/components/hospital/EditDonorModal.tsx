@@ -262,7 +262,6 @@ export const EditDonorModal: React.FC<EditDonorModalProps> = ({
                   required
                   value={fullName}
                   onChange={(e) => setFullName(e.target.value)}
-                  placeholder="e.g. Samuel Adeleke"
                 />
                 <TextField
                   id="edit-donor-email"
@@ -270,7 +269,6 @@ export const EditDonorModal: React.FC<EditDonorModalProps> = ({
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder="donor@domain.com"
                 />
                 <TextField
                   id="edit-donor-phone"
@@ -278,7 +276,6 @@ export const EditDonorModal: React.FC<EditDonorModalProps> = ({
                   type="tel"
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
-                  placeholder="+234 802 345 6789"
                 />
               </div>
             </div>

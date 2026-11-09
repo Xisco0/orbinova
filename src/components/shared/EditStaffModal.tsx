@@ -249,7 +249,6 @@ export const EditStaffModal: React.FC<EditStaffModalProps> = ({
                 required
                 value={fullName}
                 onChange={(e) => setFullName(e.target.value)}
-                placeholder="e.g. Dr. Kelechi Okafor"
               />
             </div>
 
@@ -274,7 +273,6 @@ export const EditStaffModal: React.FC<EditStaffModalProps> = ({
                 type="tel"
                 value={phone}
                 onChange={(e) => setPhone(e.target.value)}
-                placeholder="e.g. +234 802 345 6789"
               />
             </div>
 

@@ -295,7 +295,6 @@ export const RegisterDonorModal: React.FC<RegisterDonorModalProps> = ({
                   required
                   value={firstName}
                   onChange={(e) => setFirstName(e.target.value)}
-                  placeholder="e.g. Kelechi"
                 />
                 <TextField
                   id="donor-surname"
@@ -303,14 +302,12 @@ export const RegisterDonorModal: React.FC<RegisterDonorModalProps> = ({
                   required
                   value={surname}
                   onChange={(e) => setSurname(e.target.value)}
-                  placeholder="e.g. Okafor"
                 />
                 <TextField
                   id="donor-other-names"
                   label="Other Names (Optional)"
                   value={otherNames}
                   onChange={(e) => setOtherNames(e.target.value)}
-                  placeholder="e.g. Emmanuel"
                 />
                 <TextField
                   id="donor-date-of-birth"
@@ -331,8 +328,6 @@ export const RegisterDonorModal: React.FC<RegisterDonorModalProps> = ({
                   }}
                   onBlur={handleEmailBlur}
                   issueText={emailError || undefined}
-                  placeholder="donor@domain.com"
-                  helperText="Required for clinical correspondence & verification"
                 />
                 <TextField
                   id="donor-phone"
@@ -340,7 +335,6 @@ export const RegisterDonorModal: React.FC<RegisterDonorModalProps> = ({
                   type="tel"
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
-                  placeholder="+234 802 345 6789"
                 />
               </div>
             </div>

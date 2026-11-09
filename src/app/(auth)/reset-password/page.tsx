@@ -306,7 +306,6 @@ function ResetPasswordForm() {
                   id="reset-password"
                   label="New Password *"
                   type={showPassword ? "text" : "password"}
-                  placeholder="••••••••••••"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
@@ -356,7 +355,6 @@ function ResetPasswordForm() {
                 id="reset-confirm-password"
                 label="Confirm New Password *"
                 type={showConfirmPassword ? "text" : "password"}
-                placeholder="••••••••••••"
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 required
