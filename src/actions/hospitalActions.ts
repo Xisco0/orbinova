@@ -15,6 +15,7 @@ import { orbinovaEmail } from "@/lib/email";
 import { emailService } from "@/services/emailService";
 import { validateEmailUniqueness } from "@/lib/auth/emailUniqueness";
 import { generateUniqueDonorReference, getDonorDisplayReference } from "@/lib/donor/donorReference";
+import { validateDonorDateOfBirth } from "@/lib/donor/donorValidation";
 import crypto from "crypto";
 import {
   assertApprovedInstitution,
@@ -929,6 +930,16 @@ export async function registerHospitalDonorAction(data: {
 
     if (!data.bloodGroup) {
       return { success: false, error: "Please select a valid blood group." };
+    }
+
+    if (data.dateOfBirth) {
+      const dobValidation = validateDonorDateOfBirth(data.dateOfBirth);
+      if (!dobValidation.valid) {
+        return {
+          success: false,
+          error: dobValidation.error || "Donor must be between 18 and 70 years of age.",
+        };
+      }
     }
 
     const { user, organization } = await requireOrgClearance("donors.register");

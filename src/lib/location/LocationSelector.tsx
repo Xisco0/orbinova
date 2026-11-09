@@ -13,6 +13,8 @@ import {
   Crosshair,
   ShieldCheck,
   Search,
+  Info,
+  Loader2,
 } from "lucide-react";
 import {
   getAllCountries,
@@ -90,6 +92,8 @@ export const LocationSelector: React.FC<LocationSelectorProps> = ({
   const [manualCityEntry, setManualCityEntry] = useState<boolean>(false);
   const [showCoordinatePicker, setShowCoordinatePicker] = useState<boolean>(false);
   const [geoError, setGeoError] = useState<string | null>(null);
+  const [geoLoading, setGeoLoading] = useState<boolean>(false);
+  const [geoNotice, setGeoNotice] = useState<string | null>(null);
 
   // Synchronize internal country with incoming props if changed externally
   useEffect(() => {
@@ -182,14 +186,36 @@ export const LocationSelector: React.FC<LocationSelectorProps> = ({
 
   // Browser Geolocation capture (Pin on Map / Current Location)
   const handleDetectGPS = () => {
+    setGeoError(null);
+    setGeoNotice(null);
+
+    const fallback = getFallbackCoordinates(selectedCountryCode, value.state, value.city);
+
     if (typeof window === "undefined" || !navigator.geolocation) {
-      setGeoError("Geolocation is not supported by your browser environment.");
+      if (fallback) {
+        onChange({
+          country: selectedCountry.name,
+          countryCode: selectedCountry.code,
+          state: value.state || "",
+          city: value.city || "",
+          district: value.district || "",
+          streetAddress: value.streetAddress || "",
+          postalCode: value.postalCode || "",
+          latitude: fallback.latitude,
+          longitude: fallback.longitude,
+          locationConsent: value.locationConsent ?? true,
+        });
+        setGeoNotice(`Geolocation not supported by device. Approximate regional coordinates for ${value.city || value.state || selectedCountry.name} applied.`);
+      } else {
+        setGeoError("Geolocation is not supported by your browser environment.");
+      }
       return;
     }
 
-    setGeoError(null);
+    setGeoLoading(true);
     navigator.geolocation.getCurrentPosition(
       (pos) => {
+        setGeoLoading(false);
         let lat = pos.coords.latitude;
         let lng = pos.coords.longitude;
 
@@ -212,15 +238,40 @@ export const LocationSelector: React.FC<LocationSelectorProps> = ({
           longitude: Math.round(lng * 10000) / 10000,
           locationConsent: value.locationConsent ?? true,
         });
+        setGeoNotice("Device GPS coordinates successfully detected.");
+        setTimeout(() => setGeoNotice(null), 4000);
       },
       (err) => {
-        setGeoError(
-          err.code === 1
-            ? "Location permission was denied. You can manually enter coordinates or administrative locations."
-            : "Could not retrieve GPS coordinates. Please enter manually."
-        );
+        setGeoLoading(false);
+        // When device GPS is unavailable or timed out, seamlessly fallback to administrative city/state coordinates
+        if (fallback || isValidCoordinates(value.latitude, value.longitude)) {
+          if (fallback && !isValidCoordinates(value.latitude, value.longitude)) {
+            onChange({
+              country: selectedCountry.name,
+              countryCode: selectedCountry.code,
+              state: value.state || "",
+              city: value.city || "",
+              district: value.district || "",
+              streetAddress: value.streetAddress || "",
+              postalCode: value.postalCode || "",
+              latitude: fallback.latitude,
+              longitude: fallback.longitude,
+              locationConsent: value.locationConsent ?? true,
+            });
+          }
+          setGeoNotice(
+            `Device GPS unavailable. Using verified regional coordinates for ${value.city || value.state || selectedCountry.name}.`
+          );
+          setGeoError(null);
+        } else {
+          setGeoError(
+            err.code === 1
+              ? "Location permission was denied. Please select a city to use regional coordinates or enter manually."
+              : "Could not retrieve GPS coordinates. Please select a city or enter manually."
+          );
+        }
       },
-      { timeout: 10000, enableHighAccuracy: mode === "institution" }
+      { timeout: 8000, enableHighAccuracy: mode === "institution", maximumAge: 60000 }
     );
   };
 
@@ -477,13 +528,23 @@ export const LocationSelector: React.FC<LocationSelectorProps> = ({
           <div className="flex gap-2">
             <button
               type="button"
-              disabled={disabled}
+              disabled={disabled || geoLoading}
               onClick={handleDetectGPS}
               className="flex-1 inline-flex items-center justify-center gap-1.5 px-3 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-semibold transition-all cursor-pointer disabled:opacity-50"
               title="Detect current device coordinates or pin location"
             >
-              <Navigation className="w-3.5 h-3.5 text-secondary-600" />
-              <span>{mode === "donor" ? "Approximate GPS" : "Detect GPS"}</span>
+              {geoLoading ? (
+                <Loader2 className="w-3.5 h-3.5 text-secondary-600 animate-spin" />
+              ) : (
+                <Navigation className="w-3.5 h-3.5 text-secondary-600" />
+              )}
+              <span>
+                {geoLoading
+                  ? "Detecting..."
+                  : mode === "donor"
+                  ? "Approximate GPS"
+                  : "Detect GPS"}
+              </span>
             </button>
             <button
               type="button"
@@ -498,7 +559,14 @@ export const LocationSelector: React.FC<LocationSelectorProps> = ({
         </div>
       </div>
 
-      {geoError && (
+      {geoNotice && (
+        <div className="p-2.5 rounded-xl bg-blue-50 border border-blue-200 text-blue-800 text-xs flex items-center gap-2">
+          <Info className="w-4 h-4 text-blue-600 shrink-0" />
+          <span>{geoNotice}</span>
+        </div>
+      )}
+
+      {geoError && !isCoordsValid && (
         <div className="p-2.5 rounded-xl bg-amber-50 border border-amber-200 text-amber-800 text-xs flex items-center gap-2">
           <AlertCircle className="w-4 h-4 shrink-0" />
           <span>{geoError}</span>

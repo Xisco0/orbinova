@@ -1,10 +1,11 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import { Modal, Input, Select, Button } from "@/components/ui";
 import { onboardDonorAction } from "@/actions/adminActions";
 import { BloodGroupCode } from "@/types/database";
 import { Heart, User, Mail, Lock, Phone, MapPin, Calendar } from "lucide-react";
+import { validateDonorDateOfBirth, getDonorDobBounds } from "@/lib/donor/donorValidation";
 
 interface OnboardDonorModalProps {
   isOpen: boolean;
@@ -30,6 +31,9 @@ export const OnboardDonorModal: React.FC<OnboardDonorModalProps> = ({
 
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [dobError, setDobError] = useState<string | null>(null);
+
+  const dobBounds = useMemo(() => getDonorDobBounds(), []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -38,6 +42,15 @@ export const OnboardDonorModal: React.FC<OnboardDonorModalProps> = ({
     if (!fullName.trim() || !email.trim() || !password) {
       setErrorMessage("Full name, email, and password are required.");
       return;
+    }
+
+    if (dateOfBirth) {
+      const dobValidation = validateDonorDateOfBirth(dateOfBirth);
+      if (!dobValidation.valid) {
+        setDobError(dobValidation.error || "Donor must be between 18 and 70 years of age.");
+        setErrorMessage(dobValidation.error || "Donor must be between 18 and 70 years of age.");
+        return;
+      }
     }
 
     setIsLoading(true);
@@ -150,7 +163,25 @@ export const OnboardDonorModal: React.FC<OnboardDonorModalProps> = ({
             label="Date of Birth"
             type="date"
             value={dateOfBirth}
-            onChange={(e) => setDateOfBirth(e.target.value)}
+            min={dobBounds.min}
+            max={dobBounds.max}
+            error={dobError || undefined}
+            onChange={(e) => {
+              const val = e.target.value;
+              setDateOfBirth(val);
+              if (val) {
+                const res = validateDonorDateOfBirth(val);
+                setDobError(res.valid ? null : (res.error || null));
+              } else {
+                setDobError(null);
+              }
+            }}
+            onBlur={() => {
+              if (dateOfBirth) {
+                const res = validateDonorDateOfBirth(dateOfBirth);
+                setDobError(res.valid ? null : (res.error || null));
+              }
+            }}
             leftIcon={<Calendar className="w-4 h-4 text-slate-400" />}
           />
 

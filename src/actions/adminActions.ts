@@ -16,6 +16,7 @@ import { accountSecurity } from "@/lib/auth/accountSecurity";
 import { rateLimiter } from "@/lib/auth/rateLimiter";
 import { donorStore } from "@/services/donorStore";
 import { generateUniqueDonorReference } from "@/lib/donor/donorReference";
+import { validateDonorDateOfBirth } from "@/lib/donor/donorValidation";
 
 /**
  * Ensures the executing user has verified server-side admin clearance.
@@ -368,6 +369,16 @@ export async function onboardDonorAction(data: {
 
     if (!cleanEmail || !data.password || !cleanName) {
       return { success: false, error: "Full name, email, and password are required." };
+    }
+
+    if (data.dateOfBirth) {
+      const dobValidation = validateDonorDateOfBirth(data.dateOfBirth);
+      if (!dobValidation.valid) {
+        return {
+          success: false,
+          error: dobValidation.error || "Donor must be between 18 and 70 years of age.",
+        };
+      }
     }
 
     // 1. Create Auth User with role = 'donor'

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { createPortal } from "react-dom";
 import {
   X,
@@ -21,6 +21,7 @@ import { BloodGroupCode, DonorEligibility } from "@/types/database";
 import { registerHospitalDonorAction } from "@/actions/hospitalActions";
 import { Button, TextField } from "@/components/ui";
 import { LocationSelector, LocationSelectorValue } from "@/lib/location";
+import { validateDonorDateOfBirth, getDonorDobBounds } from "@/lib/donor/donorValidation";
 
 interface RegisterDonorModalProps {
   isOpen: boolean;
@@ -81,6 +82,9 @@ export const RegisterDonorModal: React.FC<RegisterDonorModalProps> = ({
   const [error, setError] = useState<string | null>(null);
   const [emailChecking, setEmailChecking] = useState(false);
   const [emailError, setEmailError] = useState<string | null>(null);
+  const [dobError, setDobError] = useState<string | null>(null);
+
+  const dobBounds = useMemo(() => getDonorDobBounds(), []);
 
   const handleEmailBlur = async () => {
     const clean = email.trim().toLowerCase();
@@ -166,6 +170,15 @@ export const RegisterDonorModal: React.FC<RegisterDonorModalProps> = ({
     if (!locationValue.state || !locationValue.city) {
       setError("Donor state/province and city are required.");
       return;
+    }
+
+    if (dateOfBirth) {
+      const dobValidation = validateDonorDateOfBirth(dateOfBirth);
+      if (!dobValidation.valid) {
+        setDobError(dobValidation.error || "Donor must be between 18 and 70 years old.");
+        setError(dobValidation.error || "Donor must be between 18 and 70 years old.");
+        return;
+      }
     }
 
     setLoading(true);
@@ -314,7 +327,25 @@ export const RegisterDonorModal: React.FC<RegisterDonorModalProps> = ({
                   label="Date of Birth"
                   type="date"
                   value={dateOfBirth}
-                  onChange={(e) => setDateOfBirth(e.target.value)}
+                  min={dobBounds.min}
+                  max={dobBounds.max}
+                  issueText={dobError || undefined}
+                  onChange={(e) => {
+                    const val = e.target.value;
+                    setDateOfBirth(val);
+                    if (val) {
+                      const res = validateDonorDateOfBirth(val);
+                      setDobError(res.valid ? null : (res.error || null));
+                    } else {
+                      setDobError(null);
+                    }
+                  }}
+                  onBlur={() => {
+                    if (dateOfBirth) {
+                      const res = validateDonorDateOfBirth(dateOfBirth);
+                      setDobError(res.valid ? null : (res.error || null));
+                    }
+                  }}
                 />
                 <TextField
                   id="donor-email"
