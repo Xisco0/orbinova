@@ -20,7 +20,7 @@ import {
   KeyRound,
   CheckCircle2,
 } from "lucide-react";
-import { Button, Badge } from "@/components/ui";
+import { Button, Badge, TextField, SelectField } from "@/components/ui";
 import { GranularMemberRole, OrgType } from "@/types/database";
 import { addStaffMemberAction } from "@/actions/staffActions";
 import { getRolePermissions } from "@/lib/auth/rbac";
@@ -358,95 +358,67 @@ export const InviteStaffModal: React.FC<InviteStaffModalProps> = ({
 
               {/* 1. Title & Full Name */}
               <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1.5 font-inter">
-                  Full Name &amp; Professional Title <span className="text-red-500">*</span>
-                </label>
-                <div className="grid grid-cols-1 sm:grid-cols-4 gap-2">
+                <div className="grid grid-cols-1 sm:grid-cols-4 gap-3">
                   <div className="sm:col-span-1">
-                    <select
+                    <SelectField
+                      id="staff-title"
+                      label="Title *"
                       value={title}
                       onChange={(e) => setTitle(e.target.value)}
-                      className="w-full px-3 py-2.5 rounded-xl border border-slate-200 bg-white text-xs text-dark focus:outline-hidden focus:ring-2 focus:ring-secondary-500 focus:border-transparent font-inter transition-all font-semibold"
-                    >
-                      {STAFF_TITLES.map((t) => (
-                        <option key={t} value={t}>
-                          {t}
-                        </option>
-                      ))}
-                    </select>
+                      options={STAFF_TITLES.map((t) => ({ value: t, label: t }))}
+                      required
+                    />
                   </div>
-                  <div className="sm:col-span-3 relative">
-                    <User className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
-                    <input
-                      type="text"
+                  <div className="sm:col-span-3">
+                    <TextField
+                      id="staff-name"
+                      label="Full Name (Surname First) *"
                       required
                       value={fullName}
                       onChange={(e) => setFullName(e.target.value)}
                       placeholder="Surname Firstname (e.g. Okafor Kelechi)"
-                      className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 bg-white text-xs text-dark focus:outline-hidden focus:ring-2 focus:ring-secondary-500 focus:border-transparent font-inter transition-all"
+                      helperText="Enter surname first. A temporary password will be emailed."
                     />
                   </div>
                 </div>
-                <p className="text-[11px] text-slate-400 mt-1 font-inter">
-                  Enter surname first. A secure temporary password will be sent directly to their email address and required to change on first sign-in.
-                </p>
               </div>
 
               {/* 2. Phone Number */}
               <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1.5 font-inter">
-                  Phone Number <span className="text-red-500">*</span>
-                </label>
-                <div className="relative">
-                  <Phone className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
-                  <input
-                    type="tel"
-                    required
-                    value={phone}
-                    onChange={(e) => setPhone(e.target.value)}
-                    placeholder="e.g. 08012345678 or +2348012345678"
-                    className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 bg-white text-xs text-dark focus:outline-hidden focus:ring-2 focus:ring-secondary-500 focus:border-transparent font-inter transition-all"
-                  />
-                </div>
+                <TextField
+                  id="staff-phone"
+                  label="Phone Number *"
+                  type="tel"
+                  required
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value)}
+                  placeholder="e.g. 08012345678 or +2348012345678"
+                />
               </div>
 
               {/* 3. Official Email Address */}
               <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1.5 font-inter">
-                  Email Address <span className="text-red-500">*</span>
-                </label>
-                <div className="relative">
-                  <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
-                  <input
-                    type="email"
-                    required
-                    value={email}
-                    onChange={(e) => {
-                      setEmail(e.target.value);
-                      if (emailError) setEmailError(null);
-                    }}
-                    onBlur={handleEmailBlur}
-                    placeholder="e.g. colleague@institution.health.org"
-                    className={`w-full pl-10 pr-4 py-2.5 rounded-xl border ${
-                      emailError ? "border-rose-300 bg-rose-50/20" : "border-slate-200 bg-white"
-                    } text-xs text-dark focus:outline-hidden focus:ring-2 focus:ring-secondary-500 font-inter transition-all`}
-                  />
-                  {emailChecking && (
-                    <span className="absolute right-3.5 top-1/2 -translate-y-1/2 text-[10px] text-slate-400 font-inter">
-                      Checking...
-                    </span>
-                  )}
-                </div>
-                {emailError ? (
-                  <p className="text-[11px] text-rose-600 mt-1.5 font-inter font-medium flex items-center gap-1.5">
-                    <AlertCircle className="w-3.5 h-3.5 shrink-0" />
-                    <span>{emailError}</span>
-                  </p>
-                ) : (
-                  <p className="text-[11px] text-slate-400 mt-1 font-inter">
-                    Their login credentials and temporary password will be sent to this email address. Must be globally unique.
-                  </p>
-                )}
+                <TextField
+                  id="staff-email"
+                  label="Official Email Address *"
+                  type="email"
+                  required
+                  value={email}
+                  onChange={(e) => {
+                    setEmail(e.target.value);
+                    if (emailError) setEmailError(null);
+                  }}
+                  onBlur={handleEmailBlur}
+                  placeholder="e.g. colleague@institution.health.org"
+                  issueText={emailError || undefined}
+                  helperText={
+                    emailChecking
+                      ? "Verifying email uniqueness across ORBINOVA..."
+                      : !emailError
+                      ? "Login credentials will be sent to this email address. Must be globally unique."
+                      : undefined
+                  }
+                />
               </div>
 
               {/* 4. Professional Role Selection Cards */}

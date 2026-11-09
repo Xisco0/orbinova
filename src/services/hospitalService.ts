@@ -1,6 +1,7 @@
 import { createClient } from "@/lib/supabase/server";
 import { staffStore } from "@/services/staffStore";
 import { donorStore } from "@/services/donorStore";
+import { getDonorDisplayReference } from "@/lib/donor/donorReference";
 import { bloodRequestStore } from "@/services/bloodRequestStore";
 import { inventoryStore } from "@/services/inventoryStore";
 import { donorRequestStore } from "@/services/donorRequestStore";
@@ -454,7 +455,7 @@ export const hospitalService = {
       .map((s) => ({
         id: s.id,
         blood_request_id: s.blood_request_id,
-        donor_ref: `DONOR-${s.donor_id.substring(0, 6).toUpperCase()}`,
+        donor_ref: getDonorDisplayReference(s.donor_id, (s as any).donor_ref),
         blood_group: s.blood_group || "O+",
         status: s.status,
         distance_km: s.distance_km,
@@ -882,7 +883,7 @@ export const hospitalService = {
       donorRequests: donorRequests.map((dr) => ({
         ...dr,
         matching_score: dr.match_score ?? dr.matching_score ?? 0.85,
-        donor_ref: `DONOR-${(dr.donor_id || "").substring(0, 6).toUpperCase()}`,
+        donor_ref: getDonorDisplayReference(dr.donor_id || "", (dr as any).donor_ref),
         blood_group: dr.donor_profiles?.blood_group || req.blood_group,
       })),
     };
@@ -929,7 +930,7 @@ export const hospitalService = {
 
     const mappedDb = dbList.map((dr) => ({
       ...dr,
-      donor_ref: `DONOR-${(dr.donor_id || "").substring(0, 6).toUpperCase()}`,
+      donor_ref: getDonorDisplayReference(dr.donor_id || "", (dr as any).donor_ref),
       blood_group: dr.donor_profiles?.blood_group || "O+",
     }));
 
@@ -980,7 +981,7 @@ export const hospitalService = {
           responded_at: s.responded_at || null,
           created_at: s.created_at,
           updated_at: s.updated_at,
-          donor_ref: `DONOR-${s.donor_id.substring(0, 6).toUpperCase()}`,
+          donor_ref: getDonorDisplayReference(s.donor_id, (s as any).donor_ref),
           blood_group: s.blood_group || "O+",
         });
       }
@@ -1026,7 +1027,7 @@ export const hospitalService = {
         const dr = data as any;
         return {
           ...dr,
-          donor_ref: `DONOR-${(dr.donor_id || "").substring(0, 6).toUpperCase()}`,
+          donor_ref: getDonorDisplayReference(dr.donor_id || "", (dr as any).donor_ref),
           blood_group: dr.donor_profiles?.blood_group || "O+",
         };
       }
@@ -1041,7 +1042,7 @@ export const hospitalService = {
       }
       return {
         ...stored,
-        donor_ref: `DONOR-${stored.donor_id.substring(0, 6).toUpperCase()}`,
+        donor_ref: getDonorDisplayReference(stored.donor_id, (stored as any).donor_ref),
         blood_group: stored.blood_group || "O+",
       };
     }
@@ -1091,7 +1092,7 @@ export const hospitalService = {
       const don = data as any;
       return {
         ...don,
-        donor_ref: `DONOR-${(don.donor_id || "").substring(0, 6).toUpperCase()}`,
+        donor_ref: getDonorDisplayReference(don.donor_id || "", (don as any).donor_ref),
         recorder_name: don.profiles?.full_name || "Facility Staff",
       };
     } catch {

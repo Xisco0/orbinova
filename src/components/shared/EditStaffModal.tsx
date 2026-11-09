@@ -26,7 +26,7 @@ import {
   Profile,
 } from "@/types/database";
 import { updateStaffMemberAction } from "@/actions/staffActions";
-import { Button } from "@/components/ui";
+import { Button, TextField } from "@/components/ui";
 
 interface EditStaffModalProps {
   isOpen: boolean;
@@ -243,56 +243,39 @@ export const EditStaffModal: React.FC<EditStaffModalProps> = ({
           <form id="edit-staff-form" onSubmit={handleSubmit} className="space-y-4 sm:space-y-5">
             {/* 1. Full Name */}
             <div>
-              <label className="block text-xs font-bold text-slate-700 mb-1.5 font-inter">
-                Full Name <span className="text-red-500">*</span>
-              </label>
-              <div className="relative">
-                <User className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
-                <input
-                  type="text"
-                  required
-                  value={fullName}
-                  onChange={(e) => setFullName(e.target.value)}
-                  placeholder="e.g. Dr. Kelechi Okafor"
-                  className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 bg-white text-xs text-dark focus:outline-hidden focus:ring-2 focus:ring-secondary-500 focus:border-transparent font-inter transition-all"
-                />
-              </div>
+              <TextField
+                id="edit-staff-name"
+                label="Full Name *"
+                required
+                value={fullName}
+                onChange={(e) => setFullName(e.target.value)}
+                placeholder="e.g. Dr. Kelechi Okafor"
+              />
             </div>
 
             {/* 2. Official Email (Read-Only) */}
             <div>
-              <label className="block text-xs font-bold text-slate-700 mb-1.5 font-inter">
-                Official Email Address
-              </label>
-              <div className="relative">
-                <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
-                <input
-                  type="email"
-                  disabled
-                  value={member.profile?.email || ""}
-                  className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 bg-slate-100 text-xs text-slate-500 font-mono cursor-not-allowed select-none"
-                />
-              </div>
-              <p className="text-[10px] text-slate-400 mt-1 font-inter">
-                Official login email is immutable for security clearance.
-              </p>
+              <TextField
+                id="edit-staff-email"
+                label="Official Email Address"
+                type="email"
+                disabled
+                readOnly
+                value={member.profile?.email || ""}
+                helperText="Official login email is immutable for security clearance."
+              />
             </div>
 
             {/* 3. Phone Number */}
             <div>
-              <label className="block text-xs font-bold text-slate-700 mb-1.5 font-inter">
-                Phone Number
-              </label>
-              <div className="relative">
-                <Phone className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
-                <input
-                  type="tel"
-                  value={phone}
-                  onChange={(e) => setPhone(e.target.value)}
-                  placeholder="e.g. +234 802 345 6789"
-                  className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 bg-white text-xs text-dark focus:outline-hidden focus:ring-2 focus:ring-secondary-500 focus:border-transparent font-inter transition-all"
-                />
-              </div>
+              <TextField
+                id="edit-staff-phone"
+                label="Phone Number"
+                type="tel"
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
+                placeholder="e.g. +234 802 345 6789"
+              />
             </div>
 
             {/* 4. Clinical / Institutional Role */}

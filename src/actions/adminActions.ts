@@ -15,6 +15,7 @@ import { orbinovaEmail } from "@/lib/email";
 import { accountSecurity } from "@/lib/auth/accountSecurity";
 import { rateLimiter } from "@/lib/auth/rateLimiter";
 import { donorStore } from "@/services/donorStore";
+import { generateUniqueDonorReference } from "@/lib/donor/donorReference";
 
 /**
  * Ensures the executing user has verified server-side admin clearance.
@@ -397,9 +398,12 @@ export async function onboardDonorAction(data: {
       is_active: true,
     });
 
+    const donorRef = generateUniqueDonorReference();
+
     // 3. Create Donor Profile entry
     const { data: donorProf, error: donorErr } = await (adminSupabase.from("donor_profiles") as any).insert({
       user_id: userId,
+      donor_number: donorRef,
       blood_group: data.bloodGroup,
       date_of_birth: data.dateOfBirth || null,
       gender: data.gender || null,
@@ -414,6 +418,24 @@ export async function onboardDonorAction(data: {
     }).select().single();
 
     if (donorErr) throw new Error(donorErr.message);
+
+    donorStore.save({
+      userId,
+      donorProfileId: donorProf.id,
+      donorNumber: donorRef,
+      organizationId: "admin",
+      email: cleanEmail,
+      fullName: cleanName,
+      bloodGroup: data.bloodGroup,
+      phone: data.phone?.trim() || undefined,
+      gender: data.gender || null,
+      dateOfBirth: data.dateOfBirth || null,
+      city: data.city?.trim() || null,
+      state: data.state?.trim() || null,
+      eligibilityStatus: "eligible",
+      isActive: true,
+      updatedAt: new Date().toISOString(),
+    });
 
     // 4. Record Audit Log
     await (serverSupabase.from("audit_logs") as any).insert({

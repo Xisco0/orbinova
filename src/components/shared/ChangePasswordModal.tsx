@@ -13,7 +13,7 @@ import {
   ShieldCheck,
   Check,
 } from "lucide-react";
-import { Button } from "@/components/ui/Button";
+import { Button, TextField } from "@/components/ui";
 
 interface ChangePasswordModalProps {
   isOpen: boolean;
@@ -249,61 +249,51 @@ export function ChangePasswordModal({
             )}
 
             {/* Current Password */}
-            <div className="space-y-1.5">
-              <label className="block text-xs font-semibold text-slate-700 font-inter">
-                Current Password <span className="text-rose-500">*</span>
-              </label>
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
-                  <Lock className="w-4 h-4" />
-                </div>
-                <input
-                  type={showCurrentPassword ? "text" : "password"}
-                  value={currentPassword}
-                  onChange={(e) => setCurrentPassword(e.target.value)}
-                  placeholder="Enter your current password"
-                  required
-                  disabled={isLoading}
-                  className="w-full pl-10 pr-10 py-2.5 rounded-xl border border-slate-200 bg-white text-xs sm:text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all"
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowCurrentPassword((prev) => !prev)}
-                  className="absolute inset-y-0 right-0 pr-3.5 flex items-center text-slate-400 hover:text-slate-600 cursor-pointer"
-                  tabIndex={-1}
-                >
-                  {showCurrentPassword ? (
-                    <EyeOff className="w-4 h-4" />
-                  ) : (
-                    <Eye className="w-4 h-4" />
-                  )}
-                </button>
-              </div>
+            <div className="relative">
+              <TextField
+                id="current-password"
+                label="Current Password *"
+                type={showCurrentPassword ? "text" : "password"}
+                value={currentPassword}
+                onChange={(e) => setCurrentPassword(e.target.value)}
+                placeholder="Enter your current password"
+                required
+                disabled={isLoading}
+              />
+              <button
+                type="button"
+                onClick={() => setShowCurrentPassword((prev) => !prev)}
+                className="absolute right-3.5 top-3.5 text-slate-400 hover:text-slate-600 p-1 focus:outline-none z-10"
+                tabIndex={-1}
+                aria-label={showCurrentPassword ? "Hide password" : "Show password"}
+              >
+                {showCurrentPassword ? (
+                  <EyeOff className="w-4 h-4" />
+                ) : (
+                  <Eye className="w-4 h-4" />
+                )}
+              </button>
             </div>
 
             {/* New Password */}
             <div className="space-y-1.5">
-              <label className="block text-xs font-semibold text-slate-700 font-inter">
-                New Password <span className="text-rose-500">*</span>
-              </label>
               <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
-                  <KeyRound className="w-4 h-4" />
-                </div>
-                <input
+                <TextField
+                  id="new-password"
+                  label="New Password *"
                   type={showNewPassword ? "text" : "password"}
                   value={newPassword}
                   onChange={(e) => setNewPassword(e.target.value)}
                   placeholder="Create a strong password (min 8 characters)"
                   required
                   disabled={isLoading}
-                  className="w-full pl-10 pr-10 py-2.5 rounded-xl border border-slate-200 bg-white text-xs sm:text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all"
                 />
                 <button
                   type="button"
                   onClick={() => setShowNewPassword((prev) => !prev)}
-                  className="absolute inset-y-0 right-0 pr-3.5 flex items-center text-slate-400 hover:text-slate-600 cursor-pointer"
+                  className="absolute right-3.5 top-3.5 text-slate-400 hover:text-slate-600 p-1 focus:outline-none z-10"
                   tabIndex={-1}
+                  aria-label={showNewPassword ? "Hide password" : "Show password"}
                 >
                   {showNewPassword ? (
                     <EyeOff className="w-4 h-4" />
@@ -342,27 +332,23 @@ export function ChangePasswordModal({
 
             {/* Confirm New Password */}
             <div className="space-y-1.5">
-              <label className="block text-xs font-semibold text-slate-700 font-inter">
-                Confirm New Password <span className="text-rose-500">*</span>
-              </label>
               <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
-                  <Lock className="w-4 h-4" />
-                </div>
-                <input
+                <TextField
+                  id="confirm-new-password"
+                  label="Confirm New Password *"
                   type={showConfirmPassword ? "text" : "password"}
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
                   placeholder="Re-enter your new password"
                   required
                   disabled={isLoading}
-                  className="w-full pl-10 pr-10 py-2.5 rounded-xl border border-slate-200 bg-white text-xs sm:text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all"
                 />
                 <button
                   type="button"
                   onClick={() => setShowConfirmPassword((prev) => !prev)}
-                  className="absolute inset-y-0 right-0 pr-3.5 flex items-center text-slate-400 hover:text-slate-600 cursor-pointer"
+                  className="absolute right-3.5 top-3.5 text-slate-400 hover:text-slate-600 p-1 focus:outline-none z-10"
                   tabIndex={-1}
+                  aria-label={showConfirmPassword ? "Hide password" : "Show password"}
                 >
                   {showConfirmPassword ? (
                     <EyeOff className="w-4 h-4" />

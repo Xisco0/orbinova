@@ -34,8 +34,8 @@
     "organization_id": "b3333333-3333-3333-3333-333333333333",
     "blood_group": "O+",
     "quantity": 3,
-    "reserved_quantity": 2,
-    "available_quantity": 1,
+    "reserved_quantity": 0,
+    "available_quantity": 3,
     "created_at": "2026-11-07T09:07:36.294Z",
     "updated_at": "2026-11-08T11:37:34.777Z"
   },
@@ -174,8 +174,8 @@
     "organization_id": "b3333333-3333-3333-3333-333333333333",
     "blood_group": "O-",
     "quantity": 2,
-    "reserved_quantity": 2,
-    "available_quantity": 0,
+    "reserved_quantity": 0,
+    "available_quantity": 2,
     "created_at": "2026-11-07T09:11:34.771Z",
     "updated_at": "2026-11-07T13:05:54.609Z"
   },
@@ -244,8 +244,8 @@
     "organization_id": "b3333333-3333-3333-3333-333333333333",
     "blood_group": "AB-",
     "quantity": 1,
-    "reserved_quantity": 1,
-    "available_quantity": 0,
+    "reserved_quantity": 0,
+    "available_quantity": 1,
     "created_at": "2026-11-07T09:16:45.036Z",
     "updated_at": "2026-11-07T14:43:14.910Z"
   },
@@ -284,8 +284,8 @@
     "organization_id": "org-bb-race-test",
     "blood_group": "B+",
     "quantity": 2,
-    "reserved_quantity": 2,
-    "available_quantity": 0,
+    "reserved_quantity": 0,
+    "available_quantity": 2,
     "created_at": "2026-11-07T14:56:04.951Z",
     "updated_at": "2026-11-07T18:15:59.113Z"
   }

@@ -176,6 +176,7 @@ export interface BloodCompatibility {
 export interface DonorProfile {
   id: string;
   user_id: string;
+  donor_number?: string | null;
   registering_organization_id?: string | null;
   first_name?: string | null;
   other_names?: string | null;

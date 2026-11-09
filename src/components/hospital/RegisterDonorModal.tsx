@@ -19,7 +19,7 @@ import {
 } from "lucide-react";
 import { BloodGroupCode, DonorEligibility } from "@/types/database";
 import { registerHospitalDonorAction } from "@/actions/hospitalActions";
-import { Button } from "@/components/ui";
+import { Button, TextField } from "@/components/ui";
 import { LocationSelector, LocationSelectorValue } from "@/lib/location";
 
 interface RegisterDonorModalProps {
@@ -84,7 +84,19 @@ export const RegisterDonorModal: React.FC<RegisterDonorModalProps> = ({
 
   const handleEmailBlur = async () => {
     const clean = email.trim().toLowerCase();
-    if (!clean || !clean.includes("@") || !clean.includes(".")) return;
+    if (!clean) {
+      setEmailError("Email address is required.");
+      return;
+    }
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(clean)) {
+      setEmailError("Please enter a valid email address.");
+      return;
+    }
+    if (clean.endsWith("@orbinova.local") || clean.endsWith(".local") || clean.endsWith("@example.com")) {
+      setEmailError("Placeholder emails are not permitted. Please use a valid email address.");
+      return;
+    }
     setEmailChecking(true);
     try {
       const res = await fetch(`/api/auth/check-email-unique?email=${encodeURIComponent(clean)}`);
@@ -126,7 +138,27 @@ export const RegisterDonorModal: React.FC<RegisterDonorModalProps> = ({
       return;
     }
 
-    if (email.trim() && emailError) {
+    const cleanEmail = email.trim().toLowerCase();
+    if (!cleanEmail) {
+      setEmailError("Email address is required.");
+      setError("Email address is required.");
+      return;
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(cleanEmail)) {
+      setEmailError("Please enter a valid email address.");
+      setError("Please enter a valid email address.");
+      return;
+    }
+
+    if (cleanEmail.endsWith("@orbinova.local") || cleanEmail.endsWith(".local") || cleanEmail.endsWith("@example.com")) {
+      setEmailError("Placeholder emails are not permitted. Please use a valid email address.");
+      setError("Placeholder emails are not permitted. Please use a valid email address.");
+      return;
+    }
+
+    if (emailError) {
       setError(emailError);
       return;
     }
@@ -256,92 +288,66 @@ export const RegisterDonorModal: React.FC<RegisterDonorModalProps> = ({
                 <span>Donor Personal Identification</span>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                <div>
-                  <label className="block text-slate-700 font-bold mb-1">
-                    First Name <span className="text-red-500">*</span>
-                  </label>
-                  <input
-                    type="text"
-                    required
-                    value={firstName}
-                    onChange={(e) => setFirstName(e.target.value)}
-                    placeholder="e.g. Kelechi"
-                    className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs text-dark focus:bg-white focus:ring-2 focus:ring-secondary-500"
-                  />
-                </div>
-                <div>
-                  <label className="block text-slate-700 font-bold mb-1">
-                    Surname <span className="text-red-500">*</span>
-                  </label>
-                  <input
-                    type="text"
-                    required
-                    value={surname}
-                    onChange={(e) => setSurname(e.target.value)}
-                    placeholder="e.g. Okafor"
-                    className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs text-dark focus:bg-white focus:ring-2 focus:ring-secondary-500"
-                  />
-                </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <TextField
+                  id="donor-first-name"
+                  label="First Name *"
+                  required
+                  value={firstName}
+                  onChange={(e) => setFirstName(e.target.value)}
+                  placeholder="e.g. Kelechi"
+                />
+                <TextField
+                  id="donor-surname"
+                  label="Surname *"
+                  required
+                  value={surname}
+                  onChange={(e) => setSurname(e.target.value)}
+                  placeholder="e.g. Okafor"
+                />
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                <div>
-                  <label className="block text-slate-700 font-bold mb-1">Other Names (Optional)</label>
-                  <input
-                    type="text"
-                    value={otherNames}
-                    onChange={(e) => setOtherNames(e.target.value)}
-                    placeholder="e.g. Emmanuel"
-                    className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs text-dark focus:bg-white focus:ring-2 focus:ring-secondary-500"
-                  />
-                </div>
-                <div>
-                  <label className="block text-slate-700 font-bold mb-1">Date of Birth</label>
-                  <input
-                    type="date"
-                    value={dateOfBirth}
-                    onChange={(e) => setDateOfBirth(e.target.value)}
-                    className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs text-dark focus:bg-white focus:ring-2 focus:ring-secondary-500"
-                  />
-                </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <TextField
+                  id="donor-other-names"
+                  label="Other Names (Optional)"
+                  value={otherNames}
+                  onChange={(e) => setOtherNames(e.target.value)}
+                  placeholder="e.g. Emmanuel"
+                />
+                <TextField
+                  id="donor-date-of-birth"
+                  label="Date of Birth"
+                  type="date"
+                  value={dateOfBirth}
+                  onChange={(e) => setDateOfBirth(e.target.value)}
+                />
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                {/* Email (Optional) */}
-                <div>
-                  <label className="block text-slate-700 font-bold mb-1">
-                    Email Address <span className="text-[10px] text-slate-400 font-normal">(Optional)</span>
-                  </label>
-                  <input
-                    type="email"
-                    value={email}
-                    onChange={(e) => {
-                      setEmail(e.target.value);
-                      if (emailError) setEmailError(null);
-                    }}
-                    onBlur={handleEmailBlur}
-                    placeholder="donor@example.com"
-                    className={`w-full px-3 py-2 rounded-xl border ${
-                      emailError ? "border-rose-400 bg-rose-50/20" : "border-slate-200 bg-slate-50"
-                    } text-xs text-dark focus:bg-white focus:ring-2 focus:ring-secondary-500`}
-                  />
-                  {emailError && (
-                    <span className="text-[10px] text-rose-600 mt-1 block">{emailError}</span>
-                  )}
-                </div>
-
-                {/* Phone */}
-                <div>
-                  <label className="block text-slate-700 font-bold mb-1">Contact Phone</label>
-                  <input
-                    type="tel"
-                    value={phone}
-                    onChange={(e) => setPhone(e.target.value)}
-                    placeholder="+234 802 345 6789"
-                    className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs text-dark focus:bg-white focus:ring-2 focus:ring-secondary-500"
-                  />
-                </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <TextField
+                  id="donor-email"
+                  label="Email Address *"
+                  type="email"
+                  required
+                  value={email}
+                  onChange={(e) => {
+                    setEmail(e.target.value);
+                    if (emailError) setEmailError(null);
+                  }}
+                  onBlur={handleEmailBlur}
+                  issueText={emailError || undefined}
+                  placeholder="donor@domain.com"
+                  helperText="Required for clinical correspondence & verification"
+                />
+                <TextField
+                  id="donor-phone"
+                  label="Contact Phone"
+                  type="tel"
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value)}
+                  placeholder="+234 802 345 6789"
+                />
               </div>
             </div>
 

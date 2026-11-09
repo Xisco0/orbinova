@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { Mail, ArrowLeft, CheckCircle2, ShieldAlert, KeyRound, ArrowRight } from "lucide-react";
-import { Button, Input, Card, useToast, Logo } from "@/components/ui";
+import { Button, TextField, Card, useToast, Logo } from "@/components/ui";
 
 export default function ForgotPasswordPage() {
   const toast = useToast();
@@ -131,15 +131,15 @@ export default function ForgotPasswordPage() {
               </div>
             )}
 
-            <Input
-              label="Email Address"
+            <TextField
+              id="forgot-email"
+              label="Email Address *"
               type="email"
               placeholder="name@institution.org.ng"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
               autoComplete="email"
-              leftIcon={<Mail className="w-4 h-4" />}
               disabled={isLoading}
               helperText="Enter your registered organization or voluntary donor email"
             />

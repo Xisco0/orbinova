@@ -188,14 +188,5 @@
     "unlockedBy": "user-qa-1794168862129",
     "lastAttemptAt": "2026-11-08T20:14:28.270Z",
     "lockedUntil": null
-  },
-  "hospital@orbinova.com": {
-    "email": "hospital@orbinova.com",
-    "failedCount": 3,
-    "isLocked": false,
-    "lockedAt": null,
-    "unlockedAt": null,
-    "unlockedBy": null,
-    "lastAttemptAt": "2026-11-08T21:07:18.002Z"
   }
 }

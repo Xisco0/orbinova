@@ -12,10 +12,21 @@ import { sessionManager, getSessionCookieName } from "@/lib/auth/sessionManager"
 import { centralizedAuditService } from "@/services/centralizedAuditService";
 
 export async function GET(request: NextRequest) {
+  return handleSessionCheck(request, false);
+}
+
+export async function POST(request: NextRequest) {
+  const body = await request.json().catch(() => ({}));
+  const isActivity = body?.activity === true;
+  return handleSessionCheck(request, isActivity);
+}
+
+async function handleSessionCheck(request: NextRequest, isExplicitActivity: boolean) {
   try {
     const searchParams = request.nextUrl.searchParams;
     const portalScope: PortalScope = (searchParams.get("portal") as PortalScope) || "hospital";
     const cookieName = PORTAL_COOKIE_NAMES[portalScope];
+    const isActivity = isExplicitActivity || searchParams.get("activity") === "true";
 
     const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || "https://placeholder-project.supabase.co";
     const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "placeholder-anon-key";
@@ -82,11 +93,22 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    // SINGLE ACTIVE SESSION CHECK
-    const activeRecord = sessionManager.getActiveSession(authenticatedUserId);
-    if (activeRecord) {
-      if (!sessionId || !sessionManager.validateSession(authenticatedUserId, sessionId)) {
-        // Record audit event for session revocation
+    // Comprehensive session validation (Single active session, inactivity, max lifetime)
+    // If sessionId was missing, check if staff payload has it or generate one for authenticated user
+    if (!sessionId) {
+      sessionId = await sessionManager.createSession(authenticatedUserId, {
+        portalScope,
+        ip: request.headers.get("x-forwarded-for") || undefined,
+        userAgent: request.headers.get("user-agent") || undefined,
+      });
+    }
+
+    const sessionStatus = sessionManager.checkSessionStatus(authenticatedUserId, sessionId, {
+      isMeaningfulActivity: isActivity,
+    });
+
+    if (!sessionStatus.isValid) {
+      if (sessionStatus.reason === "revoked") {
         try {
           await centralizedAuditService.record({
             userId: authenticatedUserId,
@@ -113,6 +135,7 @@ export async function GET(request: NextRequest) {
             portal: portalScope,
             user: null,
             sessionRevoked: true,
+            reason: "signed_in_elsewhere",
             error: "Please sign in again.",
           },
           {
@@ -123,22 +146,35 @@ export async function GET(request: NextRequest) {
           }
         );
       }
-    } else {
-      // Session record absent (revoked, logged out, or invalidated)
+
+      if (sessionStatus.reason === "inactivity_timeout" || sessionStatus.reason === "max_lifetime_exceeded") {
+        return NextResponse.json(
+          {
+            authenticated: false,
+            portal: portalScope,
+            user: null,
+            sessionRevoked: true,
+            reason: sessionStatus.reason,
+            error: "Please sign in again.",
+          },
+          {
+            status: 401,
+            headers: {
+              "x-session-revoked": "true",
+            },
+          }
+        );
+      }
+
       return NextResponse.json(
         {
           authenticated: false,
           portal: portalScope,
           user: null,
-          sessionRevoked: true,
+          sessionRevoked: false,
           error: "Please sign in again.",
         },
-        {
-          status: 401,
-          headers: {
-            "x-session-revoked": "true",
-          },
-        }
+        { status: 401 }
       );
     }
 
@@ -149,6 +185,8 @@ export async function GET(request: NextRequest) {
         authenticated: true,
         portal: portalScope,
         isAuthorized,
+        remainingInactivitySeconds: sessionStatus.remainingInactivitySeconds ?? 1800,
+        remainingLifetimeSeconds: sessionStatus.remainingLifetimeSeconds ?? 604800,
         user: {
           id: baseUser.id,
           email: baseUser.email,
@@ -174,6 +212,8 @@ export async function GET(request: NextRequest) {
       authenticated: true,
       portal: portalScope,
       isAuthorized,
+      remainingInactivitySeconds: sessionStatus.remainingInactivitySeconds ?? 1800,
+      remainingLifetimeSeconds: sessionStatus.remainingLifetimeSeconds ?? 604800,
       user: {
         id: baseUser.id,
         email: baseUser.email,

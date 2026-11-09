@@ -1,10 +1,12 @@
 import fs from "fs";
 import path from "path";
 import { BloodGroupCode, DonorEligibility, DonorAvailability } from "@/types/database";
+import { isValidDonorReference, generateUniqueDonorReference } from "@/lib/donor/donorReference";
 
 export interface StoredDonorOverride {
   userId: string;
   donorProfileId: string;
+  donorNumber?: string;
   organizationId: string;
   registeringOrganizationId?: string;
   fullName: string;
@@ -92,6 +94,7 @@ export const donorStore = {
         d.userId === cleanId ||
         d.donorProfileId === idOrEmail ||
         d.donorProfileId === cleanId ||
+        (d.donorNumber && d.donorNumber.toLowerCase() === idOrEmail.toLowerCase()) ||
         (d.email && d.email.toLowerCase() === idOrEmail.toLowerCase())
     );
   },
@@ -133,9 +136,18 @@ export const donorStore = {
       donor.organizationId ||
       existing.organizationId;
 
+    // Preserve or generate unique DONOR-XXXXXX reference
+    let donorNumber = existing.donorNumber;
+    if (!isValidDonorReference(donorNumber)) {
+      donorNumber = isValidDonorReference(donor.donorNumber)
+        ? donor.donorNumber
+        : generateUniqueDonorReference();
+    }
+
     store[key] = {
       ...existing,
       ...donor,
+      donorNumber,
       registeringOrganizationId,
       organizationId: registeringOrganizationId || donor.organizationId,
       email: donor.email || existing.email,

@@ -55,8 +55,8 @@ export function DonationsClient({ donations }: DonationsClientProps) {
                     DON-{d.id.substring(0, 8).toUpperCase()}
                   </TableCell>
 
-                  <TableCell className="font-mono text-xs text-slate-500">
-                    DONOR-{d.donor_id.substring(0, 6).toUpperCase()}
+                  <TableCell className="font-mono text-xs text-slate-600 font-semibold">
+                    {(d as any).donor_ref || (d as any).donor_number || d.donor_id}
                   </TableCell>
 
                   <TableCell>

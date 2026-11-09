@@ -14,7 +14,7 @@ import {
 } from "lucide-react";
 import { BloodGroupCode, RequestUrgency } from "@/types/database";
 import { createBloodRequestAction } from "@/actions";
-import { Button, Input, Card } from "@/components/ui";
+import { Button, TextField, SelectField, Card } from "@/components/ui";
 
 const bloodGroups: { value: BloodGroupCode; label: string; description: string }[] = [
   { value: "A+", label: "A+ (A Positive)", description: "Can receive A+, A-, O+, O-" },
@@ -326,47 +326,35 @@ export function BloodRequestForm() {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {/* Blood Group Dropdown */}
-          <div className="space-y-1.5">
-            <label className="block text-xs font-medium text-slate-700">
-              Required Blood Group <span className="text-blood-600">*</span>
-            </label>
-            <select
+          <div className="space-y-1">
+            <SelectField
+              id="request-blood-group"
+              label="Required Blood Group *"
               value={bloodGroup}
+              options={bloodGroups.map((bg) => ({ value: bg.value, label: bg.label }))}
               onChange={(e) => {
                 setBloodGroup(e.target.value as BloodGroupCode);
                 setServerError(null);
               }}
               required
-              className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm font-bold text-dark bg-white focus:outline-hidden focus:ring-2 focus:ring-blood-500 transition-all"
-            >
-              {bloodGroups.map((bg) => (
-                <option key={bg.value} value={bg.value}>
-                  {bg.label}
-                </option>
-              ))}
-            </select>
-            {selectedBloodGroupMeta && (
-              <p className="text-[11px] text-slate-500 font-inter">
-                Compatibility: <span className="font-medium text-slate-700">{selectedBloodGroupMeta.description}</span>
-              </p>
-            )}
-            {errors.bloodGroup && (
-              <p className="text-xs text-red-600 font-medium">{errors.bloodGroup}</p>
-            )}
+              issueText={errors.bloodGroup}
+              helperText={selectedBloodGroupMeta ? `Compatibility: ${selectedBloodGroupMeta.description}` : undefined}
+            />
           </div>
 
           {/* Units Required Input */}
           <div>
-            <Input
-              label="Units Required (Bags / 450ml)"
+            <TextField
+              id="request-units"
+              label="Units Required (Bags / 450ml) *"
               type="number"
-              min="1"
-              max="50"
-              step="1"
+              min={1}
+              max={50}
+              step={1}
               value={unitsRequired}
               onChange={(e) => handleUnitsChange(e.target.value)}
               required
-              error={errors.unitsRequired}
+              issueText={errors.unitsRequired}
               helperText="Standard adult unit volume is ~450ml (Max 50 units)"
             />
           </div>
@@ -385,14 +373,13 @@ export function BloodRequestForm() {
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {/* Preferred Date & Time Picker */}
           <div className="space-y-1.5">
-            <Input
+            <TextField
+              id="request-deadline"
               label="Preferred Date & Time (Deadline)"
               type="datetime-local"
               value={requiredBy}
-              min={minDateTime}
-              max={maxDateTime}
               onChange={(e) => handleDateChange(e.target.value)}
-              error={errors.requiredBy}
+              issueText={errors.requiredBy}
               helperText={
                 errors.requiredBy
                   ? undefined

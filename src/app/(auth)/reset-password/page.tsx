@@ -16,7 +16,7 @@ import {
   X,
   ArrowLeft,
 } from "lucide-react";
-import { Button, Input, Card, useToast, Logo } from "@/components/ui";
+import { Button, TextField, Card, useToast, Logo } from "@/components/ui";
 import { completeFirstLoginPasswordChangeAction } from "@/actions/staffActions";
 
 function ResetPasswordForm() {
@@ -302,21 +302,21 @@ function ResetPasswordForm() {
             {/* New Password */}
             <div className="space-y-1">
               <div className="relative">
-                <Input
-                  label="New Password"
+                <TextField
+                  id="reset-password"
+                  label="New Password *"
                   type={showPassword ? "text" : "password"}
                   placeholder="••••••••••••"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
-                  leftIcon={<Lock className="w-4 h-4" />}
                   disabled={isLoading}
                   autoComplete="new-password"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3.5 top-8 text-slate-400 hover:text-slate-600 p-1 focus:outline-none"
+                  className="absolute right-3.5 top-3.5 text-slate-400 hover:text-slate-600 p-1 focus:outline-none z-10"
                   aria-label={showPassword ? "Hide password" : "Show password"}
                 >
                   {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
@@ -352,21 +352,21 @@ function ResetPasswordForm() {
 
             {/* Confirm Password */}
             <div className="relative">
-              <Input
-                label="Confirm New Password"
+              <TextField
+                id="reset-confirm-password"
+                label="Confirm New Password *"
                 type={showConfirmPassword ? "text" : "password"}
                 placeholder="••••••••••••"
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 required
-                leftIcon={<Lock className="w-4 h-4" />}
                 disabled={isLoading}
                 autoComplete="new-password"
               />
               <button
                 type="button"
                 onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                className="absolute right-3.5 top-8 text-slate-400 hover:text-slate-600 p-1 focus:outline-none"
+                className="absolute right-3.5 top-3.5 text-slate-400 hover:text-slate-600 p-1 focus:outline-none z-10"
                 aria-label={showConfirmPassword ? "Hide password" : "Show password"}
               >
                 {showConfirmPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}

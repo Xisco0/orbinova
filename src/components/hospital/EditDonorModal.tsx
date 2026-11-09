@@ -19,7 +19,7 @@ import {
 } from "lucide-react";
 import { BloodGroupCode, DonorEligibility } from "@/types/database";
 import { updateHospitalDonorAction } from "@/actions/hospitalActions";
-import { Button } from "@/components/ui";
+import { Button, TextField } from "@/components/ui";
 import { LocationSelector, LocationSelectorValue } from "@/lib/location";
 
 interface EditDonorModalProps {
@@ -255,38 +255,32 @@ export const EditDonorModal: React.FC<EditDonorModalProps> = ({
                 <span>Donor Contact &amp; Identity</span>
               </div>
 
-              <div>
-                <label className="block text-slate-700 font-bold mb-1">
-                  Full Name <span className="text-red-500">*</span>
-                </label>
-                <input
-                  type="text"
-                  required
-                  value={fullName}
-                  onChange={(e) => setFullName(e.target.value)}
-                  className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs text-dark focus:bg-white focus:ring-2 focus:ring-secondary-500"
-                />
-              </div>
+              <TextField
+                id="edit-donor-name"
+                label="Full Name *"
+                required
+                value={fullName}
+                onChange={(e) => setFullName(e.target.value)}
+                placeholder="e.g. Samuel Adeleke"
+              />
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                <div>
-                  <label className="block text-slate-700 font-bold mb-1">Email</label>
-                  <input
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs text-dark focus:bg-white focus:ring-2 focus:ring-secondary-500"
-                  />
-                </div>
-                <div>
-                  <label className="block text-slate-700 font-bold mb-1">Phone</label>
-                  <input
-                    type="tel"
-                    value={phone}
-                    onChange={(e) => setPhone(e.target.value)}
-                    className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs text-dark focus:bg-white focus:ring-2 focus:ring-secondary-500"
-                  />
-                </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <TextField
+                  id="edit-donor-email"
+                  label="Email Address"
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="donor@domain.com"
+                />
+                <TextField
+                  id="edit-donor-phone"
+                  label="Contact Phone"
+                  type="tel"
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value)}
+                  placeholder="+234 802 345 6789"
+                />
               </div>
             </div>
 

@@ -14,6 +14,7 @@ import { centralizedAuditService } from "@/services/centralizedAuditService";
 import { orbinovaEmail } from "@/lib/email";
 import { emailService } from "@/services/emailService";
 import { validateEmailUniqueness } from "@/lib/auth/emailUniqueness";
+import { generateUniqueDonorReference, getDonorDisplayReference } from "@/lib/donor/donorReference";
 import crypto from "crypto";
 import {
   assertApprovedInstitution,
@@ -902,22 +903,29 @@ export async function registerHospitalDonorAction(data: {
     }
 
     const rawEmail = data.email?.trim().toLowerCase();
-    const hasProvidedEmail = Boolean(rawEmail && rawEmail.includes("@"));
-
-    if (hasProvidedEmail && rawEmail) {
-      // Global Email Uniqueness Guard: Enforce email uniqueness across staff, donors, and admins
-      const emailUniqueness = await validateEmailUniqueness(rawEmail);
-      if (!emailUniqueness.isUnique) {
-        return {
-          success: false,
-          error: emailUniqueness.error || "An account with this email address already exists. Email addresses must be unique across all users and donors.",
-        };
-      }
+    if (!rawEmail || rawEmail.length === 0) {
+      return { success: false, error: "Email address is required." };
     }
 
-    const cleanEmail = hasProvidedEmail && rawEmail
-      ? rawEmail
-      : `donor-${Date.now()}-${Math.floor(Math.random() * 10000)}@orbinova.local`;
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(rawEmail)) {
+      return { success: false, error: "Please enter a valid email address." };
+    }
+
+    if (rawEmail.endsWith("@orbinova.local") || rawEmail.endsWith(".local") || rawEmail.endsWith("@example.com")) {
+      return { success: false, error: "A valid, real email address is required. Placeholder emails are not permitted." };
+    }
+
+    // Global Email Uniqueness Guard: Enforce email uniqueness across staff, donors, and admins
+    const emailUniqueness = await validateEmailUniqueness(rawEmail);
+    if (!emailUniqueness.isUnique) {
+      return {
+        success: false,
+        error: emailUniqueness.error || "An account with this email address already exists. Email addresses must be unique across all users and donors.",
+      };
+    }
+
+    const cleanEmail = rawEmail;
 
     if (!data.bloodGroup) {
       return { success: false, error: "Please select a valid blood group." };
@@ -930,6 +938,7 @@ export async function registerHospitalDonorAction(data: {
     const newUserId = `${hash.substring(0, 8)}-${hash.substring(8, 12)}-4${hash.substring(13, 16)}-a${hash.substring(17, 20)}-${hash.substring(20, 32)}`;
     const hash2 = crypto.createHash("sha256").update(cleanEmail + "-profile").digest("hex");
     const donorProfileId = `${hash2.substring(0, 8)}-${hash2.substring(8, 12)}-4${hash2.substring(13, 16)}-b${hash2.substring(17, 20)}-${hash2.substring(20, 32)}`;
+    const donorRef = generateUniqueDonorReference();
 
     const firstName = data.firstName?.trim() || cleanName.split(" ")[0];
     const surname = data.surname?.trim() || cleanName.split(" ").slice(1).join(" ") || "";
@@ -948,7 +957,7 @@ export async function registerHospitalDonorAction(data: {
     try {
       await (supabase.from("profiles") as any).upsert({
         id: newUserId,
-        email: hasProvidedEmail ? cleanEmail : null,
+        email: cleanEmail,
         full_name: cleanName,
         phone: data.phone?.trim() || null,
         role: "donor",
@@ -959,6 +968,7 @@ export async function registerHospitalDonorAction(data: {
       await (supabase.from("donor_profiles") as any).upsert({
         id: donorProfileId,
         user_id: newUserId,
+        donor_number: donorRef,
         organization_id: organization.id,
         registering_organization_id: organization.id,
         first_name: firstName,
@@ -986,13 +996,14 @@ export async function registerHospitalDonorAction(data: {
     donorStore.save({
       userId: newUserId,
       donorProfileId,
+      donorNumber: donorRef,
       organizationId: organization.id,
       registeringOrganizationId: organization.id,
       fullName: cleanName,
       firstName,
       otherNames: otherNames || undefined,
       surname,
-      email: hasProvidedEmail ? cleanEmail : undefined,
+      email: cleanEmail,
       phone: data.phone?.trim() || undefined,
       dateOfBirth: data.dateOfBirth || null,
       gender: data.gender || null,
@@ -1024,7 +1035,7 @@ export async function registerHospitalDonorAction(data: {
         entity_id: donorProfileId,
         details: {
           donor_name: cleanName,
-          email: hasProvidedEmail ? cleanEmail : null,
+          email: cleanEmail,
           blood_group: data.bloodGroup,
           facility_id: organization.id,
           country,
@@ -1035,20 +1046,18 @@ export async function registerHospitalDonorAction(data: {
       });
     } catch {}
 
-    // Dispatch welcome email with credentials to donor if email is provided
-    if (hasProvidedEmail) {
-      try {
-        await emailService.sendDonorWelcomeEmail({
-          toEmail: cleanEmail,
-          fullName: cleanName,
-          bloodGroup: data.bloodGroup,
-          organizationName: organization.name || "Facility Voluntary Donor Registry",
-          defaultPassword: "DonorPassword2026!",
-          organizationId: organization.id,
-        });
-      } catch (emailErr) {
-        console.warn("Notice: Donor welcome email dispatch:", emailErr);
-      }
+    // Dispatch welcome email with credentials to donor
+    try {
+      await emailService.sendDonorWelcomeEmail({
+        toEmail: cleanEmail,
+        fullName: cleanName,
+        bloodGroup: data.bloodGroup,
+        organizationName: organization.name || "Facility Voluntary Donor Registry",
+        defaultPassword: "DonorPassword2026!",
+        organizationId: organization.id,
+      });
+    } catch (emailErr) {
+      console.warn("Notice: Donor welcome email dispatch:", emailErr);
     }
 
     cacheManager.invalidateDonors(organization.id);
@@ -1059,6 +1068,8 @@ export async function registerHospitalDonorAction(data: {
       success: true,
       message: `Donor ${cleanName} (${data.bloodGroup}) registered under ${organization.name}.`,
       donorId: donorProfileId,
+      donorNumber: donorRef,
+      donorRef,
     };
   } catch (err: any) {
     return { success: false, error: err.message || "Failed to register donor." };
@@ -1378,7 +1389,7 @@ export async function scheduleDonorScreeningAction(params: {
     const donorName = donorRecord?.fullName || "Candidate Donor";
     const donorEmail = donorRecord?.email || "";
     const donorPhone = donorRecord?.phone || "";
-    const donorRef = `DONOR-${(donorReq.donor_id || "").substring(0, 6).toUpperCase()}`;
+    const donorRef = getDonorDisplayReference(donorReq.donor_id, (donorReq as any).donor_ref || donorRecord?.donorNumber);
 
     // Facility address for screening
     const facilityAddress = [organization.address, organization.city, organization.state]

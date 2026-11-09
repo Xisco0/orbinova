@@ -22,7 +22,8 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-# local env files
+# local data & backups
+.data/backup_*
 .env*.local
 
 # vercel
