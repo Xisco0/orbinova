@@ -49,9 +49,26 @@ CREATE INDEX IF NOT EXISTS idx_donor_profiles_donor_number
   ON public.donor_profiles(donor_number) 
   WHERE donor_number IS NOT NULL;
 
--- 3. ORGANIZATION MEMBERS: Ensure is_active exists and staff email uniqueness within the SAME institution
+-- 3. ORGANIZATION MEMBERS: Ensure member_role, role, and is_active exist
 ALTER TABLE public.organization_members
+  ADD COLUMN IF NOT EXISTS member_role TEXT DEFAULT 'staff',
+  ADD COLUMN IF NOT EXISTS role TEXT DEFAULT 'staff',
   ADD COLUMN IF NOT EXISTS is_active BOOLEAN NOT NULL DEFAULT TRUE;
+
+-- Sync existing role values into member_role if needed
+DO $$
+BEGIN
+  IF EXISTS (
+    SELECT 1 FROM information_schema.columns 
+    WHERE table_schema = 'public' 
+      AND table_name = 'organization_members' 
+      AND column_name = 'role'
+  ) THEN
+    UPDATE public.organization_members 
+    SET member_role = COALESCE(member_role, role, 'staff')
+    WHERE member_role IS NULL;
+  END IF;
+END $$;
 
 DO $$
 BEGIN
@@ -104,7 +121,7 @@ SELECT
   -- Institutional Staff Identity
   om.id AS organization_member_id,
   om.organization_id,
-  om.member_role,
+  COALESCE(om.member_role, om.role, 'staff') AS member_role,
   om.is_active AS staff_active,
   o.name AS organization_name,
   o.organization_type
