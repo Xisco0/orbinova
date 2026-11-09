@@ -13,7 +13,7 @@ import { GranularMemberRole, OrganizationMember } from "@/types/database";
 import { revalidatePath } from "next/cache";
 import { emailService } from "@/services/emailService";
 import { staffStore } from "@/services/staffStore";
-import { validateEmailUniqueness } from "@/lib/auth/emailUniqueness";
+import { validateEmailUniqueness, validateScopedEmailUniqueness } from "@/lib/auth/emailUniqueness";
 import { extractSurname, generateTemporaryPassword } from "@/lib/auth/passwordUtils";
 import { accountSecurity } from "@/lib/auth/accountSecurity";
 import { rateLimiter } from "@/lib/auth/rateLimiter";
@@ -95,12 +95,16 @@ export async function addStaffMemberAction(data: {
       return { success: false, error: "Please enter a valid official email address." };
     }
 
-    // Global Email Uniqueness Guard: Enforce email uniqueness across staff, donors, and admins
-    const emailUniqueness = await validateEmailUniqueness(normalizedEmail);
+    // Table-Level Staff Uniqueness Guard: Enforce email uniqueness within the institution,
+    // while permitting verified existing donors or multi-institution staff to link their account
+    const emailUniqueness = await validateScopedEmailUniqueness(normalizedEmail, "staff", {
+      organizationId: data.organizationId,
+      candidateName: normalizedFullName,
+    });
     if (!emailUniqueness.isUnique) {
       return {
         success: false,
-        error: emailUniqueness.error || "An account with this email address already exists. Email addresses must be unique.",
+        error: emailUniqueness.error || "A staff member with this email address already exists at this facility.",
       };
     }
 
@@ -144,25 +148,27 @@ export async function addStaffMemberAction(data: {
     // Authoritative Server-Side Institutional Ownership (Never trust client payload)
     const targetOrgId = context.organization.id;
 
-    // 1. Try Postgres RPC Function (Bypasses RLS, creates Auth User, Profile, and Member directly)
-    let newUserId: string | null = null;
-    try {
-      const { data: rpcRes, error: rpcErr } = await (supabase as any).rpc(
-        "add_facility_staff_member",
-        {
-          p_org_id: targetOrgId,
-          p_full_name: normalizedFullName,
-          p_email: normalizedEmail,
-          p_phone: normalizedPhone,
-          p_member_role: assignedRole,
-          p_password: temporaryPassword,
-          p_is_active: true, // Created active so staff can immediately log in with default credentials
+    // 1. Try Postgres RPC Function or reuse existing central user identity
+    let newUserId: string | null = emailUniqueness.isExistingCentralUser ? (emailUniqueness.existingUserId || null) : null;
+    if (!newUserId) {
+      try {
+        const { data: rpcRes, error: rpcErr } = await (supabase as any).rpc(
+          "add_facility_staff_member",
+          {
+            p_org_id: targetOrgId,
+            p_full_name: normalizedFullName,
+            p_email: normalizedEmail,
+            p_phone: normalizedPhone,
+            p_member_role: assignedRole,
+            p_password: temporaryPassword,
+            p_is_active: true, // Created active so staff can immediately log in with default credentials
+          }
+        );
+        if (!rpcErr && rpcRes?.user_id) {
+          newUserId = rpcRes.user_id;
         }
-      );
-      if (!rpcErr && rpcRes?.user_id) {
-        newUserId = rpcRes.user_id;
-      }
-    } catch {}
+      } catch {}
+    }
 
     // 2. Fallback if RPC function has not yet been seeded in Supabase SQL editor
     if (!newUserId) {

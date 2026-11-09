@@ -17,6 +17,7 @@ import { rateLimiter } from "@/lib/auth/rateLimiter";
 import { donorStore } from "@/services/donorStore";
 import { generateUniqueDonorReference } from "@/lib/donor/donorReference";
 import { validateDonorDateOfBirth } from "@/lib/donor/donorValidation";
+import { validateScopedEmailUniqueness } from "@/lib/auth/emailUniqueness";
 
 /**
  * Ensures the executing user has verified server-side admin clearance.
@@ -381,33 +382,51 @@ export async function onboardDonorAction(data: {
       }
     }
 
-    // 1. Create Auth User with role = 'donor'
-    const { data: authData, error: authError } = await adminSupabase.auth.admin.createUser({
-      email: cleanEmail,
-      password: data.password,
-      email_confirm: true,
-      user_metadata: {
-        full_name: cleanName,
-        role: "donor",
-        phone: data.phone?.trim() || null,
-      },
+    // Table-Level Email Uniqueness Guard (Scope: Donor)
+    const emailUniqueness = await validateScopedEmailUniqueness(cleanEmail, "donor", {
+      candidateName: cleanName,
     });
-
-    if (authError || !authData.user) {
-      throw new Error(authError?.message || "Failed to create donor auth record.");
+    if (!emailUniqueness.isUnique) {
+      return {
+        success: false,
+        error: emailUniqueness.error || "A voluntary donor is already registered with this email address.",
+      };
     }
 
-    const userId = authData.user.id;
+    let userId: string;
+    const isLinkedAccount = emailUniqueness.isExistingCentralUser === true;
 
-    // 2. Ensure Profile has role = 'donor'
-    await (adminSupabase.from("profiles") as any).upsert({
-      id: userId,
-      full_name: cleanName,
-      email: cleanEmail,
-      phone: data.phone?.trim() || null,
-      role: "donor",
-      is_active: true,
-    });
+    if (isLinkedAccount && emailUniqueness.existingUserId) {
+      userId = emailUniqueness.existingUserId;
+    } else {
+      // 1. Create Auth User with role = 'donor'
+      const { data: authData, error: authError } = await adminSupabase.auth.admin.createUser({
+        email: cleanEmail,
+        password: data.password,
+        email_confirm: true,
+        user_metadata: {
+          full_name: cleanName,
+          role: "donor",
+          phone: data.phone?.trim() || null,
+        },
+      });
+
+      if (authError || !authData.user) {
+        throw new Error(authError?.message || "Failed to create donor auth record.");
+      }
+
+      userId = authData.user.id;
+
+      // 2. Ensure Profile has role = 'donor'
+      await (adminSupabase.from("profiles") as any).upsert({
+        id: userId,
+        full_name: cleanName,
+        email: cleanEmail,
+        phone: data.phone?.trim() || null,
+        role: "donor",
+        is_active: true,
+      });
+    }
 
     const donorRef = generateUniqueDonorReference();
 

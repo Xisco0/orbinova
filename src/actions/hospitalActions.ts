@@ -13,7 +13,7 @@ import { inAppNotificationStore } from "@/services/inAppNotificationStore";
 import { centralizedAuditService } from "@/services/centralizedAuditService";
 import { orbinovaEmail } from "@/lib/email";
 import { emailService } from "@/services/emailService";
-import { validateEmailUniqueness } from "@/lib/auth/emailUniqueness";
+import { validateEmailUniqueness, validateScopedEmailUniqueness } from "@/lib/auth/emailUniqueness";
 import { generateUniqueDonorReference, getDonorDisplayReference } from "@/lib/donor/donorReference";
 import { validateDonorDateOfBirth } from "@/lib/donor/donorValidation";
 import crypto from "crypto";
@@ -917,16 +917,21 @@ export async function registerHospitalDonorAction(data: {
       return { success: false, error: "A valid, real email address is required. Placeholder emails are not permitted." };
     }
 
-    // Global Email Uniqueness Guard: Enforce email uniqueness across staff, donors, and admins
-    const emailUniqueness = await validateEmailUniqueness(rawEmail);
+    // Table-Level Email Uniqueness Guard (Scope: Donor)
+    // Enforces donor-level uniqueness while permitting verified existing staff accounts to link their identity
+    const emailUniqueness = await validateScopedEmailUniqueness(rawEmail, "donor", {
+      candidateName: cleanName,
+    });
     if (!emailUniqueness.isUnique) {
       return {
         success: false,
-        error: emailUniqueness.error || "An account with this email address already exists. Email addresses must be unique across all users and donors.",
+        error: emailUniqueness.error || "A voluntary donor is already registered with this email address.",
       };
     }
 
     const cleanEmail = rawEmail;
+    const isLinkedAccount = emailUniqueness.isExistingCentralUser === true;
+    let targetUserId = emailUniqueness.existingUserId;
 
     if (!data.bloodGroup) {
       return { success: false, error: "Please select a valid blood group." };
@@ -945,9 +950,12 @@ export async function registerHospitalDonorAction(data: {
     const { user, organization } = await requireOrgClearance("donors.register");
     const supabase = await createClient();
 
-    const hash = crypto.createHash("md5").update(cleanEmail).digest("hex");
-    const newUserId = `${hash.substring(0, 8)}-${hash.substring(8, 12)}-4${hash.substring(13, 16)}-a${hash.substring(17, 20)}-${hash.substring(20, 32)}`;
-    const hash2 = crypto.createHash("sha256").update(cleanEmail + "-profile").digest("hex");
+    if (!targetUserId) {
+      const hash = crypto.createHash("md5").update(cleanEmail).digest("hex");
+      targetUserId = `${hash.substring(0, 8)}-${hash.substring(8, 12)}-4${hash.substring(13, 16)}-a${hash.substring(17, 20)}-${hash.substring(20, 32)}`;
+    }
+
+    const hash2 = crypto.createHash("sha256").update(cleanEmail + "-profile-" + Date.now()).digest("hex");
     const donorProfileId = `${hash2.substring(0, 8)}-${hash2.substring(8, 12)}-4${hash2.substring(13, 16)}-b${hash2.substring(17, 20)}-${hash2.substring(20, 32)}`;
     const donorRef = generateUniqueDonorReference();
 
@@ -964,21 +972,31 @@ export async function registerHospitalDonorAction(data: {
     const locationConsent = data.locationConsent ?? true;
     const nowIso = new Date().toISOString();
 
-    // Upsert into Supabase profiles where possible
+    // Upsert into Supabase profiles:
+    // If this is an existing user account (e.g. staff member), DO NOT overwrite their role or credentials!
     try {
-      await (supabase.from("profiles") as any).upsert({
-        id: newUserId,
-        email: cleanEmail,
-        full_name: cleanName,
-        phone: data.phone?.trim() || null,
-        role: "donor",
-        is_active: true,
-        updated_at: nowIso,
-      });
+      if (!isLinkedAccount) {
+        await (supabase.from("profiles") as any).upsert({
+          id: targetUserId,
+          email: cleanEmail,
+          full_name: cleanName,
+          phone: data.phone?.trim() || null,
+          role: "donor",
+          is_active: true,
+          updated_at: nowIso,
+        });
+      } else {
+        await (supabase.from("profiles") as any)
+          .update({
+            updated_at: nowIso,
+            ...(data.phone ? { phone: data.phone.trim() } : {}),
+          })
+          .eq("id", targetUserId);
+      }
 
       await (supabase.from("donor_profiles") as any).upsert({
         id: donorProfileId,
-        user_id: newUserId,
+        user_id: targetUserId,
         donor_number: donorRef,
         organization_id: organization.id,
         registering_organization_id: organization.id,
@@ -1005,7 +1023,7 @@ export async function registerHospitalDonorAction(data: {
 
     // Authoritative persistence in donorStore with institutional ownership & location data
     donorStore.save({
-      userId: newUserId,
+      userId: targetUserId,
       donorProfileId,
       donorNumber: donorRef,
       organizationId: organization.id,
@@ -1036,35 +1054,37 @@ export async function registerHospitalDonorAction(data: {
       updatedAt: nowIso,
     });
 
-    // Audit Log
+    // Centralized Tamper-Evident Audit Logging
     try {
-      await (supabase.from("audit_logs") as any).insert({
-        user_id: user.id,
-        organization_id: organization.id,
-        action: "DONOR_REGISTERED_BY_FACILITY",
-        entity_type: "donor_profiles",
-        entity_id: donorProfileId,
-        details: {
+      await centralizedAuditService.record({
+        action: isLinkedAccount ? "DONOR_PROFILE_LINKED_TO_EXISTING_USER" : "DONOR_REGISTERED_BY_FACILITY",
+        category: "donor_management",
+        entityType: "donor_profiles",
+        entityId: donorProfileId,
+        organizationId: organization.id,
+        userId: user.id,
+        description: isLinkedAccount
+          ? `Donor profile (${donorRef}) linked to existing verified account (${cleanEmail}) by ${organization.name}`
+          : `New voluntary donor (${donorRef}) registered by ${organization.name}`,
+        metadata: {
           donor_name: cleanName,
           email: cleanEmail,
           blood_group: data.bloodGroup,
-          facility_id: organization.id,
-          country,
-          state,
-          city,
-          district,
+          donorRef,
+          isLinkedAccount,
+          linkedUserId: targetUserId,
         },
       });
     } catch {}
 
-    // Dispatch welcome email with credentials to donor
+    // Dispatch welcome email with credentials to donor (or account-linked notice)
     try {
       await emailService.sendDonorWelcomeEmail({
         toEmail: cleanEmail,
         fullName: cleanName,
         bloodGroup: data.bloodGroup,
         organizationName: organization.name || "Facility Voluntary Donor Registry",
-        defaultPassword: "DonorPassword2026!",
+        defaultPassword: isLinkedAccount ? undefined : "DonorPassword2026!",
         organizationId: organization.id,
       });
     } catch (emailErr) {
@@ -1077,10 +1097,13 @@ export async function registerHospitalDonorAction(data: {
 
     return {
       success: true,
-      message: `Donor ${cleanName} (${data.bloodGroup}) registered under ${organization.name}.`,
+      message: isLinkedAccount
+        ? `Donor profile for ${cleanName} (${data.bloodGroup}) successfully created and linked to their existing ORBINOVA account.`
+        : `Donor ${cleanName} (${data.bloodGroup}) registered under ${organization.name}.`,
       donorId: donorProfileId,
       donorNumber: donorRef,
       donorRef,
+      isLinkedAccount,
     };
   } catch (err: any) {
     return { success: false, error: err.message || "Failed to register donor." };

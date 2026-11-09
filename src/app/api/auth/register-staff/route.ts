@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
-import { validateEmailUniqueness } from "@/lib/auth/emailUniqueness";
+import { validateScopedEmailUniqueness } from "@/lib/auth/emailUniqueness";
 
 export const dynamic = "force-dynamic";
 
@@ -23,13 +23,13 @@ export async function POST(req: Request) {
       );
     }
 
-    // Global Email Uniqueness Guard
-    const emailUniqueness = await validateEmailUniqueness(email);
+    // Table-Level Email Uniqueness Guard (Scope: Staff)
+    const emailUniqueness = await validateScopedEmailUniqueness(email, "staff");
     if (!emailUniqueness.isUnique) {
       return NextResponse.json(
         {
           success: false,
-          error: emailUniqueness.error || "An account with this email address already exists. Email addresses must be unique.",
+          error: emailUniqueness.error || "A staff member with this email address already exists.",
         },
         { status: 409 }
       );

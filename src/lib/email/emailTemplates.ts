@@ -224,8 +224,21 @@ export function renderDonorWelcomeEmail(params: {
   defaultPassword?: string;
 }): { html: string; text: string; subject: string } {
   const name = params.fullName?.trim() || "Voluntary Donor";
+  const isLinked = !params.defaultPassword;
   const defaultPassword = params.defaultPassword || "DonorPassword2026!";
-  const subject = `Welcome to ORBINOVA Blood Donor Network — Your Login Credentials`;
+  const subject = isLinked
+    ? `Your ORBINOVA Voluntary Donor Profile is Active`
+    : `Welcome to ORBINOVA Blood Donor Network — Your Login Credentials`;
+
+  const credentialSectionHtml = isLinked
+    ? `<div class="info-row" style="background-color: #eff6ff; padding: 10px 14px; border-radius: 8px; margin-top: 10px; border: 1px solid #bfdbfe;">
+        <span class="info-label" style="color: #1e40af; font-weight: bold;">Account Login:</span>
+        <span class="info-value" style="color: #1e3a8a; font-weight: 600;">Linked to your existing ORBINOVA account. Use your existing password to log in.</span>
+      </div>`
+    : `<div class="info-row" style="background-color: #f1f5f9; padding: 10px 14px; border-radius: 8px; margin-top: 10px; border: 1px dashed #cbd5e1;">
+        <span class="info-label" style="color: #0f172a; font-weight: bold;">Default Password:</span>
+        <span class="info-value" style="font-family: monospace; font-size: 15px; font-weight: bold; color: #dc2626;">${defaultPassword}</span>
+      </div>`;
 
   const contentHtml = `
     <h2 class="greeting">Welcome to ORBINOVA, ${name}!</h2>
@@ -246,10 +259,7 @@ export function renderDonorWelcomeEmail(params: {
         <span class="info-label">Donor Portal Login:</span>
         <span class="info-value" style="font-family: monospace;">${params.toEmail}</span>
       </div>
-      <div class="info-row" style="background-color: #f1f5f9; padding: 10px 14px; border-radius: 8px; margin-top: 10px; border: 1px dashed #cbd5e1;">
-        <span class="info-label" style="color: #0f172a; font-weight: bold;">Default Password:</span>
-        <span class="info-value" style="font-family: monospace; font-size: 15px; font-weight: bold; color: #dc2626;">${defaultPassword}</span>
-      </div>
+      ${credentialSectionHtml}
     </div>
 
     <p style="font-size: 14px; color: #475569; margin-top: 16px;">
@@ -257,7 +267,21 @@ export function renderDonorWelcomeEmail(params: {
     </p>
   `;
 
-  const contentText = `
+  const contentText = isLinked
+    ? `
+Hello ${name},
+
+Thank you for registering as a voluntary blood donor with ${params.organizationName}.
+
+Your donor profile has been created with blood group ${params.bloodGroup}.
+Your donor profile is linked to your existing ORBINOVA healthcare account.
+
+Log into your Donor Portal using your existing email (${params.toEmail}) and password at:
+${params.loginUrl}
+
+Through your portal, you can view emergency requests, manage your availability, and track your life-saving donations.
+`
+    : `
 Hello ${name},
 
 Thank you for registering as a voluntary blood donor with ${params.organizationName}.

@@ -82,6 +82,7 @@ export const RegisterDonorModal: React.FC<RegisterDonorModalProps> = ({
   const [error, setError] = useState<string | null>(null);
   const [emailChecking, setEmailChecking] = useState(false);
   const [emailError, setEmailError] = useState<string | null>(null);
+  const [emailNotice, setEmailNotice] = useState<string | null>(null);
   const [dobError, setDobError] = useState<string | null>(null);
 
   const dobBounds = useMemo(() => getDonorDobBounds(), []);
@@ -90,25 +91,36 @@ export const RegisterDonorModal: React.FC<RegisterDonorModalProps> = ({
     const clean = email.trim().toLowerCase();
     if (!clean) {
       setEmailError("Email address is required.");
+      setEmailNotice(null);
       return;
     }
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(clean)) {
       setEmailError("Please enter a valid email address.");
+      setEmailNotice(null);
       return;
     }
     if (clean.endsWith("@orbinova.local") || clean.endsWith(".local") || clean.endsWith("@example.com")) {
       setEmailError("Placeholder emails are not permitted. Please use a valid email address.");
+      setEmailNotice(null);
       return;
     }
     setEmailChecking(true);
     try {
-      const res = await fetch(`/api/auth/check-email-unique?email=${encodeURIComponent(clean)}`);
+      const candidateName = [firstName.trim(), surname.trim()].filter(Boolean).join(" ");
+      const nameParam = candidateName ? `&name=${encodeURIComponent(candidateName)}` : "";
+      const res = await fetch(`/api/auth/check-email-unique?email=${encodeURIComponent(clean)}&scope=donor${nameParam}`);
       const data = await res.json();
       if (!data.isUnique) {
-        setEmailError(data.error || "This email address is already in use.");
+        setEmailError(data.error || "This email address is already registered to a voluntary donor.");
+        setEmailNotice(null);
       } else {
         setEmailError(null);
+        if (data.isExistingUser) {
+          setEmailNotice("Existing ORBINOVA account found. This donor profile will link to their existing login.");
+        } else {
+          setEmailNotice(null);
+        }
       }
     } catch {
       setEmailError(null);
@@ -356,9 +368,11 @@ export const RegisterDonorModal: React.FC<RegisterDonorModalProps> = ({
                   onChange={(e) => {
                     setEmail(e.target.value);
                     if (emailError) setEmailError(null);
+                    if (emailNotice) setEmailNotice(null);
                   }}
                   onBlur={handleEmailBlur}
                   issueText={emailError || undefined}
+                  helperText={emailNotice && !emailError ? emailNotice : undefined}
                 />
                 <TextField
                   id="donor-phone"

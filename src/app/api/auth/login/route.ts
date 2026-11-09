@@ -6,11 +6,13 @@ import {
   PORTAL_COOKIE_NAMES,
   PORTAL_COOKIE_OPTIONS,
   isRoleAuthorizedForPortal,
+  isUserAuthorizedForPortal,
 } from "@/lib/auth/portalAuth";
 import { ROLE_PORTAL_MAP } from "@/constants/theme";
 import { accountSecurity } from "@/lib/auth/accountSecurity";
 import { rateLimiter } from "@/lib/auth/rateLimiter";
 import { staffStore } from "@/services/staffStore";
+import { donorStore } from "@/services/donorStore";
 import { sessionManager, getSessionCookieName } from "@/lib/auth/sessionManager";
 import { centralizedAuditService } from "@/services/centralizedAuditService";
 
@@ -287,13 +289,21 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Strict portal authorization check
-    if (!isRoleAuthorizedForPortal(role, scope)) {
+    // Strict portal authorization check with shared identity & multi-profile support
+    const hasDonor = !!(donorStore.get(authUser.id) || donorStore.get(normalizedEmail));
+    const hasStaff = isStaffSession || !!(staffStore.get(authUser.id) || staffStore.get(normalizedEmail));
+
+    const isAuthorized = isUserAuthorizedForPortal(authUser.id, normalizedEmail, role, scope, {
+      hasDonorProfile: hasDonor,
+      hasStaffMembership: hasStaff,
+    });
+
+    if (!isAuthorized) {
       await supabase.auth.signOut();
       return NextResponse.json(
         {
           success: false,
-          error: `This account with role '${role}' is not authorized to access the ${scope} portal.`,
+          error: `This account is not authorized to access the ${scope} portal.`,
         },
         { status: 403 }
       );
@@ -314,7 +324,7 @@ export async function POST(request: NextRequest) {
       ? "/reset-password?first_login=true"
       : effectiveScope === "admin" || role === "admin"
       ? "/admin/dashboard"
-      : effectiveScope === "donor" || role === "donor"
+      : effectiveScope === "donor" || (role === "donor" && !hasStaff)
       ? "/donor/dashboard"
       : effectiveScope === "imaging" || (role as string) === "radiologist" || staffRecord?.memberRole === "radiologist"
       ? "/imaging"

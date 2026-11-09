@@ -51,6 +51,38 @@ export function isRoleAuthorizedForPortal(role: string | undefined | null, porta
 }
 
 /**
+ * Validates whether a user with a shared central identity is authorized for a specific portal scope.
+ * Supports cross-profile accounts where a hospital staff member is also registered as a voluntary donor.
+ */
+export function isUserAuthorizedForPortal(
+  userId: string,
+  email: string | undefined | null,
+  primaryRole: string | undefined | null,
+  portal: PortalScope,
+  profileContext?: {
+    hasDonorProfile?: boolean;
+    hasStaffMembership?: boolean;
+  }
+): boolean {
+  // 1. Direct primary role check
+  if (isRoleAuthorizedForPortal(primaryRole, portal)) {
+    return true;
+  }
+
+  // 2. Cross-profile authorization for Donor Portal
+  if (portal === "donor" && profileContext?.hasDonorProfile) {
+    return true;
+  }
+
+  // 3. Cross-profile authorization for Hospital Portal
+  if (portal === "hospital" && profileContext?.hasStaffMembership) {
+    return true;
+  }
+
+  return false;
+}
+
+/**
  * Resolves the portal scope from a URL pathname.
  */
 export function getPortalFromPathname(pathname: string): PortalScope | null {

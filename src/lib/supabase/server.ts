@@ -2,12 +2,14 @@ import { createServerClient, type CookieOptions } from "@supabase/ssr";
 import { cookies, headers } from "next/headers";
 import { Database, UserRole, Profile } from "@/types/database";
 import { staffStore } from "@/services/staffStore";
+import { donorStore } from "@/services/donorStore";
 import { sessionManager, getSessionCookieName } from "@/lib/auth/sessionManager";
 import {
   PortalScope,
   PORTAL_COOKIE_NAMES,
   getPortalFromPathname,
   isRoleAuthorizedForPortal,
+  isUserAuthorizedForPortal,
   PORTAL_COOKIE_OPTIONS,
 } from "@/lib/auth/portalAuth";
 
@@ -237,14 +239,23 @@ export async function getCurrentUser(portalScope?: PortalScope) {
       };
     }
 
-    // Verify role authorization against portal scope
-    if (portalScope && !isRoleAuthorizedForPortal(profile.role, portalScope)) {
+    // Verify role authorization against portal scope with shared user identity support
+    const hasDonor = portalScope === "donor" ? !!(donorStore.get(baseUser.id) || donorStore.get(baseUser.email)) : false;
+    const hasStaff = portalScope === "hospital" ? (isStaffSession || !!(staffStore.get(baseUser.id) || staffStore.get(baseUser.email))) : false;
+
+    if (portalScope && !isUserAuthorizedForPortal(baseUser.id, baseUser.email, profile.role, portalScope, { hasDonorProfile: hasDonor, hasStaffMembership: hasStaff })) {
       return null;
     }
 
+    const adaptedProfile: Profile = {
+      ...(profile as Profile),
+      // If a staff member accesses the donor portal, adapt profile context role to donor
+      role: portalScope === "donor" && hasDonor ? ("donor" as UserRole) : profile.role,
+    };
+
     return {
       ...baseUser,
-      profile: profile as Profile,
+      profile: adaptedProfile,
     };
   } catch (err) {
     console.error("Error fetching current user:", err);
