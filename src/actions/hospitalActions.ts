@@ -376,6 +376,9 @@ export async function adjustHospitalInventoryAction(data: {
           {
             organization_id: organization.id,
             blood_group: data.bloodGroup,
+            product_type: "red_cells",
+            units_available: newQty,
+            units_reserved: currentReserved,
             quantity: newQty,
             reserved_quantity: currentReserved,
             updated_at: new Date().toISOString(),
@@ -540,6 +543,8 @@ export async function recordHospitalDonationAction(data: {
         {
           organization_id: organization.id,
           blood_group: data.bloodGroup,
+          product_type: "red_cells",
+          units_available: newQty,
           quantity: newQty,
           updated_at: new Date().toISOString(),
         },
@@ -994,7 +999,7 @@ export async function registerHospitalDonorAction(data: {
           .eq("id", targetUserId);
       }
 
-      await (supabase.from("donor_profiles") as any).upsert({
+      const donorDbPayload: any = {
         id: donorProfileId,
         user_id: targetUserId,
         donor_number: donorRef,
@@ -1004,7 +1009,6 @@ export async function registerHospitalDonorAction(data: {
         other_names: otherNames,
         surname: surname,
         blood_group: data.bloodGroup,
-        country: country,
         state: state,
         city: city,
         district: district,
@@ -1016,7 +1020,12 @@ export async function registerHospitalDonorAction(data: {
         availability_status: "available",
         eligibility_status: data.eligibilityStatus || "eligible",
         updated_at: nowIso,
-      });
+      };
+
+      const { error: donorUpsertErr } = await (supabase.from("donor_profiles") as any).upsert(donorDbPayload);
+      if (donorUpsertErr) {
+        console.warn("Direct donor upsert notice:", donorUpsertErr.message);
+      }
     } catch (e: any) {
       console.warn("Direct donor upsert notice:", e?.message);
     }
@@ -1220,7 +1229,6 @@ export async function updateHospitalDonorAction(data: {
       await (supabase.from("donor_profiles") as any)
         .update({
           blood_group: data.bloodGroup,
-          country,
           state,
           city,
           district: district || null,

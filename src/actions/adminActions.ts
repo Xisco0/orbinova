@@ -939,6 +939,8 @@ export async function adjustInventoryAction(
         {
           organization_id: organizationId,
           blood_group: bloodGroup,
+          product_type: "red_cells",
+          units_available: newQuantity,
           quantity: newQuantity,
           updated_at: new Date().toISOString(),
         },
