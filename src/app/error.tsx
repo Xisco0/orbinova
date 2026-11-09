@@ -10,7 +10,7 @@ interface ErrorProps {
   reset: () => void;
 }
 
-export default function GlobalError({ error, reset }: ErrorProps) {
+export default function RootError({ error, reset }: ErrorProps) {
   useEffect(() => {
     // Log sanitized error to client console or monitoring service
     console.error("[Global Error Boundary caught]:", error.message);
