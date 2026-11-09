@@ -9,7 +9,10 @@
 -- while guaranteeing that within each relevant table, duplicate records are strictly rejected.
 -- ==============================================================================
 
--- 1. PROFILES TABLE: Fast case-insensitive identity lookup
+-- 1. PROFILES TABLE: Ensure is_active exists and add fast case-insensitive identity lookup
+ALTER TABLE public.profiles
+  ADD COLUMN IF NOT EXISTS is_active BOOLEAN NOT NULL DEFAULT TRUE;
+
 CREATE INDEX IF NOT EXISTS idx_profiles_email_lower 
   ON public.profiles(LOWER(email));
 
@@ -46,9 +49,10 @@ CREATE INDEX IF NOT EXISTS idx_donor_profiles_donor_number
   ON public.donor_profiles(donor_number) 
   WHERE donor_number IS NOT NULL;
 
--- 3. ORGANIZATION MEMBERS: Ensure staff email uniqueness within the SAME institution
--- Allows the same person to belong to different institutions or hold a voluntary donor profile,
--- but prevents duplicate memberships within the same hospital or blood bank.
+-- 3. ORGANIZATION MEMBERS: Ensure is_active exists and staff email uniqueness within the SAME institution
+ALTER TABLE public.organization_members
+  ADD COLUMN IF NOT EXISTS is_active BOOLEAN NOT NULL DEFAULT TRUE;
+
 DO $$
 BEGIN
   IF NOT EXISTS (
@@ -66,7 +70,10 @@ CREATE INDEX IF NOT EXISTS idx_org_members_user_id
 CREATE INDEX IF NOT EXISTS idx_org_members_org_id 
   ON public.organization_members(organization_id);
 
--- 4. ORGANIZATIONS: Enforce uniqueness on active institutional contact email
+-- 4. ORGANIZATIONS: Ensure is_active exists, then enforce uniqueness on active institutional contact email
+ALTER TABLE public.organizations
+  ADD COLUMN IF NOT EXISTS is_active BOOLEAN NOT NULL DEFAULT TRUE;
+
 CREATE UNIQUE INDEX IF NOT EXISTS uq_organizations_email_lower 
   ON public.organizations(LOWER(email)) 
   WHERE is_active = TRUE;

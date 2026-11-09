@@ -1284,38 +1284,29 @@ export const hospitalService = {
       }
 
       // If no organization_members records are linked yet in the database,
-      // fallback to pre-seeded profiles ONLY for default demo hospital
-      if (membersList.length === 0 && orgId === "a1111111-1111-1111-1111-111111111111") {
-        try {
-          const { data: hospitalProfiles } = await supabase
-            .from("profiles")
-            .select("*")
-            .eq("role", "hospital")
-            .order("created_at", { ascending: true });
-
-          if (hospitalProfiles && hospitalProfiles.length > 0) {
-            membersList = hospitalProfiles.map((p: any) => {
-              let clinicalRole: any = "doctor";
-              if (p.email === "hospital@orbinova.com") clinicalRole = "owner";
-              else if (p.email?.includes("radiologist")) clinicalRole = "radiologist";
-              else if (p.email?.includes("nurse")) clinicalRole = "nurse";
-              else if (p.email?.includes("coordinator")) clinicalRole = "donor_coordinator";
-              else if (p.email?.includes("doctor") || p.email?.includes("bamirin")) clinicalRole = "doctor";
-
-              return {
-                id: `member-${p.id}`,
-                organization_id: orgId,
-                user_id: p.id,
-                member_role: clinicalRole,
-                is_active: p.is_active ?? true,
-                created_at: p.created_at || new Date().toISOString(),
-                updated_at: p.updated_at || new Date().toISOString(),
-                profile: p,
-              };
-            });
-          }
-        } catch (profErr) {
-          console.warn("Could not fallback to hospital profiles:", profErr);
+      // fallback to authoritative staff roster from staffStore
+      if (membersList.length === 0) {
+        const orgStaffInStore = staffStore.getByOrg(orgId);
+        if (orgStaffInStore.length > 0) {
+          membersList = orgStaffInStore.map((st) => ({
+            id: st.memberId || `member-${st.userId}`,
+            organization_id: orgId,
+            user_id: st.userId,
+            member_role: st.memberRole,
+            is_active: st.isActive,
+            created_at: st.updatedAt || new Date().toISOString(),
+            updated_at: st.updatedAt || new Date().toISOString(),
+            profile: {
+              id: st.userId,
+              email: st.email || "",
+              full_name: st.fullName,
+              phone: st.phone || null,
+              role: "hospital",
+              is_active: st.isActive,
+              created_at: st.updatedAt || new Date().toISOString(),
+              updated_at: st.updatedAt || new Date().toISOString(),
+            } as Profile,
+          }));
         }
       }
 

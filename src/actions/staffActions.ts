@@ -28,7 +28,10 @@ import { orbinovaEmail } from "@/lib/email";
  * Ensures caller is an active member with staff management authorization
  */
 async function requireStaffManagerClearance(targetOrgId: string) {
-  const user = await getCurrentUser("hospital");
+  let user = await getCurrentUser("hospital");
+  if (!user || !user.profile?.is_active) {
+    user = await getCurrentUser();
+  }
   if (!user || !user.profile?.is_active) {
     throw new Error("Unauthorized: Active user session required.");
   }
@@ -73,6 +76,9 @@ async function requireStaffManagerClearance(targetOrgId: string) {
 export async function addStaffMemberAction(data: {
   fullName: string;
   title?: string;
+  surname?: string;
+  firstName?: string;
+  otherNames?: string;
   email: string;
   phone: string;
   memberRole: GranularMemberRole;
@@ -141,8 +147,10 @@ export async function addStaffMemberAction(data: {
 
     const supabase = await createClient();
 
-    // Specification: Extract surname (entered first) and generate cryptographically random temporary password
-    const { surname, temporaryPassword } = generateTemporaryPassword(normalizedFullName);
+    // Specification: Extract surname (or use explicitly provided surname) and generate temporary password
+    const effectiveSurname = data.surname?.trim() || extractSurname(normalizedFullName);
+    const { temporaryPassword } = generateTemporaryPassword(effectiveSurname);
+    const surname = effectiveSurname;
     const orgType = context.organization.organization_type || "hospital";
 
     // Authoritative Server-Side Institutional Ownership (Never trust client payload)

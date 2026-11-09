@@ -129,7 +129,9 @@ export const InviteStaffModal: React.FC<InviteStaffModalProps> = ({
 }) => {
   const [mounted, setMounted] = useState(false);
   const [title, setTitle] = useState<string>("Dr.");
-  const [fullName, setFullName] = useState("");
+  const [surname, setSurname] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [otherNames, setOtherNames] = useState("");
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
   const isBloodBank = organizationType === "blood_bank";
@@ -213,8 +215,12 @@ export const InviteStaffModal: React.FC<InviteStaffModalProps> = ({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!fullName.trim()) {
-      setError("Please enter the staff member's full name.");
+    if (!surname.trim()) {
+      setError("Please enter the staff member's surname.");
+      return;
+    }
+    if (!firstName.trim()) {
+      setError("Please enter the staff member's first name.");
       return;
     }
     if (!phone.trim()) {
@@ -230,12 +236,19 @@ export const InviteStaffModal: React.FC<InviteStaffModalProps> = ({
       return;
     }
 
+    const cleanFullName = [surname.trim(), firstName.trim(), otherNames.trim()]
+      .filter(Boolean)
+      .join(" ");
+
     setLoading(true);
     setError(null);
 
     const res = await addStaffMemberAction({
       title: title,
-      fullName: fullName.trim(),
+      fullName: cleanFullName,
+      surname: surname.trim(),
+      firstName: firstName.trim(),
+      otherNames: otherNames.trim() || undefined,
       phone: phone.trim(),
       email: email.trim(),
       memberRole: selectedRole,
@@ -250,14 +263,14 @@ export const InviteStaffModal: React.FC<InviteStaffModalProps> = ({
     }
 
     setSuccessData({
-      fullName: res.fullName || fullName.trim(),
+      fullName: res.fullName || cleanFullName,
       email: res.email || email.trim().toLowerCase(),
       roleName: res.roleName || selectedRole.replace("_", " "),
     });
 
     if (onSuccess) {
       onSuccess({
-        fullName: res.fullName || fullName.trim(),
+        fullName: res.fullName || cleanFullName,
         email: res.email || email.trim().toLowerCase(),
         phone: phone.trim() || undefined,
         role: selectedRole,
@@ -268,7 +281,9 @@ export const InviteStaffModal: React.FC<InviteStaffModalProps> = ({
 
   const handleReset = () => {
     setTitle("Dr.");
-    setFullName("");
+    setSurname("");
+    setFirstName("");
+    setOtherNames("");
     setPhone("");
     setEmail("");
     setSuccessData(null);
@@ -356,30 +371,46 @@ export const InviteStaffModal: React.FC<InviteStaffModalProps> = ({
                 </div>
               )}
 
-              {/* 1. Title & Full Name */}
+              {/* 1. Title (Full Width & Stacked) */}
               <div>
-                <div className="grid grid-cols-1 sm:grid-cols-4 gap-3">
-                  <div className="sm:col-span-1">
-                    <SelectField
-                      id="staff-title"
-                      label="Title *"
-                      value={title}
-                      onChange={(e) => setTitle(e.target.value)}
-                      options={STAFF_TITLES.map((t) => ({ value: t, label: t }))}
-                      required
-                    />
-                  </div>
-                  <div className="sm:col-span-3">
-                    <TextField
-                      id="staff-name"
-                      label="Full Name (Surname First) *"
-                      required
-                      value={fullName}
-                      onChange={(e) => setFullName(e.target.value)}
-                      helperText="Enter surname first. A temporary password will be emailed."
-                    />
-                  </div>
-                </div>
+                <SelectField
+                  id="staff-title"
+                  label="Title *"
+                  value={title}
+                  onChange={(e) => setTitle(e.target.value)}
+                  options={STAFF_TITLES.map((t) => ({ value: t, label: t }))}
+                  required
+                />
+              </div>
+
+              {/* 2. Surname, First Name, Other Names (Full Width & Stacked) */}
+              <div>
+                <TextField
+                  id="staff-surname"
+                  label="Surname *"
+                  required
+                  value={surname}
+                  onChange={(e) => setSurname(e.target.value)}
+                />
+              </div>
+
+              <div>
+                <TextField
+                  id="staff-first-name"
+                  label="First Name *"
+                  required
+                  value={firstName}
+                  onChange={(e) => setFirstName(e.target.value)}
+                />
+              </div>
+
+              <div>
+                <TextField
+                  id="staff-other-names"
+                  label="Other Names (Optional)"
+                  value={otherNames}
+                  onChange={(e) => setOtherNames(e.target.value)}
+                />
               </div>
 
               {/* 2. Phone Number */}
