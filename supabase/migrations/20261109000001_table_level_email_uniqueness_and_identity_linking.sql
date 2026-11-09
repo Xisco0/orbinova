@@ -13,8 +13,21 @@
 CREATE INDEX IF NOT EXISTS idx_profiles_email_lower 
   ON public.profiles(LOWER(email));
 
--- 2. DONOR PROFILES: Ensure each central user has at most one donor profile
--- and foreign key referential integrity with CASCADE deletion
+-- 2. DONOR PROFILES: Ensure required columns exist, user uniqueness,
+-- and fast index lookups for reference number and user linkage
+ALTER TABLE public.donor_profiles 
+  ADD COLUMN IF NOT EXISTS donor_number TEXT,
+  ADD COLUMN IF NOT EXISTS organization_id UUID REFERENCES public.organizations(id) ON DELETE SET NULL,
+  ADD COLUMN IF NOT EXISTS registering_organization_id UUID REFERENCES public.organizations(id) ON DELETE RESTRICT,
+  ADD COLUMN IF NOT EXISTS first_name TEXT,
+  ADD COLUMN IF NOT EXISTS other_names TEXT,
+  ADD COLUMN IF NOT EXISTS surname TEXT,
+  ADD COLUMN IF NOT EXISTS district TEXT,
+  ADD COLUMN IF NOT EXISTS postal_code TEXT,
+  ADD COLUMN IF NOT EXISTS location_consent BOOLEAN NOT NULL DEFAULT TRUE,
+  ADD COLUMN IF NOT EXISTS location_updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  ADD COLUMN IF NOT EXISTS is_active BOOLEAN NOT NULL DEFAULT TRUE;
+
 DO $$
 BEGIN
   IF NOT EXISTS (
