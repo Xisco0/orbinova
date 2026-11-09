@@ -204,7 +204,7 @@ export const EditDonorModal: React.FC<EditDonorModalProps> = ({
       />
 
       {/* Drawer */}
-      <div className="relative w-full sm:w-[540px] md:w-[580px] h-full bg-[#fcfcfc] border-l border-slate-200 shadow-2xl flex flex-col z-10 drawer-slide-in-right">
+      <div className="relative w-full sm:w-[460px] md:w-[480px] h-full bg-[#fcfcfc] border-l border-slate-200 shadow-2xl flex flex-col z-10 drawer-slide-in-right">
         {/* Header */}
         <div className="h-18 px-6 flex items-center justify-between p-4 bg-white border-b border-slate-100 shrink-0">
           <div className="flex items-center gap-3 min-w-0">
@@ -255,16 +255,15 @@ export const EditDonorModal: React.FC<EditDonorModalProps> = ({
                 <span>Donor Contact &amp; Identity</span>
               </div>
 
-              <TextField
-                id="edit-donor-name"
-                label="Full Name *"
-                required
-                value={fullName}
-                onChange={(e) => setFullName(e.target.value)}
-                placeholder="e.g. Samuel Adeleke"
-              />
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="space-y-4">
+                <TextField
+                  id="edit-donor-name"
+                  label="Full Name *"
+                  required
+                  value={fullName}
+                  onChange={(e) => setFullName(e.target.value)}
+                  placeholder="e.g. Samuel Adeleke"
+                />
                 <TextField
                   id="edit-donor-email"
                   label="Email Address"

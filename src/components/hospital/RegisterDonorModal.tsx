@@ -244,7 +244,7 @@ export const RegisterDonorModal: React.FC<RegisterDonorModalProps> = ({
       />
 
       {/* Drawer */}
-      <div className="relative w-full sm:w-[540px] md:w-[580px] h-full bg-[#fcfcfc] border-l border-slate-200 shadow-2xl flex flex-col z-10 drawer-slide-in-right">
+      <div className="relative w-full sm:w-[460px] md:w-[480px] h-full bg-[#fcfcfc] border-l border-slate-200 shadow-2xl flex flex-col z-10 drawer-slide-in-right">
         {/* Header */}
         <div className="h-18 px-6 flex p-4 items-center justify-between bg-white border-b border-slate-100 shrink-0">
           <div className="flex items-center gap-3 min-w-0">
@@ -288,7 +288,7 @@ export const RegisterDonorModal: React.FC<RegisterDonorModalProps> = ({
                 <span>Donor Personal Identification</span>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="space-y-4">
                 <TextField
                   id="donor-first-name"
                   label="First Name *"
@@ -305,9 +305,6 @@ export const RegisterDonorModal: React.FC<RegisterDonorModalProps> = ({
                   onChange={(e) => setSurname(e.target.value)}
                   placeholder="e.g. Okafor"
                 />
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <TextField
                   id="donor-other-names"
                   label="Other Names (Optional)"
@@ -322,9 +319,6 @@ export const RegisterDonorModal: React.FC<RegisterDonorModalProps> = ({
                   value={dateOfBirth}
                   onChange={(e) => setDateOfBirth(e.target.value)}
                 />
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <TextField
                   id="donor-email"
                   label="Email Address *"

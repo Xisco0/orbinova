@@ -1,11 +1,11 @@
 {
   "d0000001-0000-0000-0000-000000000001": {
     "userId": "d0000001-0000-0000-0000-000000000001",
-    "sessionId": "sess_mw8z57k3_c68a1f1c29eae8986ae4651403f102e1798dcae61fd751eb0caae07b7a688575",
-    "sessionVersion": 1,
+    "sessionId": "sess_mw91y65t_8a0c1ae3822d2781d8a1bab084c862b7bf838053ef1631e909beb8c377b372b3",
+    "sessionVersion": 2,
     "portalScope": "hospital",
-    "createdAt": "2026-11-09T08:03:23.908Z",
-    "lastActiveAt": "2026-11-09T08:03:23.908Z",
+    "createdAt": "2026-11-09T09:21:54.354Z",
+    "lastActiveAt": "2026-11-09T09:29:06.497Z",
     "ip": "::ffff:127.0.0.1",
     "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:160.0) Gecko/20100101 Firefox/160.0"
   }

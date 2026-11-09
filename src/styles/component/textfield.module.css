@@ -21,6 +21,17 @@
   box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
 }
 
+.floatingInput::placeholder,
+.floatingTextArea::placeholder {
+  color: transparent;
+  transition: color 0.15s ease;
+}
+
+.floatingInput:focus::placeholder,
+.floatingTextArea:focus::placeholder {
+  color: #94a3b8;
+}
+
 .floatingTextArea {
   width: 100%;
   padding: 16px 20px;
@@ -61,6 +72,7 @@
 
 .floatingInput:focus ~ .floatingLabel,
 .floatingInput:not(:placeholder-shown) ~ .floatingLabel,
+.floatingInput[type="date"] ~ .floatingLabel,
 .floatingTextArea:focus ~ .floatingLabel,
 .floatingTextArea:not(:placeholder-shown) ~ .floatingLabel {
   top: -9px;

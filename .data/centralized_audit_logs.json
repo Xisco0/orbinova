@@ -1,5 +1,35 @@
 [
   {
+    "id": "audit-1794216114360-td27g",
+    "user_id": "d0000001-0000-0000-0000-000000000001",
+    "actor_name": "LUTH Chief Medical Officer",
+    "actor_role": "hospital",
+    "organization_id": "a1111111-1111-1111-1111-111111111111",
+    "organization_type": "hospital",
+    "organization_name": "Lagos University Teaching Hospital (LUTH)",
+    "action": "USER_LOGIN_SUCCESS",
+    "category": "authentication",
+    "entity_type": "profiles",
+    "entity_id": "d0000001-0000-0000-0000-000000000001",
+    "description": "Successful sign-in to hospital portal (hospital)",
+    "status": "success",
+    "reason": null,
+    "previous_values": null,
+    "new_values": null,
+    "metadata": {
+      "email": "hospital@orbinova.com",
+      "portalScope": "hospital",
+      "mustChangePassword": "[REDACTED]"
+    },
+    "ip_address": "::ffff:127.0.0.1",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:160.0) Gecko/20100101 Firefox/160.0",
+    "correlation_id": null,
+    "created_at": "2026-11-09T09:21:54.360Z",
+    "previous_hash": "180314de680cfb8094deb3e64c7fcf1f5fd63bb5e3cc93f35aaea672dcf10841",
+    "hash": "a4f4cafddb98aca6322d8f7b1a5ac686c57ddbb1ca6621dd310f98d63e3e2789",
+    "checksum": "a4f4cafddb98aca6322d8f7b1a5ac686c57ddbb1ca6621dd310f98d63e3e2789"
+  },
+  {
     "id": "audit-1794211403913-hclbi",
     "user_id": "d0000001-0000-0000-0000-000000000001",
     "actor_name": "LUTH Chief Medical Officer",
