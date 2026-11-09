@@ -87,9 +87,27 @@ CREATE INDEX IF NOT EXISTS idx_org_members_user_id
 CREATE INDEX IF NOT EXISTS idx_org_members_org_id 
   ON public.organization_members(organization_id);
 
--- 4. ORGANIZATIONS: Ensure is_active exists, then enforce uniqueness on active institutional contact email
+-- 4. ORGANIZATIONS: Ensure name, organization_type, and is_active exist
 ALTER TABLE public.organizations
+  ADD COLUMN IF NOT EXISTS name TEXT,
+  ADD COLUMN IF NOT EXISTS organization_type TEXT DEFAULT 'hospital',
+  ADD COLUMN IF NOT EXISTS type TEXT DEFAULT 'hospital',
   ADD COLUMN IF NOT EXISTS is_active BOOLEAN NOT NULL DEFAULT TRUE;
+
+-- Sync existing type column into organization_type if needed
+DO $$
+BEGIN
+  IF EXISTS (
+    SELECT 1 FROM information_schema.columns 
+    WHERE table_schema = 'public' 
+      AND table_name = 'organizations' 
+      AND column_name = 'type'
+  ) THEN
+    UPDATE public.organizations 
+    SET organization_type = COALESCE(organization_type, type, 'hospital')
+    WHERE organization_type IS NULL;
+  END IF;
+END $$;
 
 CREATE UNIQUE INDEX IF NOT EXISTS uq_organizations_email_lower 
   ON public.organizations(LOWER(email)) 
@@ -124,7 +142,7 @@ SELECT
   COALESCE(om.member_role, om.role, 'staff') AS member_role,
   om.is_active AS staff_active,
   o.name AS organization_name,
-  o.organization_type
+  COALESCE(o.organization_type::text, o.type::text, 'hospital') AS organization_type
 FROM public.profiles p
 LEFT JOIN public.donor_profiles dp ON dp.user_id = p.id
 LEFT JOIN public.organization_members om ON om.user_id = p.id
